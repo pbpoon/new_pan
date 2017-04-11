@@ -1,0 +1,59 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+    <div class="ui container">
+        <div class="segment">
+            <div class="ui header">{{ account.name }}
+                <span>/共 {{ account.get_peolpe_count }} 人</span>
+                <span>/符合分红资格： {{ account.get_getmoney_count }} 人</span>
+            </div>
+            <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>年龄</th>
+                    <th>民族</th>
+                    <th>文化程度</th>
+                    <th>是否已婚</th>
+                    <th>分红资格</th>
+                    <th>电话号码</th>
+                    <th>是否户主</th>
+                </tr>
+                </thead>
+
+
+                <tbody>
+                {% for people in people_list %}
+                    <tr>
+
+                        <td><a href="{{ people.get_absolute_url }}">{{ people }}</a></td>
+                        <td>{{ people.sex }}</td>
+                        <td>{{ people.get_age }}</td>
+                        <td>{{ people.nationality }}</td>
+                        <td>{{ people.education }}</td>
+                        <td>{{ people.is_main|default:"" }}</td>
+                        <td>{{ people.is_getmoney|default:"" }}</td>
+                        <td>{{ people.phone_num }}</td>
+                        <td>{{ people.is_main|default:"" }}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th>共 {{ account.get_peolpe_count }} 人</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>共 {{ account.get_getmoney_count }} 人符合</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

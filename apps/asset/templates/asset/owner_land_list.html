@@ -1,0 +1,46 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+
+    <div class="ui container">
+           <table class="ui single line table">
+                <thead>
+                <tr>
+                    <th>区域</th>
+                    <th>性质</th>
+                    <th>田号</th>
+                    <th>分亩</th>
+                    <th>备注</th>
+                    <th>原有人</th>
+                </tr>
+                </thead>
+
+
+                <tbody>
+                {% for item in owner_lst %}
+                    <tr>
+                        <td>{{ item.num.area }}</td>
+                        <td>{{ item.num.category }}</td>
+                        <td>{{ item.num.num }}</td>
+                        <td>{{ item.num.fm }}</td>
+                        <td>{{ item.ps }}</td>
+                        <td>{{ item.old_owner }}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ item.get_owner_fm }}</th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
+                </tfoot>
+                </tbody>
+
+            </table>
+            </div>
+{% endblock %}
+

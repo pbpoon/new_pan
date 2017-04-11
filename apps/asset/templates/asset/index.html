@@ -1,0 +1,13 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+    <div class="ui container">
+    {% for asset in asset_list %}
+    <div class="ui list">
+        <div class="item">
+            <a href="{% url 'asset:owner' asset.id %}">{{ asset.old_owner }}</a>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}

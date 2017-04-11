@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+</head>
+<body>
+<main><nav>
+    <div class="ui menu">
+        <a href="/" class="item">
+            主页
+        </a>
+        <a href="/" class="item">admin</a>
+    </div>
+</nav>
+<div>{% block conten %}{% endblock %}</div>
+</main>
+
+</body>
+</html>

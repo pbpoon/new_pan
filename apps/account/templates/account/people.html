@@ -1,0 +1,72 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+    <div class="ui container">
+    <div class="ui  segment">
+        <div class="ui header">所属户口:<a href="{{ account.get_absolute_url }}">{{ account }}</a></div>
+        <div class="ui divider"></div>
+        <div class="ui relaxed divided list">
+
+            <div class="item">
+                <div class="content">
+                    <div class="header">姓名：</div>
+                    {{ people }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">性别：</div>
+                    {{ people.sex }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">身份证号码：</div>
+                    {{ people.id_card_num }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">是否已婚：</div>
+                    {{ people.is_main }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">出生年月日</div>
+                    {{ people.birthday }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">年龄：</div>
+                    {{ people.get_age }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">分钱资格：</div>
+                    {{ people.is_getmoney }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">入户日期：</div>
+                    {{ people.joind }}
+                </div>
+            </div>
+             <div class="item">
+                <div class="content">
+                    <div class="header">教育程度：</div>
+                    {{ people.education }}
+                </div>
+            </div>
+            <div class="item">
+                <div class="content">
+                    <div class="header">戶口類型：</div>
+                    {{ people.account_type }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

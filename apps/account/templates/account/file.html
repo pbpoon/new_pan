@@ -1,0 +1,12 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+    <div class="ui contairn">
+        <form method="post" action="" enctype="multipart/form-data">
+            {{ form }}
+            {% csrf_token %}
+            <input type="submit" value="提交">
+        </form>
+    </div>
+    </div>
+{% endblock %}
