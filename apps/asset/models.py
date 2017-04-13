@@ -63,6 +63,7 @@ class LandOwnerShip(models.Model):
         verbose_name = '原所属人田地明细'
         verbose_name_plural = verbose_name
         unique_together = ('owner', 'num')
+        auto_created = True
 
     def __str__(self):
         # return self.owner.get_full_name

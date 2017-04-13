@@ -54,7 +54,7 @@ class FileUploadView(FormView):
             list = []
             accounts = [Account(name=str(x)) for x in set(table.col_values(10, 1))]
             print(accounts)
-            Account.objects.bulk_create(accounts)
+            # Account.objects.bulk_create(accounts)
             for rownum in range(1, nrows):
                 row = table.row_values(rownum)
                 for index,i in enumerate(range(len(colnames))):
@@ -71,7 +71,7 @@ class FileUploadView(FormView):
                     list.append(People(first_name=row[1],last_name=row[2], sex=row[3], birthday=row[4],
                                        nationality=row[5], education=row[6], account_type=row[7], is_marry=row[8],
                                        id_card_num=row[9], phone_num=row[12], is_getmoney=row[13],account=row[10],
-                                       joind=row[14],
+                                       join_d=row[14],
                                        is_main=row[15]
                                        ))
                 print(list)

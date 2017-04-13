@@ -21,7 +21,9 @@ class Account(models.Model):
         return reverse("account:detail", kwargs={'name':self.name})
 
     def __str__(self):
-        return "{0}:{1}".format(self.name, self.people.get(is_main=True))
+        if self.people.filter(is_main=True).exists():
+            return "{0}:{1}".format(self.name, self.people.get(is_main=True))
+        return "{0}".format(self.name)
 
     __repr__ = __str__
 
@@ -55,8 +57,8 @@ class People(models.Model):
     updated = models.DateTimeField('更新日期', auto_now=True)
     is_del = models.BooleanField('是否注销', default=False)
 
-    objects = PeopleNoDelManager()
-    all_people = models.Manager()
+    # objects = PeopleNoDelManager()
+    # all_people = models.Manager()
 
     class Meta:
         verbose_name = '村民信息'
