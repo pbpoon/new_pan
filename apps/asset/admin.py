@@ -4,17 +4,20 @@ from .models import Area, Category, LandNum, LandOwnerShip, LandOwner
 
 class InlineAreaLandNum(admin.TabularInline):
     model = LandNum
+    extra = 1
     # raw_id_fields = ('area',)
 
 
-class InlineOwnerLandNum(admin.TabularInline):
+class InlineOwner(admin.TabularInline):
     model = LandOwnerShip
-#     fk_name = 'Owner'
-    # raw_id_fields = ('owner',)
+    fk_name = 'owner'
+    raw_id_fields = ('owner',)
+    extra = 1
 
 
-# class InlineOwner(admin.TabularInline):
-#     model = Owner
+class InlineLandNum(admin.TabularInline):
+    model = LandOwnerShip
+    extra = 1
 #     fk_name = 'owner'
 
 
@@ -32,9 +35,11 @@ class AreaAdmin(admin.ModelAdmin):
 
 @admin.register(LandOwner)
 class OwnerAdmin(admin.ModelAdmin):
-    # inlines = [InlineOwnerLandNum]
-    pass
+    list_display = ['first_name', 'last_name', 'get_total_land']
+    fields = ['first_name', 'last_name']
+    inlines = [InlineOwner]
+
 
 @admin.register(LandNum)
 class OwnerAdmin(admin.ModelAdmin):
-    inlines = [InlineOwnerLandNum]
+    inlines = [InlineLandNum]

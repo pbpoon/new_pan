@@ -85,9 +85,7 @@ class FileUploadView(FormView):
                 # # if not LandNum.objects.filter(area=row[2], num=row[3]):
                 land = LandNum.objects.create(area=row[2], num=row[3], category=row[1], fm=row[4], ps=row[6])
                 owner= LandOwnerShip.objects.create(num=land, owner=row[0], old_owner=row[0], ps=row[6])
-                for ow in owner:
-                    land.owner = ow
-                    land.save()
+                # land.owner.add(LandOwnerShip.objects.filter(num=row[3]))
 
             print('OK')
         return HttpResponse('OK')

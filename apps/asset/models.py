@@ -31,7 +31,7 @@ class Area(models.Model):
 
 
 class LandNum(models.Model):
-    owner = models.ManyToManyField('account.People',through='LandOwnerShip', through_fields=('num', 'owner'),
+    owner = models.ManyToManyField('account.People', through='LandOwnerShip', through_fields=('num', 'owner'),
                                    related_name='land_num', verbose_name='所有人')
     num = models.CharField('田地号码', max_length=10, db_index=True)
     category = models.ForeignKey('Category', null=True, blank=True, related_name='land_num', verbose_name='分类名称')
@@ -51,7 +51,8 @@ class LandNum(models.Model):
 
 
 class LandOwnerShip(models.Model):
-    owner = models.ForeignKey('account.People', on_delete=models.CASCADE, verbose_name='所属人')
+    owner = models.ForeignKey('account.People', on_delete=models.CASCADE, limit_choices_to={'is_main':True},
+                              verbose_name='所属人')
     old_owner = models.ForeignKey('account.People', related_name='old_owner', verbose_name='原有人')
     num = models.ForeignKey('LandNum', on_delete=models.CASCADE, verbose_name='田地号码')
     ps = models.TextField('备注信息', null=True, blank=True)
@@ -71,7 +72,10 @@ class LandOwnerShip(models.Model):
 
 
 class LandOwner(People):
-    pass
+    @property
+    def get_total_land(self):
+        fm = self.land_num.aggregate(total_fm = Sum('fm'))
+        return  fm['total_fm']
 
     class Meta:
         verbose_name = '田地所属于人信息'

@@ -22,5 +22,7 @@ class PeopleAdmin(admin.ModelAdmin):
     list_filter = ['first_name', 'last_name', 'sex', 'is_main', 'account', 'is_marry', 'is_getmoney']
     search_fields = ['first_name', 'last_name', 'sex', 'id_card_num', 'account__name']
 
-
+    def get_queryset(self, request):
+        qs = super(PeopleAdmin, self).get_queryset(request)
+        return qs.filter(is_del=False)
 
