@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+import decimal
 
 
 class WaterNum(models.Model):
@@ -14,9 +15,10 @@ class WaterNum(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return '{0}({1}):({2})'.format(self.account, self.desc, self.rate.latest('mark_date'))
+        return '{0}({1})'.format(self.account, self.desc)
 
 
+#个人表
 class WaterRate(models.Model):
     WaterNum = models.ForeignKey('WaterNum', related_name='rate', verbose_name='水表号码')
     mark_d = models.ForeignKey('CenterWater', related_name='account_rate', verbose_name='抄表日期')
@@ -40,12 +42,15 @@ class WaterRate(models.Model):
                 return self.meter_num - meter_nums.meter_num
         except:
             return self.meter_num
+    total_m3 = property(get_total_m3)
+
 
     def get_total_price(self):
         # 计算出本次应缴水费
         return self.get_total_m3() * self.mark_d.real_price()
 
 
+#总表
 class CenterWater(models.Model):
     mark_d = models.DateField('抄表日期')
     meter_num = models.DecimalField('水表度数', max_digits=9, decimal_places=2, default=0)
@@ -64,7 +69,7 @@ class CenterWater(models.Model):
         # 求得本次的用水量
         try:
             meter_nums = CenterWater.objects.filter(mark_d__lt=self.mark_d)[0]
-            if meter_nums.exists():
+            if meter_nums:
                 return self.meter_num - meter_nums.meter_num
         except:
             return self.meter_num
@@ -72,12 +77,14 @@ class CenterWater(models.Model):
 
     def get_total_rate(self):
         # 求得总表应缴纳水费
-        return self.get_total_m3() * self.price
+        return decimal.Decimal(self.get_total_m3() * self.price)
 
     def get_total_account_m3(self):
         # 求得全村的总用水量
         if self.account_rate.exists():
-            return self.account_rate.filter(WaterNum__is_del=False).aggregate(total_account_m3 =Sum('m3'))
+            total_account_m3 = sum(account.get_total_m3() for account in self.account_rate.all())
+            print(total_account_m3)
+            return total_account_m3
         return 1
 
     def get_balance_m3(self):
@@ -86,7 +93,7 @@ class CenterWater(models.Model):
 
     def real_price(self):
         # 通过差价求得实际本次水费单价
-        return self.get_total_rate() / self.get_total_account_m3()
+        return  decimal.Decimal(self.get_total_rate() / self.get_total_account_m3()).quantize(decimal.Decimal('0.00'))
 
     def __str__(self):
         return '{0}:{1}'.format(self.mark_d, self.get_total_m3())

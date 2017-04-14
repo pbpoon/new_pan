@@ -6,6 +6,7 @@ from .models import CenterWater, WaterNum, WaterRate
 class InlineCenterWaterRate(admin.TabularInline):
     model = WaterRate
     raw_id_fields = ['mark_d']
+    fields = ['WaterNum','mark_d','meter_num','ps','is_pay', 'total_m3']
 
 
 class InlineNumWaterRate(admin.TabularInline):
