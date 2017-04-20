@@ -42,13 +42,13 @@ class WaterRate(models.Model):
                 return self.meter_num - meter_nums.meter_num
         except:
             return self.meter_num
-    total_m3 = property(get_total_m3)
-
+    get_total_m3.short_description = '本次用量'
 
     def get_total_price(self):
-        # 计算出本次应缴水费
-        return self.get_total_m3() * self.mark_d.real_price()
-
+        if self.get_total_m3() is not None and self.mark_d.real_price() is not None:
+            return decimal.Decimal(self.get_total_m3() * self.mark_d.real_price()).quantize(decimal.Decimal(0.00))
+        return ''
+    get_total_price.short_description = '水费'
 
 #总表
 class CenterWater(models.Model):
@@ -73,7 +73,7 @@ class CenterWater(models.Model):
                 return self.meter_num - meter_nums.meter_num
         except:
             return self.meter_num
-        # m3 = property(get_total_m3)
+    get_total_m3.short_description = '本次用量'
 
     def get_total_rate(self):
         # 求得总表应缴纳水费
@@ -94,6 +94,7 @@ class CenterWater(models.Model):
     def real_price(self):
         # 通过差价求得实际本次水费单价
         return  decimal.Decimal(self.get_total_rate() / self.get_total_account_m3()).quantize(decimal.Decimal('0.00'))
+    real_price.short_description = '实际单价'
 
     def __str__(self):
         return '{0}:{1}'.format(self.mark_d, self.get_total_m3())
