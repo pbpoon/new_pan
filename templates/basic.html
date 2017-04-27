@@ -4,19 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Title{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+{#<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">#}
 </head>
 <body>
-<main><nav>
-    <div class="ui menu">
-        <a href="/" class="item">
-            主页
-        </a>
-        <a href="/" class="item">admin</a>
-    </div>
+<main><nav class="navbar navbar-default">
+    <a href="" class="navbar-brand">主页</a>
+    <a href="http://127.0.0.1:8000/admin" class="navbar-brand">后台</a>
 </nav>
 <div>{% block conten %}{% endblock %}</div>
 </main>
-
+<script href="{% static 'js/bootstrap.min.js' %}"
 </body>
 </html>

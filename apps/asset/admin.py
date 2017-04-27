@@ -11,7 +11,7 @@ class InlineAreaLandNum(admin.TabularInline):
 class InlineOwner(admin.TabularInline):
     model = LandOwnerShip
     fk_name = 'owner'
-    raw_id_fields = ('owner',)
+    # raw_id_fields = ['owner']
     extra = 1
 
 
@@ -36,7 +36,8 @@ class AreaAdmin(admin.ModelAdmin):
 @admin.register(LandOwner)
 class OwnerAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'get_total_land']
-    fields = ['first_name', 'last_name']
+    fields = ['first_name', 'last_name', 'get_total_land']
+    readonly_fields = ['get_total_land']
     inlines = [InlineOwner]
 
 

@@ -51,8 +51,8 @@ class LandNum(models.Model):
 
 
 class LandOwnerShip(models.Model):
-    owner = models.ForeignKey('account.People', on_delete=models.CASCADE, limit_choices_to={'is_main':True},
-                              verbose_name='所属人')
+    owner = models.ForeignKey('account.People', on_delete=models.CASCADE,
+                              verbose_name='所属人')#limit_choices_to={'is_main':True},
     old_owner = models.ForeignKey('account.People', related_name='old_owner', verbose_name='原有人')
     num = models.ForeignKey('LandNum', on_delete=models.CASCADE, verbose_name='田地号码')
     ps = models.TextField('备注信息', null=True, blank=True)
@@ -61,7 +61,7 @@ class LandOwnerShip(models.Model):
     file = models.FileField('资料', upload_to='asset/land/Y%m%/', blank=True)
 
     class Meta:
-        verbose_name = '原所属人田地明细'
+        verbose_name = '所属人田地明细'
         verbose_name_plural = verbose_name
         unique_together = ('owner', 'num')
         auto_created = True
@@ -72,10 +72,9 @@ class LandOwnerShip(models.Model):
 
 
 class LandOwner(People):
-    @property
     def get_total_land(self):
-        fm = self.land_num.aggregate(total_fm = Sum('fm'))
-        return  fm['total_fm']
+        return  self.land_num.aggregate(total_fm = Sum('fm'))['total_fm']
+    get_total_land.short_description = '共有田地'
 
     class Meta:
         verbose_name = '田地所属于人信息'

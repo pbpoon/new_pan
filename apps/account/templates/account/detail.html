@@ -1,8 +1,8 @@
 {% extends 'basic.html' %}
 {% block title %}户口{% endblock %}
 {% block conten %}
-    <div class="ui container">
-        <div class="segment">
+    <div class="container">
+        <div class="col-md-8">
             <div class="ui header">{{ account.name }}
                 <span>/共 {{ account.get_peolpe_count }} 人</span>
                 <span>/符合分红资格： {{ account.get_getmoney_count }} 人</span>
@@ -55,5 +55,8 @@
 
             </table>
         </div>
+    <div class="col-md-4">
+        <h1 class="header">sidebar</h1>
+    </div>
     </div>
 {% endblock %}
