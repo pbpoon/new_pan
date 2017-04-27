@@ -1,13 +1,19 @@
 {% extends 'basic.html' %}
 {% block title %}户口{% endblock %}
 {% block conten %}
-    <div class="ui container">
+<div class="container">
+    <div class="col-md-6">
     {% for account in account_list %}
-    <div class="ui list">
-        <div class="item">
-            <a href="{{ account.get_absolute_url }}" class="ui divider">{{ account }}- {{ account.get_peolpe_count }}人</a>
-        </div>
-    </div>
+    <div class="list-group">
+  <a href="{{ account.get_absolute_url }}" class="list-group-item">
+    <span class="badge">{{ account.get_peolpe_count }}人</span>
+    {{ account }}
+  </a>
+</div>
     {% endfor %}
-    </div>
+</div>
+<div class="col-md-4">
+
+</div>
+</div>
 {% endblock %}
