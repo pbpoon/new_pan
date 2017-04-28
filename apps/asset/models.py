@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Sum
 from account.models import People
+from django.shortcuts import reverse
 
 
 class Category(models.Model):
@@ -31,7 +32,7 @@ class Area(models.Model):
 
 
 class LandNum(models.Model):
-    owner = models.ManyToManyField('account.People', through='LandOwnerShip', through_fields=('num', 'owner'),
+    owner = models.ManyToManyField('LandOwner', through='LandOwnerShip', through_fields=('num', 'owner'),
                                    related_name='land_num', verbose_name='所有人')
     num = models.CharField('田地号码', max_length=10, db_index=True)
     category = models.ForeignKey('Category', null=True, blank=True, related_name='land_num', verbose_name='分类名称')
@@ -51,9 +52,9 @@ class LandNum(models.Model):
 
 
 class LandOwnerShip(models.Model):
-    owner = models.ForeignKey('account.People', on_delete=models.CASCADE,
+    owner = models.ForeignKey('LandOwner', on_delete=models.CASCADE,
                               verbose_name='所属人')#limit_choices_to={'is_main':True},
-    old_owner = models.ForeignKey('account.People', related_name='old_owner', verbose_name='原有人')
+    old_owner = models.ForeignKey('LandOwner', related_name='old_owner', verbose_name='原有人')
     num = models.ForeignKey('LandNum', on_delete=models.CASCADE, verbose_name='田地号码')
     ps = models.TextField('备注信息', null=True, blank=True)
     create_d = models.DateField('添加日期', auto_now_add=True)
@@ -81,5 +82,7 @@ class LandOwner(People):
         verbose_name_plural = verbose_name
         proxy = True
 
+    def get_absolute_url(self):
+        return reverse("asset:owner", kwargs={'pk': self.id})
 
 

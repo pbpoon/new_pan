@@ -17,14 +17,14 @@
 
 
                 <tbody>
-                {% for item in owner_lst %}
+                {% for item in landnum_list %}
                     <tr>
-                        <td>{{ item.num.area }}</td>
-                        <td>{{ item.num.category }}</td>
-                        <td>{{ item.num.num }}</td>
-                        <td>{{ item.num.fm }}</td>
+                        <td>{{ item.area }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.num }}</td>
+                        <td>{{ item.fm }}</td>
                         <td>{{ item.ps }}</td>
-                        <td>{{ item.old_owner }}</td>
+                        <td>{{ item.landownership_set.old_owner }}</td>
                     </tr>
                 {% endfor %}
                 <tfoot>

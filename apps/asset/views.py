@@ -1,33 +1,33 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
-from django.views.generic import FormView, ListView, DateDetailView
+from django.views.generic import FormView, ListView, DetailView
 from account.forms import FileForm
-from .models import Area, Category, LandNum, LandOwnerShip
+from .models import Area, Category, LandNum, LandOwnerShip, LandOwner
 from account.models import People, Account
 import xlrd
 import decimal
 
 
-# class OwnerListView(ListView):
-#     context_object_name = 'asset_list'
-#     items=[]
-#     querysett = Owner.objects.all()
-#     for item in querysett:
-#         if item.old_owner not in querysett:
-#             items.append(item)
-#     queryset = Owner.objects.filter(old_owner__in=querysett)
-#     template_name = 'asset/index.html'
+class OwnerListView(ListView):
+    context_object_name = 'asset_list'
+    qs = LandOwner.objects.filter(landownership__isnull=False)
+    owner_list = []
+    for i in qs:
+        if i not in owner_list:
+            owner_list.append(i)
+    queryset = owner_list
+    template_name = 'asset/index.html'
 
 
-# def owner_land_listview(request, owner_id):
-#     aold_owner = get_object_or_404(Owner, pk = owner_id).old_owner
-#     owner_lst = Owner.objects.filter(old_owner=aold_owner)
-#     for i in owner_lst:
-#         try:
-#             int(i.owner)
-#             i.owner = People.objects.get(pk=int(i.owner))
-#         except:
-#             i.owner = i.owner
-#     return render(request, 'asset/owner_land_list.html', locals())
+class PeopleLandListView(DetailView):
+    context_object_name = 'land_list'
+    model = LandOwner
+    template_name = 'asset/owner_land_list.html'
+    pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(PeopleLandListView, self).get_context_data(**kwargs)
+        context['landnum_list'] = LandNum.objects.filter(owner=self.object)
+        return context
 
 
 class FileUploadView(FormView):
