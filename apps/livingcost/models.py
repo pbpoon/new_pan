@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from django.shortcuts import reverse
 import decimal
 
 
@@ -15,7 +16,14 @@ class WaterNum(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return '{0}({1})'.format(self.account, self.desc)
+        if self.desc:
+            desc = '(' + self.desc + ')'
+        else:
+            desc = ''
+        return '{0}{1}'.format(self.account, desc)
+
+    def get_absolute_url(self):
+        return reverse("livingcost:detail", kwargs={'pk': self.id})
 
 
 #个人表
@@ -49,6 +57,7 @@ class WaterRate(models.Model):
             return decimal.Decimal(self.get_total_m3() * self.mark_d.real_price()).quantize(decimal.Decimal(0.00))
         return ''
     get_total_price.short_description = '水费'
+
 
 #总表
 class CenterWater(models.Model):
@@ -89,7 +98,7 @@ class CenterWater(models.Model):
 
     def get_balance_m3(self):
         # 计算总表与全村的总用水量的差额
-        return self.m3 - self.get_total_account_m3()
+        return self.get_total_m3() - self.get_total_account_m3()
 
     def real_price(self):
         # 通过差价求得实际本次水费单价

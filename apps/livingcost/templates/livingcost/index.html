@@ -4,10 +4,10 @@
     <div class="container">
     <div class="col-md-6">
         <ul class="list-group">
-            {% for people in asset_list %}
-                <a class="list-group-item" href="{% url 'asset:owner' people.id %}">
-                    <span class="badge">{{ people.get_total_land }}</span>
-                    {{ people }}
+            {% for num in num_list %}
+                <a class="list-group-item" href="{{  num.get_absolute_url }} ">
+                    <span class="badge">test</span>
+                    {{ num }}
                 </a>
             {% endfor %}
         </ul>

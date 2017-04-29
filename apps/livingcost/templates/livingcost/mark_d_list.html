@@ -1,0 +1,23 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+    <div class="container">
+    <div class="col-md-6">
+        <ul class="list-group">
+            {% for mark_d in mark_d_list %}
+                <a class="list-group-item" href="{% url 'livingcost:mark_detail' mark_d.id %}">
+                    <span class="badge">test</span>
+                    {{ mark_d.mark_d }}
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+    </div>
+{% endblock %}
+
+mark_d = models.DateField('抄表日期')
+    meter_num = models.DecimalField('水表度数', max_digits=9, decimal_places=2, default=0)
+    ps = models.CharField('备注信息', max_length=200, null=True, blank=True)
+    price = models.DecimalField('单价', max_digits=5, decimal_places=2, default=3.6, help_text='水费单价，默认是3.6元/m3')
+    is_pay = models.BooleanField('已缴费', default=False)
+    is_post = models.BooleanField('发布', default=False)

@@ -1,0 +1,105 @@
+{% extends 'basic.html' %}
+{% block title %}户口{% endblock %}
+{% block conten %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'livingcost:mark' %}">水表列表</a></li>
+            {% if num %}
+                <li><a href="#" class="active">{{ num }}</a></li>
+            {% endif %}
+            <li class="active">Data</li>
+        </ol>
+
+        <table class="table">
+            <colgroup>
+                <col class="col-md-1">
+                <col class="col-md-7">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>总表明细</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>抄表日期</td>
+                <td>{{ mark_d.mark_d }}</td>
+            </tr>
+            <tr>
+                <td>水表度数</td>
+                <td>{{ mark_d.meter_num }}</td>
+            </tr>
+            <tr>
+                <td>总表用水量</td>
+                <td>{{ mark_d.get_total_m3 }}</td>
+            </tr>
+            <tr>
+                <td>全村用水量</td>
+                <td>{{ mark_d.get_total_account_m3 }}</td>
+            </tr>
+            <tr>
+                <td>用水量差额</td>
+                <td>{{ mark_d.get_balance_m3 }}</td>
+            </tr>
+            <tr>
+                <td>总水费</td>
+                <td>{{ mark_d.get_total_rate }}</td>
+            </tr>
+            <tr>
+                <td>实际水费单价</td>
+                <td>{{ mark_d.real_price }}</td>
+            </tr>
+            <tr>
+                <td>备注信息</td>
+                <td>{{ mark_d.ps }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>表号</th>
+                <th>水表度数</th>
+                <th>用水量</th>
+                <th>水费金额</th>
+                <th>是否缴费</th>
+                <th>备注信息</th>
+                <th>录入日期</th>
+            </tr>
+            </thead>
+
+
+            <tbody>
+            {% for item in num_list %}
+                <tr>
+                    <td><a href="{% url 'livingcost:detail' item.id %}">{{ item.WaterNum }}</a>
+                    </td>
+                    <td>{{ item.meter_num }}</td>
+                    <td>{{ item.get_total_m3 }}</td>
+                    <td>{{ item.get_total_price }}</td>
+                    <td>{{ item.is_pay }}</td>
+                    <td>{{ item.ps }}</td>
+                    <td>{{ item.create_d }}</td>
+                </tr>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </tfoot>
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}
+

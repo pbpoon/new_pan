@@ -2,8 +2,18 @@
 {% block title %}户口{% endblock %}
 {% block conten %}
 
-    <div class="ui container">
-           <table class="ui single line table">
+    <div class="container">
+
+    <ol class="breadcrumb">
+  <li><a href="{% url 'asset:index' %}">田亩列表</a></li>
+        {% if people %}
+  <li><a href="#" class="active">{{ people }}</a></li>
+        {% endif %}
+  <li class="active">Data</li>
+
+</ol>
+
+           <table class="table">
                 <thead>
                 <tr>
                     <th>区域</th>
@@ -24,7 +34,7 @@
                         <td>{{ item.num }}</td>
                         <td>{{ item.fm }}</td>
                         <td>{{ item.ps }}</td>
-                        <td>{{ item.landownership_set.old_owner }}</td>
+                        <td>{{ item.landownership_set.first.old_owner }}</td>
                     </tr>
                 {% endfor %}
                 <tfoot>
@@ -32,7 +42,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
-                    <th>{{ item.get_owner_fm }}</th>
+                    <th>{{ people.get_total_land }}</th>
                     <th></th>
                     <th></th>
 

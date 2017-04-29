@@ -19,7 +19,7 @@ class OwnerListView(ListView):
 
 
 class PeopleLandListView(DetailView):
-    context_object_name = 'land_list'
+    context_object_name = 'people'
     model = LandOwner
     template_name = 'asset/owner_land_list.html'
     pk_url_kwarg = 'pk'
