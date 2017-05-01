@@ -28,7 +28,10 @@ class Area(models.Model):
         return self.name
 
     def get_total_fm(self):
-        return self.num.filter(is_del=False).aggregate(total_fm = Sum('fm'))
+        return self.area_num.filter(is_del=False).aggregate(total_fm=Sum('fm'))['total_fm']
+
+    def get_count(self):
+        return self.area_num.filter(is_del=False).count()
 
 
 class LandNum(models.Model):
@@ -38,9 +41,9 @@ class LandNum(models.Model):
     category = models.ForeignKey('Category', null=True, blank=True, related_name='land_num', verbose_name='分类名称')
     fm = models.DecimalField('分亩', max_digits=5, decimal_places=2, null=False, help_text='单位为分岁')
     is_rent = models.BooleanField('是否出租', default=False)
-    ps = models.CharField('备注信息', max_length=200,null=True, blank=True)
+    ps = models.CharField('备注信息', max_length=200, null=True, blank=True)
     desc = models.CharField('分类描述', max_length=60, null=True, blank=True)
-    area = models.ForeignKey('Area', related_name='num', verbose_name='所属区域')
+    area = models.ForeignKey('Area', related_name='area_num', verbose_name='所属区域')
     is_del = models.BooleanField('注销', default=False)
 
     class Meta:

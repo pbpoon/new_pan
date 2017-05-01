@@ -26,8 +26,39 @@ class PeopleLandListView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PeopleLandListView, self).get_context_data(**kwargs)
-        context['landnum_list'] = LandNum.objects.filter(owner=self.object)
+        context['landnum_list'] = self.object.land_num.all() #LandNum.objects.filter(owner=self.object)
         return context
+
+
+class AreaListView(ListView):
+    context_object_name = 'area_list'
+    model = Area
+    template_name = 'asset/area_list.html'
+
+
+class AreaDetailView(DetailView):
+    context_object_name = 'area'
+    model = Area
+    template_name = 'asset/area_detail.html'
+    pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(AreaDetailView, self).get_context_data(**kwargs)
+        context['landnum_list'] = self.object.area_num.all()
+        return context
+
+
+class LandNumDetaiView(DetailView):
+    context_object_name = 'landnum'
+    model = LandNum
+    template_name = 'asset/landnum_detail.html'
+    pk_url_kwarg = 'pk'
+
+    def get_context_data(self, **kwargs):
+        context = super(LandNumDetaiView, self).get_context_data(**kwargs)
+        context['owner_list'] = self.object.landownership_set.all()
+        return context
+
 
 
 class FileUploadView(FormView):

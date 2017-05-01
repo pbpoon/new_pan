@@ -1,0 +1,71 @@
+{% extends 'basic.html' %}
+{% block title %}田亩{% endblock %}
+{% block conten %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'asset:area' %}">区域</a></li>
+            {% if landnum.area %}
+                <li><a href="{% url 'asset:area_detail' landnum.area.id %}" class="active">{{ landnum.area }}</a></li>
+            {% endif %}
+            {% if landnum.num %}
+            <li class="active">{{ landnum.num }}</li>
+            {% endif %}
+        </ol>
+
+    <h3 class="page-header">{{ landnum }}</h3>
+<div class="col-md-6">
+        <table class="table">
+            <colgroup>
+                <col class="col-md-3">
+                <col class="col-md-7">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>本件田明细</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>所属区域</td>
+                <td>{{ landnum.area }}</td>
+            </tr>
+            <tr>
+                <td>分类</td>
+                <td>{{ landnum.category }}</td>
+            </tr>
+            <tr>
+                <td>分亩</td>
+                <td>{{ landnum.fm }}</td>
+            </tr>
+            <tr>
+                <td>是否出租</td>
+                <td>{{ landnum.is_rent }}</td>
+            </tr>
+            <tr>
+                <td>注销</td>
+                <td>{{ landnum.is_del }}</td>
+            </tr>
+            <tr>
+                <td>描述</td>
+                <td>{{ landnum.desc }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+    <h5 class="page-header">所有人</h5>
+        {% for item in owner_list %}
+        <ul class="list">
+            <li class="list">
+                <a href="{% url 'asset:owner' item.owner.id %}">
+                {{ item.owner }}</a>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+    </div>
+{% endblock %}
+

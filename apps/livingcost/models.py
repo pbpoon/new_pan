@@ -42,6 +42,17 @@ class WaterRate(models.Model):
         get_latest_by = 'mark_d'
         ordering = ['-mark_d']
 
+    def get_pre_meter(self):
+        '''
+        上次抄表度数
+        '''
+        try:
+            meter_nums = WaterRate.objects.filter(mark_d__lt=self.mark_d)[0]
+            if meter_nums.exists():
+                return meter_nums.meter_num
+        except:
+            return 0
+
     def get_total_m3(self):
         # 求得本次用水量
         try:

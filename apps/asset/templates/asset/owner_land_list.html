@@ -4,53 +4,56 @@
 
     <div class="container">
 
-    <ol class="breadcrumb">
-  <li><a href="{% url 'asset:index' %}">田亩列表</a></li>
-        {% if people %}
-  <li><a href="#" class="active">{{ people }}</a></li>
-        {% endif %}
-  <li class="active">Data</li>
+        <ol class="breadcrumb">
+            <li><a href="{% url 'asset:index' %}">田亩列表</a></li>
+            {% if people %}
+                <li><a href="#" class="active">{{ people }}</a></li>
+            {% endif %}
+            <li class="active">Data</li>
 
-</ol>
+        </ol>
+        <div class="col-md-6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>性质</th>
+                <th>区域</th>
+                <th>田号</th>
+                <th>分亩</th>
+                <th>备注</th>
+                <th>原有人</th>
+            </tr>
+            </thead>
 
-           <table class="table">
-                <thead>
+
+            <tbody>
+            {% for item in landnum_list %}
                 <tr>
-                    <th>区域</th>
-                    <th>性质</th>
-                    <th>田号</th>
-                    <th>分亩</th>
-                    <th>备注</th>
-                    <th>原有人</th>
+                    <td>{{ item.category }}</td>
+                    <td><a href="{% url 'asset:area_detail' item.area.id %}">
+                        {{ item.area }}</a></td>
+                    <td><a href="{% url 'asset:landnum' item.id %}">
+                        {{ item.num }}</a></td>
+                    <td>{{ item.fm }}</td>
+                    <td>{{ item.ps }}</td>
+                    <td>{{ item.landownership_set.first.old_owner }}</td>
                 </tr>
-                </thead>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>{{ people.get_total_land }}</th>
+                <th></th>
+                <th></th>
 
+            </tr>
+            </tfoot>
+            </tbody>
 
-                <tbody>
-                {% for item in landnum_list %}
-                    <tr>
-                        <td>{{ item.area }}</td>
-                        <td>{{ item.category }}</td>
-                        <td>{{ item.num }}</td>
-                        <td>{{ item.fm }}</td>
-                        <td>{{ item.ps }}</td>
-                        <td>{{ item.landownership_set.first.old_owner }}</td>
-                    </tr>
-                {% endfor %}
-                <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>{{ people.get_total_land }}</th>
-                    <th></th>
-                    <th></th>
-
-                </tr>
-                </tfoot>
-                </tbody>
-
-            </table>
-            </div>
+        </table>
+        </div>
+    </div>
 {% endblock %}
 

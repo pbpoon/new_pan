@@ -1,0 +1,66 @@
+{% extends 'basic.html' %}
+{% block title %}田亩{% if area %}-{{ area }}{% endif %}{% endblock %}
+{% block conten %}
+
+    <div class="container">
+
+        <ol class="breadcrumb">
+            <li><a href="{% url 'asset:area' %}">区域</a></li>
+            {% if area %}
+                <li><a href="#" class="active">{{ area }}</a></li>
+            {% endif %}
+        </ol>
+    <h3 class="page-header">
+        {{ area }}
+    </h3>
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>性质</th>
+                    <th>田号</th>
+                    <th>分亩</th>
+                    <th>是否出租</th>
+                    <th>注销</th>
+                    <th>所有人</th>
+                    <th>原有人</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+
+
+                <tbody>
+                {% for item in landnum_list %}
+                    <tr>
+                        <td>{{ item.category }}</td>
+                        <td><a href="{% url 'asset:landnum' item.id %}">
+                            {{ item.num }}</a></td>
+                        <td>{{ item.fm }}</td>
+                        <td>{{ is_rent }}</td>
+                        <td>{{ is_del }}</td>
+                        <td>
+                            <a href="{% url 'asset:owner' item.landownership_set.first.owner.id %}">
+                            {{ item.landownership_set.first.owner }}</a></td>
+                        <td>{{ item.landownership_set.first.old_owner }}</td>
+                        <td>{{ item.ps }}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th>合计：</th>
+                    <th>{{ area.get_count }}件</th>
+                    <th>{{ area.get_total_fm }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
