@@ -83,7 +83,7 @@ class People(models.Model):
             return today.year - self.birthday.year
 
     def get_absolute_url(self):
-        return reverse("account:people", kwargs={'pk':self.id})
+        return reverse("account:people", kwargs={'pk': self.id})
 
     @property
     def get_full_name(self):

@@ -23,6 +23,7 @@ class AccountDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AccountDetailView, self).get_context_data(**kwargs)
         context['people_list'] = self.object.people.filter(is_del=False)
+        context['waternum_list'] =self.object.water_num.all()
         return context
 
 

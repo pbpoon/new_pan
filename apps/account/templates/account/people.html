@@ -2,71 +2,70 @@
 {% block title %}户口{% endblock %}
 {% block conten %}
     <div class="ui container">
-    <div class="ui  segment">
-        <div class="ui header">所属户口:<a href="{{ account.get_absolute_url }}">{{ account }}</a></div>
-        <div class="ui divider"></div>
-        <div class="ui relaxed divided list">
 
-            <div class="item">
-                <div class="content">
-                    <div class="header">姓名：</div>
-                    {{ people }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">性别：</div>
-                    {{ people.sex }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">身份证号码：</div>
-                    {{ people.id_card_num }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">是否已婚：</div>
-                    {{ people.is_main }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">出生年月日</div>
-                    {{ people.birthday }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">年龄：</div>
-                    {{ people.get_age }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">分钱资格：</div>
-                    {{ people.is_getmoney }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">入户日期：</div>
-                    {{ people.joind }}
-                </div>
-            </div>
-             <div class="item">
-                <div class="content">
-                    <div class="header">教育程度：</div>
-                    {{ people.education }}
-                </div>
-            </div>
-            <div class="item">
-                <div class="content">
-                    <div class="header">戶口類型：</div>
-                    {{ people.account_type }}
-                </div>
-            </div>
-        </div>
+    <ol class="breadcrumb">
+        <li><a href="{% url 'account:index' %}">户口列表</a></li>
+        <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>
+        <li><a href="#">{{ people }}</a></li>
+    </ol>
+
+    <div class="col-md-6">
+        <table class="table">
+            <colgroup>
+                <col class="col-md-4">
+                <col class="col-md-8">
+            </colgroup>
+            <thead>
+            <tr>
+                <th>本件田明细</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>姓名</td>
+                <td> {{ people }}</td>
+            </tr>
+            <tr>
+                <td>性别</td>
+                <td>{{ people.sex }}</td>
+            </tr>
+
+            <tr>
+                <td>身份证号码</td>
+                <td>{{ people.id_card_num }}</td>
+            </tr>
+
+            <tr>
+                <td>是否已婚</td>
+                <td>{{ people.is_main }}</td>
+            </tr>
+
+            <tr>
+                <td>出生年月日</td>
+                <td>{{ people.birthday }}</td>
+            </tr>
+            <tr>
+                <td>年龄</td>
+                <td>{{ people.get_age }}</td>
+            </tr>
+            <tr>
+                <td>分红资格</td>
+                <td>{{ people.is_getmoney }}</td>
+            </tr>
+            <tr>
+                <td>入户日期</td>
+                <td>{{ people.joind }}</td>
+            </tr>
+            <tr>
+                <td>教育程度</td>
+                <td>{{ people.education }}</td>
+            </tr>
+            <tr>
+                <td>户口类型</td>
+                <td>{{ people.account_type }}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 {% endblock %}

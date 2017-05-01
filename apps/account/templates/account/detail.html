@@ -2,11 +2,15 @@
 {% block title %}户口{% endblock %}
 {% block conten %}
     <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'account:index' %}">户口列表</a></li>
+            <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>
+        </ol>
         <div class="col-md-8">
-            <div class="ui header">{{ account.name }}
+            <h3 class="page-header">{{ account.name }}
                 <span>/共 {{ account.get_peolpe_count }} 人</span>
                 <span>/符合分红资格： {{ account.get_getmoney_count }} 人</span>
-            </div>
+            </h3>
             <table class="table">
                 <thead>
                 <tr>
@@ -55,8 +59,14 @@
 
             </table>
         </div>
-    <div class="col-md-4">
-        <h1 class="header">sidebar</h1>
-    </div>
+        <div class="col-md-4">
+            <h3 class="page-header">额外信息</h3>
+            {% if waternum_list %}
+                <h4 class="page-header">水表</h4>
+                {% for item in waternum_list %}
+                    <a href="{% url 'livingcost:detail' item.id %}">{{ item }}</a>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
