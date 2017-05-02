@@ -1,0 +1,18 @@
+{% extends 'basic.html' %}
+{% block title %}文章内容{% endblock %}
+{% block conten %}
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="{% url 'article:index' %}">文章列表</a></li>
+{#            <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>#}
+        </ol>
+        <div class="col-md-8">
+            <h3 class="page-header">{{ object.title }}
+            <small>{{ object.author }} 发表于:{{ object.create_d }}</small></h3>
+            <p>{{ object.content }}</p>
+            {% for tag in tag_list %}
+            <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

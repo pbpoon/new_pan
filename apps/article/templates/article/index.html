@@ -1,0 +1,18 @@
+{% extends 'basic.html' %}
+{% block title %}公告栏{% endblock %}
+{% block conten %}
+    <div class="container">
+        <h2 class="page-header">文章列表</h2>
+        <div class="list-group">
+            {% for obj in object_list %}
+                <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
+                    <h4 class="list-group-item-heading">{{ obj.title }}<small>(发布于:{{ obj.create_d }} / {{ obj.author }})</small></h4>
+                    <p class="list-group-item-text">{{ obj.content|slice:":38" }}</p>
+                    {% for tag in obj.tag.name %}
+                        <span class="label-default">{{ tag }}</span>
+                    {% endfor %}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

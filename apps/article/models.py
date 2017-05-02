@@ -31,6 +31,7 @@ class Article(models.Model):
     tag = models.ManyToManyField('Tag', related_name='article', verbose_name='标签')
     likes = models.IntegerField('点赞数', default=0)
     views = models.IntegerField('浏览数', default=0)
+    publish = models.BooleanField('发布', default=False)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
 
@@ -57,7 +58,8 @@ class Tag(models.Model):
 
 
 class Comment(models.Model):
-    commnet = models.CharField('评论内容', max_length=200)
+    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='comment', verbose_name='文章')
+    comment = models.CharField('评论内容', max_length=200)
     name = models.CharField('姓名', max_length=20)
     likes = models.IntegerField('点赞数', default=0)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
