@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'account',
     'livingcost',
     'asset',
+    'article',
 ]
 
 MIDDLEWARE = [

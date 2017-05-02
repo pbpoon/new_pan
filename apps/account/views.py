@@ -2,13 +2,14 @@ from django.shortcuts import render , HttpResponse
 from django.views.generic import ListView, DetailView, View, FormView
 import xlrd
 from xlrd.xldate import xldate_as_datetime
-from datetime import datetime
+
 from .models import Account, People
+from asset.models import LandOwner
 from .forms import FileForm
 
 
 class AccountListView(ListView):
-    model = Account
+    queryset = Account.objects.filter(people__is_del=False).distinct()
     template_name = 'account/index.html'
     context_object_name = 'account_list'
 
@@ -23,7 +24,13 @@ class AccountDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(AccountDetailView, self).get_context_data(**kwargs)
         context['people_list'] = self.object.people.filter(is_del=False)
-        context['waternum_list'] =self.object.water_num.all()
+        context['waternum_list'] = self.object.water_num.all()
+        qs = LandOwner.objects.filter(land_num__owner__account=self.object)
+        owner_list = []
+        for i in qs:
+            if i not in owner_list:
+                owner_list.append(i)
+        context['landnum_list'] = owner_list
         return context
 
 

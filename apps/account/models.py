@@ -16,6 +16,7 @@ class Account(models.Model):
     class Meta:
         verbose_name = '户口号码'
         verbose_name_plural = verbose_name
+        ordering = ['name']
 
     def get_absolute_url(self):
         return reverse("account:detail", kwargs={'name':self.name})
@@ -31,7 +32,7 @@ class Account(models.Model):
         return self.people.filter(is_del=False).count()
 
     def get_getmoney_count(self):
-        return self.people.filter(is_getmoney=True).count()
+        return self.people.filter(is_getmoney=True, is_del=False).count()
 
 
 class People(models.Model):

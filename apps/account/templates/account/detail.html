@@ -62,9 +62,15 @@
         <div class="col-md-4">
             <h3 class="page-header">额外信息</h3>
             {% if waternum_list %}
-                <h4 class="page-header">水表</h4>
+                <h5 class="page-header"><strong>水表</strong></h5>
                 {% for item in waternum_list %}
                     <a href="{% url 'livingcost:detail' item.id %}">{{ item }}</a>
+                {% endfor %}
+            {% endif %}
+            {% if landnum_list %}
+                <h5 class="page-header"><strong>田亩记录</strong></h5>
+                {% for item in landnum_list %}
+                    <a href="{% url 'asset:owner' item.id %}">{{ item }}</a>
                 {% endfor %}
             {% endif %}
         </div>

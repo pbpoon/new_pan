@@ -77,7 +77,7 @@ class LandOwnerShip(models.Model):
 
 class LandOwner(People):
     def get_total_land(self):
-        return  self.land_num.aggregate(total_fm = Sum('fm'))['total_fm']
+        return self.land_num.aggregate(total_fm=Sum('fm'))['total_fm']
     get_total_land.short_description = '共有田地'
 
     class Meta:
