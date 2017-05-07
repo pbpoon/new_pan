@@ -8,4 +8,4 @@ from django import forms
 
 class LoginForm(forms.Form):
     user_name = forms.CharField(label='账号', required=True, min_length=5)
-    password = forms.CharField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput)

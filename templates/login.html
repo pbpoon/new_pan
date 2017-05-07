@@ -1,9 +1,15 @@
 {% extends 'basic.html' %}
 {% block title %}用户登录{% endblock %}
 {% block conten %}
-    <form action="{% url 'user:login' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="提交">
-    </form>
+    <div class="container">
+        {% if msg %}
+            <div class="alert alert-danger" role="alert">{{ msg }}</div>
+        {% endif %}
+        <form action="{% url 'user:login' %}" method="post">
+            {% csrf_token %}
+            {{ form.errors }}
+            {{ form }}
+            <input class="btn btn-default" type="submit" value="提交">
+        </form>
+    </div>
 {% endblock %}

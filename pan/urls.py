@@ -19,7 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^user/', include('users.urls', namespace='user')),
-    url(r'^article/', include('article.urls', namespace='article')),
+    url(r'^', include('article.urls', namespace='article')),
     url(r'^account/', include('account.urls', namespace='account')),
     url(r'^asset/', include('asset.urls', namespace='asset')),
     url(r'^livingcost/', include('livingcost.urls', namespace='livingcost')),

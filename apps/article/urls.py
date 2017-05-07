@@ -17,7 +17,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^article/tag/(?P<tag_id>\d+)/$', views.TagListView.as_view(), name='tag'),
-    url(r'^article/(?P<pk>\d+)/$', views.ArticleDetailView.as_view(), name='detail'),
+    url(r'^/article/tag/(?P<tag_id>\d+)/$', views.TagListView.as_view(), name='tag'),
+    url(r'^/article/(?P<pk>\d+)/$', views.ArticleDetailView.as_view(), name='detail'),
     url(r'^$', views.ArticleListView.as_view(), name='index'),
 ]
