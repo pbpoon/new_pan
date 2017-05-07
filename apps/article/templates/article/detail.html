@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <h3 class="page-header">{{ object.title }}
             <small>{{ object.author }} 发表于:{{ object.create_d }}</small></h3>
-            <p>{{ object.content }}</p>
+            <p>{{ object.content|safe }}</p>
             {% for tag in tag_list %}
             <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
             {% endfor %}

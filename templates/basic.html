@@ -11,6 +11,9 @@
 <main><nav class="navbar navbar-default">
     <a href="" class="navbar-brand">主页</a>
     <a href="http://127.0.0.1:8000/admin" class="navbar-brand">后台</a>
+    {% if request.user %}{{ request.user }}{{ request.user.bind_people }}
+    {% else %}<a href="">登陆</a>
+    {% endif %}
 </nav>
 <div>{% block conten %}{% endblock %}</div>
 </main>

@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'livingcost',
     'asset',
     'article',
+    'users',
 ]
+
+AUTH_USER_MODEL = 'users.UserProfile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
