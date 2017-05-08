@@ -2,16 +2,26 @@
 {% block title %}公告栏{% endblock %}
 {% block conten %}
     <div class="container">
-        <h2 class="page-header">文章列表</h2>
-        <div class="list-group">
-            {% for obj in object_list %}
-                <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
-                    <h4 class="list-group-item-heading">{{ obj.title }}<small>(发布于:{{ obj.create_d }} / {{ obj.author }})</small></h4>
-                    <p class="list-group-item-text">{{ obj.content|safe|slice:":38" }}...</p>
-                    {% for tag in obj.tag.name %}
-                        <span class="label-default">{{ tag }}</span>
-                    {% endfor %}
-                </a>
+        <div class="col-md-8">
+            <h2 class="page-header">文章列表</h2>
+            <div class="list-group">
+                {% for obj in object_list %}
+                    <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
+                        <h4 class="list-group-item-heading">{{ obj.title }}
+                            <small>(发布于:{{ obj.create_d }} / {{ obj.author }})</small>
+                        </h4>
+                        <p class="list-group-item-text">{{ obj.content|safe|slice:":38" }}...</p>
+                        {% for tag in obj.tag.name %}
+                            <span class="label-default">{{ tag }}</span>
+                        {% endfor %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2 class="page-header">所有标签主题</h2>
+            {% for tag in tag_list %}
+                <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
             {% endfor %}
         </div>
     </div>

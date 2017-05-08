@@ -8,8 +8,9 @@
         <form action="{% url 'user:login' %}" method="post">
             {% csrf_token %}
             {{ form.errors }}
-            {{ form }}
-            <input class="btn btn-default" type="submit" value="提交">
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{% url 'article:index' %}">
+            <p><input class="btn btn-default" type="submit" value="提交"></p>
         </form>
     </div>
 {% endblock %}

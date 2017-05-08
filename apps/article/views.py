@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
-from .models import Article
+from .models import Article, Tag
 import markdown
 
 
@@ -13,6 +13,11 @@ class ArticleListView(ListView):
     #     for qs in object_list:
     #         qs.content = markdown.markdown(qs.content)
     #     return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleListView, self).get_context_data(**kwargs)
+        context['tag_list'] = Tag.objects.all()
+        return context
 
 
 class ArticleDetailView(DetailView):
@@ -36,3 +41,8 @@ class TagListView(ListView):
     def get_queryset(self):
         object_list = Article.objects.filter(publish=True, tag__in=self.kwargs['tag_id'])
         return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        context['tag_list'] = Tag.objects.all()
+        return context
