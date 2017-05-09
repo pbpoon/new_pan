@@ -5,11 +5,13 @@
         {% if msg %}
             <div class="alert alert-danger" role="alert">{{ msg }}</div>
         {% endif %}
-        <form action="{% url 'user:login' %}" method="post">
+
+        <form action="" method="post">
+
             {% csrf_token %}
             {{ form.errors }}
             {{ form.as_p }}
-            <input type="hidden" name="next" value="{% url 'article:index' %}">
+            <input type="hidden" name="next" value="{{ next }}">
             <p><input class="btn btn-default" type="submit" value="提交"></p>
         </form>
     </div>

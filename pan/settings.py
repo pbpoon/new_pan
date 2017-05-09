@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 import sys
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -161,4 +162,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #     'INTERCEPT_REDIRECTS': False,
 #     'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 #     'HIDE_DJANGO_SQL': False
-# }
+LOGIN_URL = '/user/login/'
+LOGIN_REDIRECT_URL = "/article/"

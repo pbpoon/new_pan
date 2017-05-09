@@ -1,11 +1,13 @@
-from django.shortcuts import render , HttpResponse
-from django.views.generic import ListView, DetailView, View, FormView
+from django.shortcuts import HttpResponse
+from django.views.generic import ListView, DetailView, FormView
 import xlrd
 from xlrd.xldate import xldate_as_datetime
 
 from .models import Account, People
 from asset.models import LandOwner
 from .forms import FileForm
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class AccountListView(ListView):
@@ -14,12 +16,14 @@ class AccountListView(ListView):
     context_object_name = 'account_list'
 
 
-class AccountDetailView(DetailView):
+class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     template_name = 'account/detail.html'
     context_object_name = 'account'
     slug_field = 'name' #重新设定slug的字段
     slug_url_kwarg = 'name' #定位到slug字段，可能他存入的是字典类型
+    # redirect_field_name = 'user'
+    # raise_exception = True
 
     def get_context_data(self, **kwargs):
         context = super(AccountDetailView, self).get_context_data(**kwargs)
@@ -34,7 +38,7 @@ class AccountDetailView(DetailView):
         return context
 
 
-class PeopleView(DetailView):
+class PeopleView(LoginRequiredMixin, DetailView):
     model = People
     template_name = 'account/people.html'
     context_object_name = 'people'
