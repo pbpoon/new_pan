@@ -18,10 +18,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    url(r'^login', auth_views.login,{'template_name':'login.html'} ,name='login'),
-    url(r'^logout', auth_views.logout,{'template_name':'logged_out.html'}, name='logout'),
+    url(r'^login', auth_views.login, {'template_name':'login.html'}, name='login'),
+    url(r'^logout', auth_views.logout, {'template_name':'logged_out.html'}, name='logout'),
     url(r'^register', views.RegisterView.as_view(), name='register'),
-    # url(r'^login/$', auth_views.login, name='login'),
-    # url(r'^logout/$', auth_views.logout, name='logout'),
-    # url(r'^password-change/$', auth_views.password_change, name='password_change'),
 ]

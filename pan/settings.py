@@ -49,6 +49,10 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
+AUTHENTICATION_BACKENDS =(
+    'users.views.CustomAuthBackend',
+)
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

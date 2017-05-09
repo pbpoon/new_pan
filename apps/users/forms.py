@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(label='用户名', help_text='用于登录的账户名称', required=True, min_length=5, max_length=18)
+    username = forms.CharField(label='用户名', help_text='用于登录的账户名称', required=False, min_length=5, max_length=18)
     password = forms.CharField(label='设置密码', help_text='用于登录的密码', required=True, min_length=8,
                                widget=forms.PasswordInput)
     password2 = forms.CharField(label='重新输入密码', help_text='用于登录的密码', required=True, min_length=8,
@@ -23,11 +23,12 @@ class RegisterForm(forms.Form):
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if ' ' in username or '@' in username:
-            raise forms.ValidationError(u'昵称中不能包含空格和@字符')
-        res = UserProfile.objects.filter(username=username)
-        if len(res) != 0:
-            raise forms.ValidationError(u'此昵称已经注册，请重新输入')
+        if username:
+            if ' ' in username or '@' in username:
+                raise forms.ValidationError(u'昵称中不能包含空格和@字符')
+            res = UserProfile.objects.filter(username=username)
+            if len(res) != 0:
+                raise forms.ValidationError(u'此昵称已经注册，请重新输入')
         return username
 
     def clean_password2(self):
@@ -49,6 +50,9 @@ class RegisterForm(forms.Form):
                 raise forms.ValidationError(u'输入的村民姓名已注册账户！')
         return people
 
+    def clean(self):
+        if self.cleaned_data.get('username', None) is None:
+            self.cleaned_data['username'] = self.cleaned_data['people_name']
 
 
 
