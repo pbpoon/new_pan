@@ -18,29 +18,28 @@ class CustomAuthBackend(ModelBackend):
         except Exception as e:
             return None
 
-
-
-class LoginView(View):
-    template_name = 'login.html'
-
-    def post(self, request):
-        form = LoginForm(request.POST)
-        data = {}
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(username=cd.get('user_name'), password=cd.get('password'))
-            if user is not None:
-                login(request, user)
-                # return HttpResponseRedirect(reverse('article:index'))
-                return HttpResponseRedirect(request.POST['next'])
-            msg = '用户名或者密码错误!'
-            return render(request, self.template_name, locals())
-        else:
-            return render(request, self.template_name, locals())
-
-    def get(self, request):
-        form = LoginForm()
-        return render(request, 'login.html', locals())
+#
+# class LoginView(View):
+#     template_name = 'login.html'
+#
+#     def post(self, request):
+#         form = LoginForm(request.POST)
+#         data = {}
+#         if form.is_valid():
+#             cd = form.cleaned_data
+#             user = authenticate(username=cd.get('user_name'), password=cd.get('password'))
+#             if user is not None:
+#                 login(request, user)
+#                 # return HttpResponseRedirect(reverse('article:index'))
+#                 return HttpResponseRedirect(request.POST['next'])
+#             msg = '用户名或者密码错误!'
+#             return render(request, self.template_name, locals())
+#         else:
+#             return render(request, self.template_name, locals())
+#
+#     def get(self, request):
+#         form = LoginForm()
+#         return render(request, 'login.html', locals())
 
 
 # class LogoutView(View):
@@ -59,11 +58,11 @@ class RegisterView(View):
             '''
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            bind_people = form.cleaned_data['card_num']
+            bind_people = form.cleaned_data['people_name']
             new_user = UserProfile.objects.create(username=username, bind_people=bind_people)
             new_user.set_password(password)
             new_user.save()
-            return render(request, 'login.html', {'msg':'注册成功!','form': form})
+            return render(request, 'login.html', {'msg':'注册成功!', 'form': form})
         return render(request, 'register.html', {'form': form})
 
     def get(self, request):

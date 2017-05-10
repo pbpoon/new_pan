@@ -20,15 +20,10 @@ class RegisterForm(forms.Form):
     people_name = forms.CharField(label='本村户口内姓名', help_text='账户绑定的本村户口姓名，必须正确', required=True, min_length=2)
     card_num = forms.CharField(label='身份证号码', help_text='账户绑定的本村户口姓名的身份证号码', required=True, min_length=15,
                                max_length=18)
+    telphone = forms.CharField(label='s')
 
     def clean_username(self):
         username = self.cleaned_data['username']
-        if username:
-            if ' ' in username or '@' in username:
-                raise forms.ValidationError(u'昵称中不能包含空格和@字符')
-            res = UserProfile.objects.filter(username=username)
-            if len(res) != 0:
-                raise forms.ValidationError(u'此昵称已经注册，请重新输入')
         return username
 
     def clean_password2(self):
@@ -37,9 +32,17 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError('两次密码不相等！')
         return cd['password2']
 
-    def clean_card_num(self):
+    def clean_people_name(self):
         people_name = self.cleaned_data['people_name']
-        card_num = self.cleaned_data.get('card_num')
+        return people_name
+
+    def clean_card_num(self):
+        card_num = self.cleaned_data['card_num']
+        return card_num
+
+    def clean(self):
+        people_name = self.cleaned_data.get('people_name', '')
+        card_num = self.cleaned_data.get('card_num', '')
         try:
             people = People.objects.get(first_name=people_name[:1], last_name=people_name[1:], id_card_num=card_num)
         except:
@@ -48,11 +51,16 @@ class RegisterForm(forms.Form):
             res = UserProfile.objects.filter(bind_people=people)
             if len(res) != 0:
                 raise forms.ValidationError(u'输入的村民姓名已注册账户！')
-        return people
-
-    def clean(self):
-        if self.cleaned_data.get('username', None) is None:
-            self.cleaned_data['username'] = self.cleaned_data['people_name']
-
+        self.cleaned_data['people_name'] = people
+        username = self.cleaned_data['username']
+        if username:
+            if ' ' in username or '@' in username:
+                raise forms.ValidationError(u'昵称中不能包含空格和@字符')
+            res = UserProfile.objects.filter(username=username)
+            if len(res) != 0:
+                raise forms.ValidationError(u'此昵称已经注册，请重新输入')
+        else:
+            self.cleaned_data['username'] = self.cleaned_data['card_num'][6:]
+        return self.cleaned_data
 
 
