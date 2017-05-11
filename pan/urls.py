@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^', RedirectView.as_view(url='/article'),name='index'),
+    url(r'^no_perm/', TemplateView.as_view(template_name='no_prem.html'),name='no_perm'),
     url(r'^user/', include('users.urls', namespace='user')),
     url(r'^article/', include('article.urls', namespace='article')),
     url(r'^account/', include('account.urls', namespace='account')),

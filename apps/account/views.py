@@ -1,5 +1,5 @@
-from django.shortcuts import HttpResponse
-from django.views.generic import ListView, DetailView, FormView
+from django.shortcuts import HttpResponse, get_object_or_404, render, HttpResponseRedirect
+from django.views.generic import ListView, DetailView, FormView, View
 import xlrd
 from xlrd.xldate import xldate_as_datetime
 
@@ -15,7 +15,6 @@ class AccountViewPremMixin(object):
         bind_people = request.user.bind_people
         if bind_people.account != context['account']:
             print('不能浏览')
-
 
 
 class AccountListView(ListView):
@@ -46,16 +45,35 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class PeopleView(LoginRequiredMixin, DetailView):
-    model = People
-    template_name = 'account/people.html'
-    context_object_name = 'people'
-    pk_url_kwarg = 'pk'
+# class PeopleView(LoginRequiredMixin, DetailView):
+#     model = People
+#     template_name = 'account/people.html'
+#     context_object_name = 'people'
+#     pk_url_kwarg = 'pk'
+#
+#     def get(self, request, *args, **kwargs):
+#         context = super(PeopleView, self).get(request, *args, **kwargs)
+#         if request.user.bind_people.account != kwargs['account']:
+#             print('不能浏览')
+#         return context
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(PeopleView, self).get_context_data(**kwargs)
+#         context['account'] = Account.objects.get(people=self.object)
+#         return context
 
-    def get_context_data(self, **kwargs):
-        context = super(PeopleView, self).get_context_data(**kwargs)
-        context['account'] = Account.objects.get(people=self.object)
-        return context
+class PeopleView(LoginRequiredMixin, View):
+    template_name = 'account/people.html'
+
+    def get(self, request, **kwargs):
+        people = get_object_or_404(People, pk=kwargs['pk'])
+        if request.user.is_superuser == False:
+            if request.user.bind_people.account != people.account:
+                return HttpResponseRedirect('/no_perm/', {'title':'没有权限', 'msg':'你需要为该户口人员才有权限查看'})
+        account = Account.objects.get(people=people)
+        context = {'people': people,
+                   'account': account}
+        return render(request, self.template_name, context)
 
 
 class FileUploadView(FormView):
