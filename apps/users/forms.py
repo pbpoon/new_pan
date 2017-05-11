@@ -20,7 +20,8 @@ class RegisterForm(forms.Form):
     people_name = forms.CharField(label='本村户口内姓名', help_text='账户绑定的本村户口姓名，必须正确', required=True, min_length=2)
     card_num = forms.CharField(label='身份证号码', help_text='账户绑定的本村户口姓名的身份证号码', required=True, min_length=15,
                                max_length=18)
-    telphone = forms.CharField(label='s')
+    telphone = forms.CharField(label='联系手机号码', help_text='方便日后沟通,请填写正确手机号码', required=False, min_length=11,
+                               max_length=11)
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -40,12 +41,23 @@ class RegisterForm(forms.Form):
         card_num = self.cleaned_data['card_num']
         return card_num
 
+    def clean_telphone(self):
+        telphone = self.cleaned_data['telphone']
+        import re
+        p2 = re.compile('^0\d{2,3}\d{7,8}$|^1[358]\d{9}$|^147\d{8}')
+        phonematch = p2.match(telphone)
+
+        if phonematch:
+            return telphone
+        else:
+            raise forms.ValidationError('请输入正确的电话号码格式')
+
     def clean(self):
         people_name = self.cleaned_data.get('people_name', '')
         card_num = self.cleaned_data.get('card_num', '')
         try:
             people = People.objects.get(first_name=people_name[:1], last_name=people_name[1:], id_card_num=card_num)
-        except:
+        except Exception as e:
             raise forms.ValidationError(u'输入的村民姓名或身份证号码有误，请重新输入！')
         else:
             res = UserProfile.objects.filter(bind_people=people)

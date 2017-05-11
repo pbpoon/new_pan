@@ -1,0 +1,18 @@
+{% extends 'basic.html' %}
+{% block title %}用户资料{% endblock %}
+{% block conten %}
+    <div class="container">
+        {% if msg %}
+            <div class="alert alert-danger" role="alert">{{ msg }}</div>
+        {% endif %}
+
+        <form action="" method="post">
+
+            {% csrf_token %}
+            {{ form.errors }}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{{ next }}">
+            <p><input class="btn btn-default" type="submit" value="提交"></p>
+        </form>
+    </div>
+{% endblock %}

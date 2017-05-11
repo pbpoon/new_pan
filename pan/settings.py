@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'asset',
     'article',
     'users',
+    'guardian',
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
 AUTHENTICATION_BACKENDS =(
     'users.views.CustomAuthBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
 
 MIDDLEWARE = [

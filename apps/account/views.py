@@ -9,6 +9,14 @@ from .forms import FileForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+class AccountViewPremMixin(object):
+    def get_context_data(self, request, **kwargs):
+        context = super(AccountViewPremMixin, self).get_context_data(**kwargs)
+        bind_people = request.user.bind_people
+        if bind_people.account != context['account']:
+            print('不能浏览')
+
+
 
 class AccountListView(ListView):
     queryset = Account.objects.filter(people__is_del=False).distinct()

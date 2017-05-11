@@ -21,8 +21,8 @@ class CustomAuthBackend(ModelBackend):
 #
 # class LoginView(View):
 #     template_name = 'login.html'
-#
 #     def post(self, request):
+#
 #         form = LoginForm(request.POST)
 #         data = {}
 #         if form.is_valid():
@@ -59,9 +59,15 @@ class RegisterView(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             bind_people = form.cleaned_data['people_name']
+
             new_user = UserProfile.objects.create(username=username, bind_people=bind_people)
             new_user.set_password(password)
             new_user.save()
+            '''如注册资料有电话号码,保存电话号码到people的资料'''
+            telphone = form.cleaned_data['telphone']
+            if telphone:
+                bind_people.phone_num = telphone
+                bind_people.save()
             return render(request, 'login.html', {'msg':'注册成功!', 'form': form})
         return render(request, 'register.html', {'form': form})
 
