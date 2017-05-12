@@ -3,7 +3,16 @@
 {% block conten %}
     <div class="container">
         <h2 class="page-header">没有权限！</h2>
-    <h3>你不为该户口人员，没有权限查看该资料</h3>
-        <a href="/">回到首页</a>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                        <h4>{{ message }}</h4>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <a href="{{ request.session.back_url }}">返回</a>
     </div>
 {% endblock %}

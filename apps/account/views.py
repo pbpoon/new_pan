@@ -1,5 +1,7 @@
 from django.shortcuts import HttpResponse, get_object_or_404, render, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, FormView, View
+from django.contrib import messages
+
 import xlrd
 from xlrd.xldate import xldate_as_datetime
 
@@ -67,12 +69,17 @@ class PeopleView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         people = get_object_or_404(People, pk=kwargs['pk'])
+        '''检查权限，如果为superuser或者该户口人员可以查看人员详细资料'''
         if request.user.is_superuser == False:
             if request.user.bind_people.account != people.account:
-                return HttpResponseRedirect('/no_perm/', {'title':'没有权限', 'msg':'你需要为该户口人员才有权限查看'})
+                messages.warning(request, '你需要为<{0}>户口内人员才有权限查看'.format(people.account))
+                request.session['back_url'] = people.account.get_absolute_url()
+                return HttpResponseRedirect('/no_perm/')
+
         account = Account.objects.get(people=people)
         context = {'people': people,
                    'account': account}
+
         return render(request, self.template_name, context)
 
 
