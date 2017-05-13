@@ -11,13 +11,6 @@ from .forms import FileForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-class AccountViewPremMixin(object):
-    def get_context_data(self, request, **kwargs):
-        context = super(AccountViewPremMixin, self).get_context_data(**kwargs)
-        bind_people = request.user.bind_people
-        if bind_people.account != context['account']:
-            print('不能浏览')
-
 
 class AccountListView(ListView):
     queryset = Account.objects.filter(people__is_del=False).distinct()
@@ -70,7 +63,7 @@ class PeopleView(LoginRequiredMixin, View):
     def get(self, request, **kwargs):
         people = get_object_or_404(People, pk=kwargs['pk'])
         '''检查权限，如果为superuser或者该户口人员可以查看人员详细资料'''
-        if request.user.is_superuser == False:
+        if not request.user.is_superuser:
             if request.user.bind_people.account != people.account:
                 messages.warning(request, '你需要为<{0}>户口内人员才有权限查看'.format(people.account))
                 request.session['back_url'] = people.account.get_absolute_url()

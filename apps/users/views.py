@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, reverse
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
@@ -74,3 +74,15 @@ class RegisterView(View):
     def get(self, request):
         form = RegisterForm()
         return render(request, 'register.html', {'form': form})
+
+class UserInfolView(View):
+    template_name = 'user_info.html'
+
+    def get(self, request, pk):
+        user = get_object_or_404(UserProfile, pk=pk)
+
+        context={
+            'user':user
+        }
+        return render(request, self.template_name, context)
+

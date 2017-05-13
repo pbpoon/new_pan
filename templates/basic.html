@@ -29,8 +29,9 @@
                     <li class="active"><a href="{% url 'article:index' %}">文章内容<span
                             class="sr-only">(current)</span></a></li>
                     <li class="dropdown">
-                        <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">我村文档<span class="caret"></span></a>
+                        <a href="#" data-target="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span>我村文档</span><span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'account:index' %}">户口资料</a></li>
                             <li><a href="{% url 'asset:index' %}">田亩簿</a></li>
@@ -54,9 +55,13 @@
                                 {% if request.user.bind_people %}{{ request.user.bind_people }}{% else %}
                                     {{ request.user }}{% endif %}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
+                                <li><a href="{% url 'user:info' request.user.id %}">用户资料</a></li>
                                 <li><a href="#">Another action</a></li>
                                 <li><a href="#">Something else here</a></li>
+                                {% if request.user.is_superuser %}
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/admin">管理后台</a></li>
+                                    {% endif %}
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'user:logout' %}">注销</a></li>
                             </ul>
@@ -71,22 +76,8 @@
     </nav>
     <div>{% block conten %}{% endblock %}</div>
 </main>
-{#<script>#}
-{#    $('.dropdown-toggle').hover(function (e) {#}
-{#        $(this).next().slideDown(100);#}
-{#    }, function (e) {#}
-{#        if (!e.toElement.classList.contains('dropdown-menu')) {#}
-{#            $(this).next().slideUp(100);#}
-{#        }#}
-{#    });#}
-{##}
-{#    $('.dropdown-menu').on('mouseleave', function (e) {#}
-{#        if (!e.toElement.classList.contains('dropdown-toggle')) {#}
-{#            $(this).slideUp(100);#}
-{#        }#}
-{#    })#}
-{#</script>#}
-<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-<script href="{% static 'js/bootstrap.min.js' %}"></script>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
 </body>
 </html>
