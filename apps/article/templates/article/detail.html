@@ -4,15 +4,31 @@
     <div class="container">
         <ol class="breadcrumb">
             <li><a href="{% url 'article:index' %}">文章列表</a></li>
-{#            <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>#}
         </ol>
         <div class="col-md-8">
             <h3 class="page-header">{{ object.title }}
-            <small>{{ object.author }} 发表于:{{ object.create_d }}</small></h3>
+                <small>{{ object.author }} 发表于:{{ object.create_d }}</small>
+            </h3>
             <p>{{ object.content|safe }}</p>
             {% for tag in tag_list %}
-            <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
+                <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
             {% endfor %}
+            {% if comment_list %}
+                <div><h4 class="page-header">评论列表</h4>
+                {% for comment in comment_list %}
+                    <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">{{ comment.user }}
+                        <small>
+                            -- 评论于:{{ comment.create_d|date }}
+                        </small>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{ comment.comment }}</p>
+                    </div>
+            </div>{% endfor %}
+            </div>{% endif %}
+        <hr class="divider">
+        {% include 'article/comment_form.html' %}
         </div>
-    </div>
 {% endblock %}

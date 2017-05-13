@@ -12,4 +12,6 @@ class UserProfile(AbstractUser):
         verbose_name_plural = verbose_name
 
     def __str__(self):
+        if self.bind_people:
+            return str(self.bind_people)
         return self.username
