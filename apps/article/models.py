@@ -76,4 +76,3 @@ class Like(models.Model):
         verbose_name = '评论'
         verbose_name_plural = verbose_name
         ordering = ['-create_d']
-

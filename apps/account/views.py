@@ -65,7 +65,7 @@ class PeopleView(LoginRequiredMixin, View):
         '''检查权限，如果为superuser或者该户口人员可以查看人员详细资料'''
         if not request.user.is_superuser:
             if request.user.bind_people.account != people.account:
-                messages.warning(request, '你需要为<{0}>户口内人员才有权限查看'.format(people.account))
+                messages.error(request, '你需要为<{0}>户口内人员才有权限查看'.format(people.account))
                 request.session['back_url'] = people.account.get_absolute_url()
                 return HttpResponseRedirect('/no_perm/')
 

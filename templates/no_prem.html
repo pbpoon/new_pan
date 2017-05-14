@@ -4,10 +4,10 @@
     <div class="container">
         <h2 class="page-header">没有权限！</h2>
         {% if messages %}
-            <ul class="messages">
+            <ul class="messages list-unstyled">
                 {% for message in messages %}
-                    <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
-                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                    <li class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}重要: {% endif %}
                         <h4>{{ message }}</h4>
                     </li>
                 {% endfor %}
