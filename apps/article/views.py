@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
-from django.views.generic import ListView, DetailView, FormView
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
+from django.views.generic import ListView, DetailView, FormView, View
 from .models import Article, Tag, Like
 from .forms import CommentForm, LikeForm
 import markdown
@@ -36,7 +36,12 @@ class ArticleDetailView(DetailView):
         context['tag_list'] = self.object.tag.all()
         context['comment_list'] = self.object.comment.all()
         context['form'] = CommentForm()
-
+        context['article_like'] = Like.objects.filter(type='a', like_id=self.object.id).count()
+        context['liked'] = False
+        if self.request.user.is_authenticated:
+            liked = Like.objects.filter(type='a', like_id=self.object.id, user=self.request.user)
+            if liked:
+                context['liked'] = liked.like
         return context
 
 
@@ -77,10 +82,26 @@ class CommentView(FormView):
 
         return render(self.request, 'article/detail.html', context)
 
-class ClickLikeView(FormView):
-    template_name = ''
-    form_class = LikeForm
 
-    def form_valid(self, form):
+class LikeArticleView(View):
+    def get(self, request):
+        article = Article.objects.get(id=self.request.GET.get('like_id'))
+
+        if request.user.is_authenticated:
+            try:
+                Like.objects.get(type='a', like_id=article.id, user=request.user)
+
+            except:
+                like = Like(type='a', like_id=article.id, like=True, user=request.user)
+                like.save()
+
+            else:
+                like = Like.objects.get(type='a', like_id=article.id, user=request.user)
+                like.like = False
+                like.save()
+
+        return redirect(article.get_absolute_url())
+
+
+class LikeCommentView(FormView):
         pass
-

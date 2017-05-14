@@ -13,22 +13,37 @@
             {% for tag in tag_list %}
                 <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
             {% endfor %}
+
+            <form action="{% url 'article:article_like' %}" method="get">
+                <input type="hidden" name="like_id" value="{{ object.pk }}">
+                <button type="submit" class="btn btn-success" aria-label="Right Align">
+                    {% if liked %}
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                    {% else %}
+                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                    {% endif %}
+                    <span class="badge">{{ article_like }}</span>
+                </button>
+            </form>
+
+
+
             {% if comment_list %}
                 <div><h4 class="page-header">评论列表</h4>
-                {% for comment in comment_list %}
-                    <div class="panel panel-default">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading">{{ comment.user }}
-                        <small>
-                            -- 评论于:{{ comment.create_d|date }}
-                        </small>
-                    </div>
-                    <div class="panel-body">
-                        <p>{{ comment.comment }}</p>
-                    </div>
-            </div>{% endfor %}
-            </div>{% endif %}
-        <hr class="divider">
-        {% include 'article/comment_form.html' %}
+                    {% for comment in comment_list %}
+                        <div class="panel panel-default">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading">{{ comment.user }}
+                                <small>
+                                    -- 评论于:{{ comment.create_d|date }}
+                                </small>
+                            </div>
+                            <div class="panel-body">
+                                <p>{{ comment.comment }}</p>
+                            </div>
+                        </div>{% endfor %}
+                </div>{% endif %}
+            <hr class="divider">
+            {% include 'article/comment_form.html' %}
         </div>
 {% endblock %}
