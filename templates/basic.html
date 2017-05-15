@@ -10,15 +10,18 @@
 <body>
 <main>
     {% if messages %}
-        <ul class="messages list-unstyled">
+        <ul style="margin-bottom: 0px; border-radius:0px" class="messages list-unstyled">
             {% for message in messages %}
-                <li class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible in text-center" role="alert">
+                {% if message %}
+                <li style="margin-bottom: 0px; border-radius:0px" class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible in text-center"
+                    role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}重要: {% endif %}
                     <h4>{{ message }}</h4>
                 </li>
+                {% endif %}
             {% endfor %}
         </ul>
     {% endif %}

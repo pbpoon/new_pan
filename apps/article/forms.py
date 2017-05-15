@@ -12,9 +12,5 @@ class CommentForm(forms.ModelForm):
         fields = ['comment']
 
         widgets = {
-            'comment':forms.Textarea(attrs={'class': 'form-control', 'placeholder': '我来说两句~'})
+            'comment':forms.Textarea(attrs={'class': 'form-control', 'placeholder': '我来说两句~', 'row':3})
         }
-
-
-class LikeForm(forms.Form):
-    like = forms.BooleanField(widget=forms.HiddenInput)

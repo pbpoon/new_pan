@@ -10,33 +10,31 @@
                 <small>{{ object.author }} 发表于:{{ object.create_d }}</small>
             </h3>
             <p>{{ object.content|safe }}</p>
-            {% for tag in tag_list %}
-                <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
-            {% endfor %}
 
-            {#        这里两个表单是点赞文章，type是a#}
+            <hr class="divider">
+            <div class="row">
+                {% for tag in tag_list %}
 
-            <form action="{% url 'article:article_like' %}" method="get">
-                <input type="hidden" name="article_id" value="{{ object.pk }}">
-                <input type="hidden" name="like_id" value="{{ object.pk }}">
-                <input type="hidden" name="like" value="True">
-                <input type="hidden" name="type" value="a">
-                <button type="submit" class="btn btn-link btn-lg" aria-label="Right Align">
-                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                    <span class="badge">{{ article_like }}</span>
-                </button>
-            </form>
 
-            <form action="{% url 'article:article_like' %}" method="get">
-                <input type="hidden" name="article_id" value="{{ object.pk }}">
-                <input type="hidden" name="like_id" value="{{ object.pk }}">
-                <input type="hidden" name="like" value="False">
-                <input type="hidden" name="type" value="a">
-                <button type="submit" class="btn btn-link btn-lg" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                    <span class="badge">{{ article_unlike }}</span>
-                </button>
-            </form>
+                    <div class="pull-right">
+                        <h4><a class="label label-info " href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></h4>
+                    </div>
+                {% endfor %}
+
+                {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
+                <div class="btn-group pull-left">
+                    <button type="submit" class="btn btn-link btn-lg" aria-label="Right Align" form="article_like">
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                        <span class="badge">{{ article_like }}</span>
+                    </button>
+
+                    <button type="submit" class="btn btn-link btn-lg" aria-label="Left Align" form="article_unlike">
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                        <span class="badge">{{ article_unlike }}</span>
+                    </button>
+                </div>
+
+            </div>
             <hr class="divider">
 
             {#        评论内容#}
@@ -56,8 +54,10 @@
                                     </small>
                                 </div>
                                 <div class="panel-body">
-                                <div class="col-sm-2">
-                                    <form action="{% url 'article:article_like' %}" method="get">
+
+
+                                    <form action="{% url 'article:article_like' %}" method="get"
+                                          id="comment_like{{ forloop.counter }}">
 
                                         {#                                用get传到likeview的数据，由于这里是点赞评论，type是c，下表是unlike，结构相同#}
 
@@ -65,34 +65,64 @@
                                         <input type="hidden" name="like_id" value="{{ comment.pk }}">
                                         <input type="hidden" name="like" value="True">
                                         <input type="hidden" name="type" value="c">
-                                        <button type="submit" class="btn btn-link btn-lg" aria-label="Right Align">
-                                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                    </form>
+
+                                    <form action="{% url 'article:article_like' %}" method="get"
+                                          id="comment_unlike{{ forloop.counter }}">
+                                        <input type="hidden" name="article_id" value="{{ object.pk }}">
+                                        <input type="hidden" name="like_id" value="{{ comment.pk }}">
+                                        <input type="hidden" name="like" value="False">
+                                        <input type="hidden" name="type" value="c">
+                                    </form>
+
+                                    {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
+
+                                    <div class="container">
+                                        <p>{{ comment.comment }}</p></div>
+                                </div>
+                                <div class="container">
+                                    <div class="btn-group">
+                                        <button type="submit" class="btn btn-link btn-lg pull-left"
+                                                aria-label="Right Align" form="comment_like{{ forloop.counter }}">
+                                                    <span class="glyphicon glyphicon-thumbs-up"
+                                                          aria-hidden="true"></span>
 
                                             {#                                    读取点赞量#}
 
                                             <span class="badge">{{ item.like }}</span>
                                         </button>
-                                    </form>
 
-                                    <form action="{% url 'article:article_like' %}" method="get">
-                                        <input type="hidden" name="article_id" value="{{ object.pk }}">
-                                        <input type="hidden" name="like_id" value="{{ comment.pk }}">
-                                        <input type="hidden" name="like" value="False">
-                                        <input type="hidden" name="type" value="c">
-                                        <button type="submit" class="btn btn-link btn-lg" aria-label="Left Align">
-                                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                        <button type="submit" class="btn btn-link btn-lg pull-right"
+                                                aria-label="Left Align" form="comment_unlike{{ forloop.counter }}">
+                                                    <span class="glyphicon glyphicon-thumbs-down"
+                                                          aria-hidden="true"></span>
                                             <span class="badge">{{ item.unlike }}</span>
                                         </button>
-                                    </form>
-                                </div>
-                                <div class="col-sm-10">
-                                        <p>{{ comment.comment }}</p></div>
+                                    </div>
                                 </div>
                             </div>
-
-                                {% endwith %}{% endfor %}
+                        {% endwith %}{% endfor %}
                 </div>{% endif %}
             <hr class="divider">
-            {% include 'article/comment_form.html' %}
+{% include 'article/comment_form.html' %}
         </div>
+        {#        这里两个表单是点赞文章，type是a#}
+
+        <form action="{% url 'article:article_like' %}" method="get" id="article_like">
+            <input type="hidden" name="article_id" value="{{ object.pk }}">
+            <input type="hidden" name="like_id" value="{{ object.pk }}">
+            <input type="hidden" name="like" value="True">
+            <input type="hidden" name="type" value="a">
+
+        </form>
+
+        <form action="{% url 'article:article_like' %}" method="get" id="article_unlike">
+            <input type="hidden" name="article_id" value="{{ object.pk }}">
+            <input type="hidden" name="like_id" value="{{ object.pk }}">
+            <input type="hidden" name="like" value="False">
+            <input type="hidden" name="type" value="a">
+
+        </form>
+        {#        插入发表评论表单#}
+
 {% endblock %}
