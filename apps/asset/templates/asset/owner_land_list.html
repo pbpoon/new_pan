@@ -1,15 +1,15 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'asset/index.html' %}
+{% block title %}
+    {{ people }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb_detail_link %}
+    <li><a href="{{ people.get_absolute_url }}">{{ people }}</a></li>
+{% endblock %}
+
+{% block content %}
 
     <div class="container">
-
-        <ol class="breadcrumb">
-            <li><a href="{% url 'asset:index' %}">田亩列表</a></li>
-            {% if people %}
-                <li><a href="#" class="active">{{ people }}</a></li>
-            {% endif %}
-            <li class="active">Data</li>
 
         </ol>
         <div class="col-md-6">

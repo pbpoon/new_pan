@@ -33,6 +33,9 @@ class Area(models.Model):
     def get_count(self):
         return self.area_num.filter(is_del=False).count()
 
+    def get_absolute_url(self):
+        return reverse("asset:area_detail", kwargs={'pk': self.id})
+
 
 class LandNum(models.Model):
     owner = models.ManyToManyField('LandOwner', through='LandOwnerShip', through_fields=('num', 'owner'),

@@ -1,17 +1,15 @@
-{% extends 'basic.html' %}
-{% block title %}水费-总表{% endblock %}
-{% block conten %}
+{% extends 'livingcost/mark_d_list.html' %}
+{% block title %}
+    总表 | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb_detail_link %}
+    <li><a href="{{ mark_d.get }}"></a></li>
+{% endblock %}
+
+{% block content %}
 
     <div class="container">
-
-        <ol class="breadcrumb">
-            <li><a href="{% url 'livingcost:mark' %}">抄表列表</a></li>
-            {% if num %}
-                <li><a href="#" class="active">{{ num }}</a></li>
-            {% endif %}
-            <li class="active">Data</li>
-        </ol>
-
         <table class="table">
             <colgroup>
                 <col class="col-md-1">

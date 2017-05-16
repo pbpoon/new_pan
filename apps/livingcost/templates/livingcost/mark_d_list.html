@@ -1,6 +1,14 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'basc.html' %}
+{% block title %}抄表列表 | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'livingcost:mark' %}">抄表列表</a></li>
+     {% block breadcrumb_detail_link %}
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
     <div class="container">
     <div class="col-md-6">
         <ul class="list-group">

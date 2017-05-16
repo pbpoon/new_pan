@@ -118,3 +118,6 @@ class CenterWater(models.Model):
 
     def __str__(self):
         return '{0}:{1}'.format(self.mark_d, self.get_total_m3())
+
+    def get_absolute_url(self):
+        return reverse('mark_detail', kwargs={'pk': self.pk})
