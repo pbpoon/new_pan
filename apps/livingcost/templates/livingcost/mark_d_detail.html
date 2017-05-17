@@ -1,10 +1,11 @@
 {% extends 'livingcost/mark_d_list.html' %}
 {% block title %}
-    总表 | {{ block.super }}
+    {{ block.super }} - {{ mark_d.mark_d }}
 {% endblock %}
 
-{% block breadcrumb_detail_link %}
-    <li><a href="{{ mark_d.get }}"></a></li>
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ mark_d.get_absolute_url }}">{{ mark_d.mark_d }}</a></li>
 {% endblock %}
 
 {% block content %}

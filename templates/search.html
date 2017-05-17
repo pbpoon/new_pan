@@ -1,0 +1,47 @@
+{% extends 'basc.html' %}
+{% block title %}
+    搜索结果 | {{ block.super }}
+{% endblock %}
+
+{% block messages %}
+{% endblock %}
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="page-header">搜索结果：</h2>
+        {% if msg %}
+            <h3>{{ msg }}</h3>
+        {% else %}
+            <h4 class="page-header">共找到：{{ list.article_list.count }}条记录</h4>
+            {% if list.article_list %}
+                {% with list.article_list as article_list %}
+                    {% for article in article_list %}
+                        <div class="list-group">
+                            <a class="list-group-item" href="{{ article.get_absolute_url }}">
+                                <h4 class="list-group-item-heading">{{ article.title }}</h4>
+                                <p class="list-group-item-text">{{ article.content | slice:"22" }}...</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            {% endif %}
+            {% if list.people_list %}
+                {% with list.people_list as people_list %}
+                    {% for people in people_list %}
+                        <div class="list-group">
+                            <a class="list-group-item" href="{{ people.get_absolute_url }}">
+                                <h4 class="list-group-item-heading">{{ people.get_full_name }}</h4>
+                                <p class="list-group-item-text">{{ people.get_age }}岁 / 所属户口：{{ people.account }}
+                                    {% if people.phone_num %}
+                                        / 联系电话: {{ people.phone_num }} {% endif %}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            {% endif %}
+        {% endif %}
+        <a href="{{ request.session.back_url }}">返回</a>
+    </div>
+{% endblock %}

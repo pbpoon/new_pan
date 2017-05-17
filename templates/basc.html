@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/custome.css' %}">
+    {#<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">#}
+</head>
+<body>
+{#顶部消息栏#}
+{% block messages %}
+    {% include 'messages.html' %}
+{% endblock %}
+{#导航栏#}
+    {% include 'menu.html' %}
+<main>
+
+{#面包屑导航#}
+    <div class="container">
+    <ul class="breadcrumb"">
+        {% block breadcrumb %}{% endblock %}
+    </ul>
+    </div>
+
+{#内容钩子#}
+    <div>{% block content %}{% endblock %}</div>
+
+</main>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+</body>
+</html>

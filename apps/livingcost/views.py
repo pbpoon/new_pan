@@ -37,3 +37,5 @@ class CenterWaterMarkDetailView(DetailView):
         context = super(CenterWaterMarkDetailView, self).get_context_data(**kwargs)
         context['num_list'] = self.object.account_rate.all()
         return context
+
+

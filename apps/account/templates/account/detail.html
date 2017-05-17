@@ -1,11 +1,16 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'account/index.html' %}
+{% block title %}
+    {{ block.super }} - {{ account }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>
+{% endblock %}
+
+{% block content %}
+
     <div class="container">
-        <ol class="breadcrumb">
-            <li><a href="{% url 'account:index' %}">户口列表</a></li>
-            <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>
-        </ol>
         <div class="col-md-8">
             <h3 class="page-header">{{ account.name }}
                 <span>/共 {{ account.get_peolpe_count }} 人</span>

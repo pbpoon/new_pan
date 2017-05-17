@@ -1,10 +1,15 @@
-{% extends 'basic.html' %}
-{% block title %}文章内容{% endblock %}
-{% block conten %}
+{% extends 'article/index.html' %}
+{% block title %}
+    {{ block.super }} - {{ article.title }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+{% endblock %}
+
+{% block content %}
     <div class="container">
-        <ol class="breadcrumb">
-            <li><a href="{% url 'article:index' %}">文章列表</a></li>
-        </ol>
         <div class="col-md-8">
             <h3 class="page-header">{{ object.title }}
                 <small>{{ object.author }} 发表于:{{ object.create_d }}</small>

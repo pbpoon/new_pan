@@ -1,8 +1,13 @@
+import operator
+
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
+
+from article.models import Article
+from account.models import Account, People
 
 from .models import UserProfile
 from .forms import LoginForm, RegisterForm
@@ -11,12 +16,13 @@ from .forms import LoginForm, RegisterForm
 class CustomAuthBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
         try:
-            user = UserProfile.objects.get(Q(username=username)|Q(bind_people__first_name=username[:1],
-                                                              bind_people__last_name=username[1:]))
+            user = UserProfile.objects.get(Q(username=username) | Q(bind_people__first_name=username[:1],
+                                                                    bind_people__last_name=username[1:]))
             if user.check_password(password):
                 return user
         except Exception as e:
             return None
+
 
 #
 # class LoginView(View):
@@ -68,12 +74,13 @@ class RegisterView(View):
             if telphone:
                 bind_people.phone_num = telphone
                 bind_people.save()
-            return render(request, 'login.html', {'msg':'注册成功!', 'form': form})
+            return render(request, 'login.html', {'msg': '注册成功!', 'form': form})
         return render(request, 'register.html', {'form': form})
 
     def get(self, request):
         form = RegisterForm()
         return render(request, 'register.html', {'form': form})
+
 
 class UserInfolView(View):
     template_name = 'user_info.html'
@@ -81,8 +88,47 @@ class UserInfolView(View):
     def get(self, request, pk):
         user = get_object_or_404(UserProfile, pk=pk)
 
-        context={
-            'user':user
+        context = {
+            'user': user
         }
         return render(request, self.template_name, context)
 
+
+class SearchView(TemplateView):
+    template_name = 'search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchView, self).get_context_data(**kwargs)
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            context['list'] = {}
+
+            article_list = Article.objects.filter(
+                Q(Q(title__icontains=q) |
+                  Q(content__icontains=q)
+                  ) |
+                Q(Q(tag__name__icontains=q) |
+                  Q(
+                      Q(author__bind_people__first_name__icontains=q) |
+                      Q(author__bind_people__last_name__icontains=q)))
+
+            ).distinct()
+
+            people_list = People.objects.filter(
+                Q(first_name__icontains=q) |
+                Q(
+                    Q(last_name__icontains=q) |
+                    Q(phone_num__icontains=q))
+            ).distinct()
+
+        if article_list or people_list:
+
+            context['list'] = {
+                'article_list': article_list,
+                'people_list': people_list
+            }
+
+        else:
+            context['msg'] = '没有相关的搜索内容！'
+
+        return context

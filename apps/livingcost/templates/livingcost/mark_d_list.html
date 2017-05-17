@@ -1,11 +1,10 @@
-{% extends 'basc.html' %}
+{% extends 'livingcost/index.html' %}
 {% block title %}抄表列表 | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumb %}
+    {{ block.super }}
     <li><a href="{% url 'livingcost:mark' %}">抄表列表</a></li>
-     {% block breadcrumb_detail_link %}
-    {% endblock %}
 {% endblock %}
 
 {% block content %}
@@ -22,10 +21,3 @@
     </div>
     </div>
 {% endblock %}
-
-mark_d = models.DateField('抄表日期')
-    meter_num = models.DecimalField('水表度数', max_digits=9, decimal_places=2, default=0)
-    ps = models.CharField('备注信息', max_length=200, null=True, blank=True)
-    price = models.DecimalField('单价', max_digits=5, decimal_places=2, default=3.6, help_text='水费单价，默认是3.6元/m3')
-    is_pay = models.BooleanField('已缴费', default=False)
-    is_post = models.BooleanField('发布', default=False)

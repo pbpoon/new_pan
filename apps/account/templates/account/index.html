@@ -1,18 +1,23 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'basc.html' %}
+{% block title %}户口资料{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'account:index' %}">户口列表</a></li>
+{% endblock %}
+
+{% block content %}
     <div class="container">
-<h3 class="page-header">户口列表</h3>
+        <h3 class="page-header">户口列表</h3>
         <div class="col-md-6">
 
-                <div class="list-group">
-                    {% for account in account_list %}
+            <div class="list-group">
+                {% for account in account_list %}
                     <a href="{{ account.get_absolute_url }}" class="list-group-item">
                         <span class="badge">{{ account.get_peolpe_count }}人</span>
                         {{ account }}
                     </a>
-                     {% endfor %}
-                </div>
+                {% endfor %}
+            </div>
 
         </div>
         <div class="col-md-4">

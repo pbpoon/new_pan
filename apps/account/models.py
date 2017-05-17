@@ -71,17 +71,18 @@ class People(models.Model):
     __repr__ = __str__
 
     def get_age(self):
-        today = date.today()
-        try:
-            birthday = self.birthday.replace(year=today.year)
-        except ValueError:
-            # raised when birth date is February 29
-            # and the current year is not a leap year
-            birthday = self.birthday.replace(year=today.year, day=self.birthday.day - 1)
-        if birthday > today:
-            return today.year - self.birthday.year - 1
-        else:
-            return today.year - self.birthday.year
+        if self.birthday:
+            today = date.today()
+            try:
+                birthday = self.birthday.replace(year=today.year)
+            except ValueError:
+                # raised when birth date is February 29
+                # and the current year is not a leap year
+                birthday = self.birthday.replace(year=today.year, day=self.birthday.day - 1)
+            if birthday > today:
+                return today.year - self.birthday.year - 1
+            else:
+                return today.year - self.birthday.year
 
     def get_absolute_url(self):
         return reverse("account:people", kwargs={'pk': self.id})

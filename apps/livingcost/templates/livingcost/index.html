@@ -1,6 +1,10 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'basc.html' %}
+{% block title %}水费{% endblock %}
+{% block breadcrumb %}
+    <li><a href="{% url 'livingcost:index' %}">水表列表</a></li>
+{% endblock %}
+
+{% block content %}
     <div class="container">
     <div class="col-md-6">
         <ul class="list-group">

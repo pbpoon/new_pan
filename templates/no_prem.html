@@ -1,5 +1,13 @@
 {% extends 'basc.html' %}
-{% block title %}错误{% endblock %}
+{% block title %}
+    {{ block.super }} - 错误
+{% endblock %}
+
+{% block messages %}
+{% endblock %}
+{% block breadcrumb %}
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <h2 class="page-header">没有权限！</h2>

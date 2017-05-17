@@ -1,6 +1,12 @@
-{% extends 'basic.html' %}
-{% block title %}公告栏{% endblock %}
-{% block conten %}
+{% extends 'basc.html' %}
+{% block title %}文章{% endblock %}
+
+{% block breadcrumb %}
+    <li><a href="{% url 'article:index' %}">文章列表</a></li>
+{% endblock %}
+
+
+{% block content %}
     <div class="container">
         <div class="col-md-8">
             <h2 class="page-header">文章列表</h2>

@@ -1,17 +1,17 @@
-{% extends 'basic.html' %}
-{% block title %}户口{% endblock %}
-{% block conten %}
+{% extends 'livingcost/index.html' %}
+
+{% block title %}
+    {{ block.super }} - {{ num }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+<li><a href="{{ num.get_absolute_url }}">{{ num }}</a></li>
+{% endblock %}
+
+{% block content %}
 
     <div class="container">
-
-        <ol class="breadcrumb">
-            <li><a href="{% url 'livingcost:index' %}">水表列表</a></li>
-            {% if num %}
-                <li><a href="#" class="active">{{ num }}</a></li>
-            {% endif %}
-            <li class="active">Data</li>
-
-        </ol>
 
         <table class="table">
             <thead>
