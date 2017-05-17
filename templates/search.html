@@ -5,6 +5,7 @@
 
 {% block messages %}
 {% endblock %}
+
 {% block breadcrumb %}
 {% endblock %}
 
@@ -14,19 +15,34 @@
         {% if msg %}
             <h3>{{ msg }}</h3>
         {% else %}
-            <h4 class="page-header">共找到：{{ list.article_list.count }}条记录</h4>
+            <h4 class="page-header">共找到：{{ list.count}} 条记录</h4>
             {% if list.article_list %}
                 {% with list.article_list as article_list %}
                     {% for article in article_list %}
                         <div class="list-group">
                             <a class="list-group-item" href="{{ article.get_absolute_url }}">
-                                <h4 class="list-group-item-heading">{{ article.title }}</h4>
+                                <h4 class="list-group-item-heading">{{ article.title }} <small>作者:{{ article.author }}</small> </h4>
                                 <p class="list-group-item-text">{{ article.content | slice:"22" }}...</p>
                             </a>
                         </div>
                     {% endfor %}
                 {% endwith %}
             {% endif %}
+
+            {% if list.account_list %}
+                {% with list.people_list as account_list %}
+                    {% for account in account_list %}
+                        <div class="list-group">
+                            <a class="list-group-item" href="{{ account.get_absolute_url }}">
+                                <h4 class="list-group-item-heading">{{ account }}</h4>
+                                <p class="list-group-item-text">{{ account.get_peolpe_count }}口人 / 分红资格：{{ account.get_getmoney_count }}
+                                   </p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            {% endif %}
+
             {% if list.people_list %}
                 {% with list.people_list as people_list %}
                     {% for people in people_list %}

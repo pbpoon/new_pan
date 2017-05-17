@@ -114,18 +114,30 @@ class SearchView(TemplateView):
 
             ).distinct()
 
-            people_list = People.objects.filter(
-                Q(first_name__icontains=q) |
+            account_list = Account.objects.filter(
+                Q(name__icontains=q) |
                 Q(
-                    Q(last_name__icontains=q) |
-                    Q(phone_num__icontains=q))
+                    Q(people__last_name__icontains=q) |
+                    Q(people__phone_num__icontains=q))
             ).distinct()
 
-        if article_list or people_list:
+            people_list = ''
+
+            if self.request.user.is_superuser:
+                people_list = People.objects.filter(
+                    Q(first_name__icontains=q) |
+                    Q(
+                        Q(last_name__icontains=q) |
+                        Q(phone_num__icontains=q))
+                ).distinct()
+
+        if article_list or people_list or account_list:
 
             context['list'] = {
                 'article_list': article_list,
-                'people_list': people_list
+                'account_list':account_list,
+                'people_list': people_list,
+                'count':len(article_list)+len(people_list) + len(account_list)
             }
 
         else:
