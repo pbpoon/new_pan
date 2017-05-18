@@ -4,17 +4,13 @@
 {% endblock %}
 
 
-    {% block breadcrumb %}
-        {{ block.super }}
-        <li><a href="{{ landnum.get_absolute_url }}">{{ landnum }}</a></li>
-    {% endblock %}
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ landnum.get_absolute_url }}">{{ landnum }}</a></li>
+{% endblock %}
 
 {% block content %}
-
-
-
     <div class="container">
-
         <h3 class="page-header">{{ landnum }}</h3>
         <div class="col-md-6">
             <table class="table">

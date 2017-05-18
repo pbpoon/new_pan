@@ -2,24 +2,24 @@
 {% block title %}户口{% endblock %}
 
 {% block breadcrumb %}
-{{ block.super }}
+    {{ block.super }}
     <li><a href="{% url 'asset:index' %}">田亩簿列表</a></li>
 {% endblock %}
 
 {% block content %}
-
-
     <div class="container">
-    <h2 class="page-header">田亩簿 <small>（以所有人列表)</small></h2>
-    <div class="col-md-6">
-        <ul class="list-group">
-            {% for people in asset_list %}
-                <a class="list-group-item" href="{% url 'asset:owner' people.id %}">
-                    <span class="badge">{{ people.get_total_land }}</span>
-                    {{ people }}
-                </a>
-            {% endfor %}
-        </ul>
-    </div>
+        <h2 class="page-header">田亩簿
+            <small>（以所有人列表)</small>
+        </h2>
+        <div class="col-md-6">
+            <ul class="list-group">
+                {% for people in asset_list %}
+                    <a class="list-group-item" href="{% url 'asset:owner' people.id %}">
+                        <span class="badge">{{ people.get_total_land }}</span>
+                        {{ people }}
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}

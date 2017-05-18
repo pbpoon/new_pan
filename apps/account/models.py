@@ -70,6 +70,7 @@ class People(models.Model):
 
     __repr__ = __str__
 
+    @property
     def get_age(self):
         if self.birthday:
             today = date.today()

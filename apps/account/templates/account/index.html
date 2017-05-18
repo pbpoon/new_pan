@@ -21,14 +21,22 @@
 
         </div>
         <div class="col-md-4">
+            {% block sidebar %}
             <h4 class="page-header">本村户口统计</h4>
             <ul class="list-unstyled">
-                <li><span>共有人口：{{ total_people }} 人</span></li>
-                <li><span>分红人口：{{ total_get_getmoney }} 人</span></li>
-                <li><span>男性人口：{{ total_male }} 人</span></li>
-                <li><span>女性人口：{{ total_female }} 人</span></li>
+                <li><a href="{% url 'account:people_list' %}">共有人口：{{ total_people }} 人</a></li>
+                <li><a href="{% url 'account:people_list' %}?p1=is_getmoney&p2=True">分红人口：{{ total_get_getmoney }} 人</a></li>
+                <li><a href="{% url 'account:people_list' %}?p1=sex&p2=male">男性人口：{{ total_male }} 人</a></li>
+                <li><a href="{% url 'account:people_list' %}?p1=sex&p2=female">女性人口：{{ total_female }} 人</a></li>
+                <li><span>男女比例：1 : {{ male_to_female }} </span></li>
                 <li><span>平均年龄: {{ average_age }} 岁</span></li>
+                <li><a href="{% url 'account:people_list' %}?p3=True">高于65岁人口: {{ min_65_age_totle }} 人</a></li>
+                <ul>
+                    <li><a href="{% url 'account:people_list' %}?p4=male">其中男性: {{ min_65_age_male }}</a></li>
+                    <li><a href="{% url 'account:people_list' %}?p4=female">其中女性: {{ min_65_age_female }}</a></li>
+                </ul>
             </ul>
+                {% endblock %}
         </div>
     </div>
 {% endblock %}

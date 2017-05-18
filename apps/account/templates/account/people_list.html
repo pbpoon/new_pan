@@ -1,0 +1,48 @@
+{% extends 'account/index.html' %}
+{% block title %}
+    人口资料列表 | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{% url 'account:index' %}">户口列表</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="page-header">人口列表</h3>
+        <div class="col-md-6">
+
+            <div class="list-group">
+                {% for people in people_list %}
+                    <a href="{{ people.get_absolute_url }}" class="list-group-item">
+                        <span class="badge">{{ people.get_age }}岁</span>
+                        {{ people }}
+                    </a>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+                <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ full_path }}&page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ full_path }}&page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+                </div>
+            {% endif %}
+
+        </div>
+        <div class="col-md-4">
+            {% block sidebar %}
+                {{ block.super }}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
