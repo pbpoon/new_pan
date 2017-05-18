@@ -1,6 +1,14 @@
 {% extends 'basc.html' %}
 {% block title %}户口{% endblock %}
-{% block conten %}
+
+{% block breadcrumb %}
+{{ block.super }}
+    <li><a href="{% url 'asset:index' %}">田亩簿列表</a></li>
+{% endblock %}
+
+{% block content %}
+
+
     <div class="container">
     <h2 class="page-header">田亩簿 <small>（以所有人列表)</small></h2>
     <div class="col-md-6">

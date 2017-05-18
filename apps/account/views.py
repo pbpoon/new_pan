@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse, get_object_or_404, render, HttpResponseRedirect
 from django.views.generic import ListView, DetailView, FormView, View
 from django.contrib import messages
+from django.db.models import Avg
 
 import xlrd
 from xlrd.xldate import xldate_as_datetime
@@ -17,6 +18,17 @@ class AccountListView(ListView):
     template_name = 'account/index.html'
     context_object_name = 'account_list'
 
+    def get_context_data(self, **kwargs):
+        context = super(AccountListView, self).get_context_data(**kwargs)
+        account_obj = Account.objects.filter(people__is_del=False)
+        context['total_people'] = account_obj.people.filter(is_del=False)
+        context['total_get_getmoney'] = account_obj.people.filter(is_getmoney=True, is_del=False).count()
+        context['average_age'] = sum(people.get_age() for people in account_obj.people.filter(is_del=False))\
+                               / account_obj.people.filter(is_del=False).count
+        context['total_male'] = account_obj.people.filter(is_del=False, sex='male').count
+        context['total_female'] = account_obj.people.filter(is_del=False, sex='female').count
+
+        return context
 
 class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account

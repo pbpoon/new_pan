@@ -1,18 +1,20 @@
-{% extends 'basc.html' %}
-{% block title %}田亩{% if area %}-{{ area }}{% endif %}{% endblock %}
-{% block conten %}
+{% extends 'asset/area_list.html' %}
+{% block title %}{{ area.name }} | {{ block.super }}{% endblock %}
+
+    {% block breadcrumb %}
+        {{ block.super }}
+        <li><a href="{{ area.get_absolute_url }}">{{ area.name }}</a></li>
+    {% endblock %}
+
+
+{% block content %}
+
 
     <div class="container">
 
-        <ol class="breadcrumb">
-            <li><a href="{% url 'asset:area' %}">区域</a></li>
-            {% if area %}
-                <li><a href="#" class="active">{{ area }}</a></li>
-            {% endif %}
-        </ol>
-    <h3 class="page-header">
-        {{ area }}
-    </h3>
+        <h3 class="page-header">
+            {{ area }}
+        </h3>
         <div class="col-md-8">
             <table class="table">
                 <thead>
@@ -40,7 +42,7 @@
                         <td>{{ is_del }}</td>
                         <td>
                             <a href="{% url 'asset:owner' item.landownership_set.first.owner.id %}">
-                            {{ item.landownership_set.first.owner }}</a></td>
+                                {{ item.landownership_set.first.owner }}</a></td>
                         <td>{{ item.landownership_set.first.old_owner }}</td>
                         <td>{{ item.ps }}</td>
                     </tr>

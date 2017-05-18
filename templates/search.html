@@ -30,7 +30,7 @@
             {% endif %}
 
             {% if list.account_list %}
-                {% with list.people_list as account_list %}
+                {% with list.account_list as account_list %}
                     {% for account in account_list %}
                         <div class="list-group">
                             <a class="list-group-item" href="{{ account.get_absolute_url }}">

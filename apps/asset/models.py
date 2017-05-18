@@ -56,6 +56,9 @@ class LandNum(models.Model):
     def __str__(self):
         return '{0}{1}'.format(self.area, self.num)
 
+    def get_absolute_url(self):
+        return reverse("asset:landnum", kwargs={'pk': self.id})
+
 
 class LandOwnerShip(models.Model):
     owner = models.ForeignKey('LandOwner', on_delete=models.CASCADE,
