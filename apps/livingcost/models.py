@@ -89,7 +89,7 @@ class CenterWater(models.Model):
         # 求得本次的用水量
         try:
             meter_nums = CenterWater.objects.filter(mark_d__lt=self.mark_d)[0]
-            if meter_nums:
+            if meter_nums.exists():
                 return self.meter_num - meter_nums.meter_num
         except:
             return self.meter_num

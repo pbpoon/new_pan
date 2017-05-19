@@ -2,24 +2,23 @@
 {% block title %}区域列表 | {{ block.super }}
 {% endblock %}
 
-    {% block breadcrumb %}
-        {{ block.super }}
-        <li><a href="{% url 'asset:area' %}">田亩区域列表</a></li>
-        {% endblock %}
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{% url 'asset:area' %}">田亩区域列表</a></li>
+{% endblock %}
 
 {% block content %}
-
     <div class="container">
-    <h3 class="page-header">田亩区域列表</h3>
-    <div class="col-md-6">
-        <ul class="list-group">
-            {% for area in area_list %}
-                <a class="list-group-item" href="{% url 'asset:area_detail' area.id %}">
-                    <span class="badge">{{ area.get_count }}件/{{ area.get_total_fm }}</span>
-                    {{ area }}
-                </a>
-            {% endfor %}
-        </ul>
-    </div>
+        <h3 class="page-header">田亩区域列表</h3>
+        <div class="col-md-6">
+            <ul class="list-group">
+                {% for area in area_list %}
+                    <a class="list-group-item" href="{% url 'asset:area_detail' area.id %}">
+                        <span class="badge">{{ area.get_count }}件/{{ area.get_total_fm }}</span>
+                        {{ area }}
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
