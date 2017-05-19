@@ -18,6 +18,7 @@ class AccountListView(ListView):
     queryset = Account.objects.filter(people__is_del=False).distinct()
     template_name = 'account/index.html'
     context_object_name = 'account_list'
+    paginate_by = 12
 
     def get_context_data(self, **kwargs):
         context = super(AccountListView, self).get_context_data(**kwargs)
@@ -41,7 +42,7 @@ class PeopleListView(ListView):
     model = People
     template_name = 'account/people_list.html'
     context_object_name = 'people_list'
-    paginate_by = 10
+    paginate_by = 12
 
     def get_queryset(self):
         qs = super(PeopleListView, self).get_queryset()
@@ -67,8 +68,17 @@ class PeopleListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PeopleListView, self).get_context_data(**kwargs)
-        re.s
-        context['full_path'] = self.request.get_full_path()
+        '''
+        用re模块把模板引用的get_full_path后面连接页数路径重复添加的问题解决，
+        用re匹配出需要的路径前序
+        '''
+        reString = r'(.*)&page=.*'
+        get_full_path = self.request.get_full_path()
+        full_path = re.match(reString, get_full_path)
+        if full_path is None:
+            context['full_path'] = self.request.get_full_path()
+        else:
+            context['full_path'] = full_path.group(1)
 
         return context
 

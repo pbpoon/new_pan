@@ -10,3 +10,6 @@
 .breadcrumb {
     padding: 0;
 }
+.breadcrumb a {
+    margin: 5px;
+}

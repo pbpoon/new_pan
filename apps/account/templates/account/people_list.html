@@ -5,7 +5,7 @@
 
 {% block breadcrumb %}
     {{ block.super }}
-    <li><a href="{% url 'account:index' %}">户口列表</a></li>
+    <li><a href="{% url 'account:people_list' %}">户口列表</a></li>
 {% endblock %}
 
 {% block content %}
@@ -21,27 +21,10 @@
                     </a>
                 {% endfor %}
             </div>
-
-            {% if is_paginated %}
-                <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="{{ full_path }}&page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="{{ full_path }}&page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-                </div>
-            {% endif %}
-
+            {% include 'pagination.html' %}
         </div>
         <div class="col-md-4">
             {% block sidebar %}
-                {{ block.super }}
             {% endblock %}
         </div>
     </div>
