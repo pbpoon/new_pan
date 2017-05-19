@@ -11,6 +11,7 @@ import markdown
 class ArticleListView(ListView):
     template_name = 'article/index.html'
     queryset = Article.objects.filter(publish=True)
+    paginate_by = 12
 
     # def get_queryset(self):
     #     object_list = super(ArticleListView, self).get_queryset()

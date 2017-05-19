@@ -1,6 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
-from datetime import date
+import datetime
 
 
 class PeopleNoDelManager(models.Manager):
@@ -72,18 +72,23 @@ class People(models.Model):
 
     @property
     def get_age(self):
-        if self.birthday:
-            today = date.today()
-            try:
-                birthday = self.birthday.replace(year=today.year)
-            except ValueError:
-                # raised when birth date is February 29
-                # and the current year is not a leap year
-                birthday = self.birthday.replace(year=today.year, day=self.birthday.day - 1)
-            if birthday > today:
-                return today.year - self.birthday.year - 1
-            else:
-                return today.year - self.birthday.year
+        if self.id_card_num:
+            _time = str(self.id_card_num[6:14])
+            # birthday_d = _time[:4] + '-' + _time[4:6] + '-' + _time[6:8]
+            birthday_d = datetime.datetime.strptime(_time, '%Y%m%d').date()
+        elif self.birthday:
+            birthday_d = self.birthday
+        today = datetime.date.today()
+        try:
+            birthday = birthday_d.replace(year=today.year)
+        except ValueError:
+            # raised when birth date is February 29
+            # and the current year is not a leap year
+            birthday = birthday_d.replace(year=today.year, day=birthday_d.day - 1)
+        if birthday > today:
+            return today.year - birthday_d.year - 1
+        else:
+            return today.year - birthday_d.year
 
     def get_absolute_url(self):
         return reverse("account:people", kwargs={'pk': self.id})

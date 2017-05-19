@@ -16,6 +16,7 @@ class OwnerListView(ListView):
             owner_list.append(i)
     queryset = owner_list
     template_name = 'asset/index.html'
+    paginate_by = 12
 
 
 class PeopleLandListView(DetailView):
