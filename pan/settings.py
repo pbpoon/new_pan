@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'asset',
     'article',
     'users',
+    'money',
     'guardian',
 ]
 
