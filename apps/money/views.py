@@ -37,14 +37,29 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
                     kwargs['{}__id'.format(k)] = v
             if v:
                 kwargs[k] = v
-        qs = qs.filter(**kwargs)
+        if kwargs:
+            qs = qs.filter(**kwargs)
         return qs
 
     def get_context_data(self, **kwargs):
         context = super(MoneyDetailListView, self).get_context_data(**kwargs)
-        context['type'] = self.object_list.first()
+        '''
+        full_path:把筛选的条件返回下次多个条件组合
+        tag:把所有的标签展示到筛选
+        status:把筛选的status状态返回高亮
+        type:同上
+        tag_id:同上
+        title:方便把title更改
+        '''
+
         string = r'.*?detail\?(.*)'
         match_path = re.match(string, self.request.get_full_path())
-        full_path = match_path.group(1)
+        full_path = match_path.group(1) if match_path else ''
         context['full_path'] = full_path
+        context['tag'] = Tag.objects.all()
+        context['tag_id'] = int(self.request.GET.get('tag')) if self.request.GET.get('tag') else None
+        context['status'] = self.request.GET.get('status')
+        context['type'] = self.request.GET.get('type')
+        context['title'] = self.object_list.filter(type=context['type']).first()
+
         return context
