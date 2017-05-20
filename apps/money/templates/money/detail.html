@@ -1,0 +1,87 @@
+{% extends 'money/index.html' %}
+
+{% block title %}
+    账目 | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="#">{{ title.get_type_display }}流水明细记录</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h4 class="page-header">{{ title.get_type_display }}流水明细记录</h4>
+    <ul class="list-inline list-unstyled">
+        <li><a href="{% url 'money:detail' %}">全部</a></li>
+        <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=b&{{ full_path }}">银行</a></li>
+        <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=c&{{ full_path }}">现金</a></li>
+        <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?status=-1&{{ full_path }}">支出</a></li>
+        <li><a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="{% url 'money:detail' %}?status=1&{{ full_path }}">收入</a></li>
+    </ul>
+        <ul class="list-inline list-unstyled">
+        <li><a href="">全部</a></li>
+            {% for t in tag %}
+        <li><a class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-default {% endifequal %}" href="{% url 'money:detail' %}?tag={{ t.id }}&{{ full_path }}">{{ t }}</a></li>
+            {% endfor %}
+    </ul>
+        <div>
+            <table class="table table-responsive tab-content">
+                <thead>
+                <tr>
+                    <th>流水号</th>
+                    <th>日期</th>
+                    <th>项目</th>
+                    <th>类型</th>
+                    <th>去向</th>
+                    <th class="text-center">金额</th>
+                    <th class="text-center">余额</th>
+                    <th>经手人</th>
+                    <th>备注</th>
+                    <th>标签</th>
+                </tr>
+                </thead>
+                {% for money in object_list %}
+                    <tbody>
+                    <tr>
+                        <td class="text-center">{{ money.num }}</td>
+                        <td>{{ money.date|date:"y-m-d" }}</td>
+                        <td>{{ money.detail }}</td>
+                        <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}</td>
+                        <td><a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a></td>
+                        <td class="text-right">{{ money.amount }}</td>
+                        <td class="text-right">{{ money.get_balance }}</td>
+                        <td>{{ money.operator }}</td>
+                        <td>{{ money.ps }}</td>
+                        <td>{% for tag in money.tag.all %}<a href="{% url 'money:detail' %}?tag={{ tag.id }}"class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}"">{{ tag }}</a><br>{% endfor %}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-8">
+
+
+        </div>
+
+
+    </div>
+
+{% endblock %}

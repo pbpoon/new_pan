@@ -10,7 +10,7 @@ class DocumentInline(admin.TabularInline):
 @admin.register(MoneyAccount)
 class MoneyAccountAdmin(admin.ModelAdmin):
     list_display = ['num', 'date', 'detail', 'type','status', 'amount', 'get_balance', 'operator', 'ps', 'update_d']
-    readonly_fields = ['get_balance', 'num']
+    readonly_fields = ['num', 'get_balance']
     inlines = (DocumentInline,)
 
 

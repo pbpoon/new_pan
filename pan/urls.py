@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^account/', include('account.urls', namespace='account')),
     url(r'^asset/', include('asset.urls', namespace='asset')),
     url(r'^livingcost/', include('livingcost.urls', namespace='livingcost')),
+    url(r'^money/', include('money.urls', namespace='money')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

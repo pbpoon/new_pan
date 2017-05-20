@@ -33,7 +33,7 @@ class MoneyAccount(models.Model):
     class Meta:
         verbose_name = '流水账'
         verbose_name_plural = verbose_name
-        ordering = ['num']
+        ordering = ['type', 'num']
 
     def __str__(self):
         return '{0}/{1}/{2}'.format(self.date, self.detail, self.amount)
