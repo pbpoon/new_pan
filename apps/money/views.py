@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import MoneyAccount, Tag, Document
 import re
 
+from chartit import DataPool, Chart
 
 class MoneyListView(LoginRequiredMixin, ListView):
     template_name = 'money/index.html'
@@ -62,6 +63,35 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         context['type'] = self.request.GET.get('type')
         context['title'] = self.object_list.filter(type=context['type']).first()
 
+        money_date = \
+            DataPool(
+                series=
+                [{'options': {
+                    'source': MoneyAccount.objects.all()},
+                    'terms': [
+                        'date',
+                        'amount']}
+                ])
+
+        # Step 2: Create the Chart object
+        cht = Chart(
+            datasource=money_date,
+            series_options=
+            [{'options': {
+                'type': 'column',
+                },
+                'terms': {
+                    'date': [
+                        'amount'
+                        ],
+                }}],
+            chart_options=
+            {'title': {
+                'text': '账目情况'},
+                'xAxis': {
+                    'title': {
+                        'text': 'date'}}})
+        context['money_charts'] = cht
         return context
 
 

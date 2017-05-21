@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'money',
     'guardian',
+    'chartit', #图表功能
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
