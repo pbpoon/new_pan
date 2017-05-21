@@ -9,6 +9,9 @@
         <title>{% block title %}盘屋村{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/custome.css' %}">
+        <script src="http://cdn.static.runoob.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+
     {% endblock %}
 </head>
 <body>
@@ -32,8 +35,6 @@
     <div>{% block content %}{% endblock %}</div>
 
 </main>
-<script src="http://cdn.static.runoob.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
 {#<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>#}
 <script src="{% static 'js/bootstrap.js' %}"></script>
 </body>

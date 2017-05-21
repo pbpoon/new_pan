@@ -1,5 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
+import datetime
 
 class Tag(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
@@ -53,6 +54,20 @@ class MoneyAccount(models.Model):
 
     def get_absolute_url(self):
         return reverse('money:item_detail', kwargs={'pk': self.id})
+
+    def as_dict(self):
+        return {
+                str(self.num):{ 'date': self.date.strftime('%Y-%m-%d'),
+                'amount': str(self.amount),
+                }}
+        # return {'id':self.id,
+        #         'num': self.num,
+        #         'date': self.date.strftime('%Y-%m-%d'),
+        #         'amount': str(self.amount),
+        #         'status': self.status,
+        #         'type': self.type,
+        #         'detail': self.detail,
+        #         'ps':self.ps}
 
 
 class Document(models.Model):

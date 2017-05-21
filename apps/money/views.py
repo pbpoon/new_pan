@@ -1,11 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db.models import Sum, Avg
 from .models import MoneyAccount, Tag, Document
 import re
+from django.core import serializers
 
 from chartit import DataPool, Chart
+
 
 class MoneyListView(LoginRequiredMixin, ListView):
     template_name = 'money/index.html'
@@ -62,36 +64,63 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         context['status'] = self.request.GET.get('status')
         context['type'] = self.request.GET.get('type')
         context['title'] = self.object_list.filter(type=context['type']).first()
-
-        money_date = \
+        # data = [obj.as_dict() for obj in self.object_list]
+        # context['series'] = data
+        '''
+        数据设置
+        '''
+        money_list = \
             DataPool(
                 series=
                 [{'options': {
-                    'source': MoneyAccount.objects.all()},
+                    'source': self.object_list.filter(status=1)},
                     'terms': [
                         'date',
-                        'amount']}
+                        'amount',
+                        'detail',
+                        'type']},
+                    {'options': {
+                        'source': self.object_list.filter(status=-1)},
+                        'terms': [
+                            {'date2': 'date',
+                             'amount2': 'amount',
+                             'detail2': 'detail',
+                             'type2': 'type'}]}
                 ])
 
         # Step 2: Create the Chart object
+        '''
+        圖表設置
+        '''
         cht = Chart(
-            datasource=money_date,
+            datasource=money_list,
             series_options=
             [{'options': {
-                'type': 'column',
-                },
+                'type': 'pie',
+                'options3d': {'enabled': True, 'alpha': 45, 'beta': 0},
+                'stacking': False},
                 'terms': {
-                    'date': [
-                        'amount'
-                        ],
-                }}],
+                    'detail': [
+                        'amount']
+                }},
+                {'options': {
+                    'type': 'pie',
+                    'options3d': {'enabled': True, 'alpha': 45, 'beta': 0},
+                    'stacking': False},
+                    'terms': {
+                        'detail2': [
+                            'amount2']
+                    }}
+            ],
             chart_options=
             {'title': {
-                'text': '账目情况'},
+                'text': '收支情况'},
                 'xAxis': {
                     'title': {
-                        'text': 'date'}}})
-        context['money_charts'] = cht
+                        'text': 'amount'}},
+                })
+        context['money_list'] = cht
+
         return context
 
 

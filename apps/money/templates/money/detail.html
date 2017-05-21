@@ -3,11 +3,33 @@
     {{ title.get_type_display }} | {{ block.super }}
 {% endblock %}
 {% block head %}
+
+
+
     {{ block.super }}
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="http://code.highcharts.com/highcharts.js"></script>
-    {% load chartit %}
-{{ money_charts|load_charts:"cht" }}
+     {% load chartit %}
+    {{ money_list|load_charts:"container" }}
+{#    <script>#}
+{#        $(function () {#}
+{#            $('#container').highcharts({#}
+{#                chart: {#}
+{#                    type: 'column'#}
+{#                },#}
+{#                title: {#}
+{#                    text: 'My first Highcharts chart'#}
+{#                },#}
+{#                xAxis: {#}
+{#                    categories: ['my', 'first', 'chart']#}
+{#                },#}
+{#                yAxis: {#}
+{#                    title: {#}
+{#                        text: 'something'#}
+{#                    }#}
+{#                },#}
+{#                series: {{ series|safe }}#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 {% endblock %}
 {% block breadcrumb %}
     {{ block.super }}
@@ -39,6 +61,11 @@
             {% endfor %}
         </ul>
         <div>
+        <div class="row">
+            <div id="container">
+                这里显示图表
+            </div>
+        </div>
             <table class="table table-responsive tab-content">
                 <thead>
                 <tr>
@@ -59,8 +86,10 @@
                     <tr>
                         <td class="text-center"><a href="{{ money.get_absolute_url }}">{{ money.num }}</a></td>
                         <td>{{ money.date|date:"y-m-d" }}</td>
-                        <td>{{ money.detail }}{% for tag in money.tag.all %}<span><a href="{% url 'money:detail' %}?tag={{ tag.id }}"
-                                                             class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}">{{ tag }}</a>{% endfor %}</span></td>
+                        <td>{{ money.detail }}{% for tag in money.tag.all %}<span>
+                            <a href="{% url 'money:detail' %}?tag={{ tag.id }}"
+                               class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}">{{ tag }}</a>{% endfor %}
+                        </span></td>
                         <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}</td>
                         <td>
                             <a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a>
@@ -88,13 +117,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="row">
-            <div class="col-md-8" id="cht">
-                这里显示图表
-            </div>
-        </div>
+
 
 
     </div>
+
 
 {% endblock %}
