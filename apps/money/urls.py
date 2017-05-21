@@ -17,6 +17,8 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    # url(r'^add/', views.FileUploadView.as_view(), name='addfile'),
+    url(r'^detail/item/(?P<pk>\d+)$', views.ItemDetailView.as_view(), name='item_detail'),
     url(r'^detail$', views.MoneyDetailListView.as_view(), name='detail'),
     url(r'^$', views.MoneyListView.as_view(), name='index'),
 ]

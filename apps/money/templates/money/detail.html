@@ -1,7 +1,7 @@
 {% extends 'money/index.html' %}
 
 {% block title %}
-    账目 | {{ block.super }}
+    {{ title.get_type_display }} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumb %}
@@ -16,8 +16,8 @@
         <h4 class="page-header">{{ title.get_type_display }}流水明细记录</h4>
     <ul class="list-inline list-unstyled">
         <li><a href="{% url 'money:detail' %}">全部</a></li>
-        <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=b&{{ full_path }}">银行</a></li>
-        <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=c&{{ full_path }}">现金</a></li>
+        <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=b">银行</a></li>
+        <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?type=c">现金</a></li>
         <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %} href="{% url 'money:detail' %}?status=-1&{{ full_path }}">支出</a></li>
         <li><a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="{% url 'money:detail' %}?status=1&{{ full_path }}">收入</a></li>
     </ul>
@@ -46,7 +46,7 @@
                 {% for money in object_list %}
                     <tbody>
                     <tr>
-                        <td class="text-center">{{ money.num }}</td>
+                        <td class="text-center"><a href="{{ money.get_absolute_url }}">{{ money.num }}</a></td>
                         <td>{{ money.date|date:"y-m-d" }}</td>
                         <td>{{ money.detail }}</td>
                         <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}</td>

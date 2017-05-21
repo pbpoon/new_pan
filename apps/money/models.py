@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.shortcuts import reverse
 
 class Tag(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
@@ -51,10 +51,13 @@ class MoneyAccount(models.Model):
         alls = MoneyAccount.objects.filter(num__lt=self.num, type=self.type)
         return self.amount + sum(item.amount for item in alls if item.type == self.type)
 
+    def get_absolute_url(self):
+        return reverse('money:item_detail', kwargs={'pk': self.id})
+
 
 class Document(models.Model):
     img = models.ImageField('留档图片', upload_to='file/money/%Y%m%d', max_length=120)
-    money_num = models.ForeignKey('MoneyAccount', null=False, on_delete=models.CASCADE, verbose_name='对应账款')
+    money_num = models.ForeignKey('MoneyAccount', related_name='doc', null=False, on_delete=models.CASCADE, verbose_name='对应账款')
     desc = models.CharField('图片说明', max_length=200, null=True, blank=True)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)

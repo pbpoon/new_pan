@@ -1,0 +1,87 @@
+{% extends 'money/detail.html' %}
+
+{% block title %}
+    {{ money.detail }}项目 | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="#">{{ money.detail }} 项目明细记录</a></li>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+        <h4 class="page-header">{{ money.detail }}项目明细记录</h4>
+
+        <div>
+            <table class="table table-responsive tab-content">
+                <thead>
+                <tr>
+                    <th>流水号</th>
+                    <th>日期</th>
+                    <th>项目</th>
+                    <th>类型</th>
+                    <th>去向</th>
+                    <th class="text-center">金额</th>
+                    <th class="text-center">余额</th>
+                    <th>经手人</th>
+                    <th>备注</th>
+                    <th>标签</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-center">{{ money.num }}</td>
+                    <td>{{ money.date|date:"y-m-d" }}</td>
+                    <td>{{ money.detail }}</td>
+                    <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}</td>
+                    <td>
+                        <a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a>
+                    </td>
+                    <td class="text-right">{{ money.amount }}</td>
+                    <td class="text-right">{{ money.get_balance }}</td>
+                    <td>{{ money.operator }}</td>
+                    <td>{{ money.ps }}</td>
+                    <td>{% for tag in money.tag.all %}<a href="{% url 'money:detail' %}?tag={{ tag.id }}"
+                                                         class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}">{{ tag }}</a>
+                        <br>{% endfor %}</td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </tfoot>
+                </tbody>
+            </table>
+        {% if money.get_previous_by_date %}
+            <div class="pull-left">
+                <a href="{{ money.get_previous_by_date.get_absolute_url }}" class="btn btn-default"><<上条记录</a>
+            </div>
+        {% endif %}
+        {% if money.get_next_by_date %}
+            <div class="pull-right">
+                <a href="{{ money.get_next_by_date.get_absolute_url }}" class="btn btn-default">下条记录>></a>
+            </div>
+        {% endif %}
+        </div>
+
+        {% for item in doc %}
+            <div class="list-group">
+                <img src="{{ item.img.url }}" alt="{{ item.img.desc }}" class="list-group-item">
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

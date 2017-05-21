@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, HttpResponse
+from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import MoneyAccount, Tag, Document
@@ -63,3 +63,61 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         context['title'] = self.object_list.filter(type=context['type']).first()
 
         return context
+
+
+class ItemDetailView(DetailView):
+    template_name = 'money/item_detail.html'
+    model = MoneyAccount
+    context_object_name = 'money'
+
+    def get_context_data(self, **kwargs):
+        context = super(ItemDetailView, self).get_context_data(**kwargs)
+        context['doc'] = self.object.doc.all()
+
+        return context
+
+#
+# class FileUploadView(FormView):
+#     from account.forms import FileForm
+#
+#     template_name = 'account/file.html'
+#     form_class = FileForm
+#
+#     def form_valid(self, form):
+#         f = form.files.get('file')
+#         if f:
+#             import xlrd
+#             from xlrd.xldate import xldate_as_datetime
+#             from decimal import Decimal
+#             import re
+#
+#             data = xlrd.open_workbook(file_contents=f.read())
+#             # table = data.sheet_by_name(by_name)
+#             table = data.sheets()[0]
+#             nrows = table.nrows  # 总行数
+#             colnames = table.row_values(0)  # 表头列名称数据
+#             print(colnames)
+#             list = []
+#             # accounts = [MoneyAccount(name=str(x)) for x in set(table.col_values(10, 1))]
+#             # print(accounts)
+#             # Account.objects.bulk_create(accounts)
+#             for rownum in range(1, nrows):
+#                 row = table.row_values(rownum)
+#                 for index, i in enumerate(range(len(colnames))):
+#                     if row:
+#                         if index == 0:
+#                             row[i] = xldate_as_datetime(row[i], 0)
+#                         elif index == 2:
+#                             row[i] = Decimal(row[i]).quantize(Decimal('0.00'))
+#                         else:
+#                             row[i] = str(row[i])
+#                 print(row)
+#
+#                 list.append(MoneyAccount(date=row[0], detail=row[1], amount=row[2], ps=row[3], type=row[4],
+#                                          status=row[5],num=row[6], operator=self.request.user))
+#         #         print(list)
+#         #         # account = row[10],
+#         MoneyAccount.objects.bulk_create(list)
+#         return HttpResponse('OK')
+#         # form.save()
+#         # return redirect(order)
