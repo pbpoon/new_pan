@@ -64,6 +64,8 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         kwargs['type'] = self.request.GET.get('type', '')
         kwargs['title'] = self.object_list.filter(type=kwargs['type']).first()
         kwargs['date_label'] = [i.year for i in MoneyAccount.objects.dates('date', 'year')]
+        kwargs['b_balance'] = MoneyAccount.objects.filter(type='b').last()
+        kwargs['c_balance'] = MoneyAccount.objects.filter(type='c').last()
         '''
         图表数据设置
         '''
@@ -77,9 +79,10 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
                         'amount',
                         'detail']},
                     {'options': {
-                        'source': self.object_list.filter(status=-1)},
+                        'source': self.object_list.filter(status=-1).extra(
+                            select={'absamount': 'abs(amount)'}).order_by('absamount')},
                         'terms': [{'date2': 'date',
-                                   'amount2': 'amount',
+                                   'amount2': 'absamount',
                                    'detail2': 'detail'}
                                   ]}
                 ])
@@ -87,35 +90,48 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         # Step 2: Create the Chart object
         '''
         圖表設置
+        https://www.hcharts.cn/docs/pie-chart
         '''
         cht = Chart(
             datasource=money_list,
             series_options=
             [{'options': {
-                'type': 'pie',
-                'options3d': {'enabled': True, 'alpha': 45, 'beta': 0},
-                'stacking': False},
+                'type': 'pie',# 图表类型
+                'stacking': False,
+                'size': '70%',#图表大小
+                'dataLabels': {'enabled': True},#标签显示
+                'center': ['20%', '50%'],#中心位置
+            },
                 'terms': {
                     'detail': [
                         'amount']
                 }},
                 {'options': {
                     'type': 'pie',
-                    'options3d': {'enabled': True, 'alpha': 45, 'beta': 0},
-                    'stacking': False},
+                    'stacking': False,
+                    'size': '70%',
+                    'center': ['80%', '50%'],
+                },
                     'terms': {
                         'detail2': [
                             'amount2']
-                    }}
+                    }},
             ],
-
             chart_options=
             {'title': {
-                'text': '收支情况'},
+                'text': '收支情况饼图'},
+                'subtitle': {
+                    'text': '左图为收入,右图为支出'
+                },
                 'xAxis': {
                     'title': {
                         'text': 'amount'}},
-            })
+                'yAxis': {
+                    'title': {
+                        'text': 'amount2'}},
+            }
+        )
+
         kwargs['money_list'] = cht
 
         return super(MoneyDetailListView, self).get_context_data(**kwargs)

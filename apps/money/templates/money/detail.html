@@ -3,33 +3,12 @@
     {{ title.get_type_display }} | {{ block.super }}
 {% endblock %}
 {% block head %}
-
-
-
     {{ block.super }}
+    {#    # chartit工具需要用到的标签，一定要注意jquery和highchart的js文件到入的先后次序#}
+
     {% load chartit %}
-    {{ money_list|load_charts:"container" }}
-    {#    <script>#}
-    {#        $(function () {#}
-    {#            $('#container').highcharts({#}
-    {#                chart: {#}
-    {#                    type: 'column'#}
-    {#                },#}
-    {#                title: {#}
-    {#                    text: 'My first Highcharts chart'#}
-    {#                },#}
-    {#                xAxis: {#}
-    {#                    categories: ['my', 'first', 'chart']#}
-    {#                },#}
-    {#                yAxis: {#}
-    {#                    title: {#}
-    {#                        text: 'something'#}
-    {#                    }#}
-    {#                },#}
-    {#                series: {{ series|safe }}#}
-    {#            });#}
-    {#        });#}
-    {#    </script>#}
+    {{ money_list|load_charts:"cht" }}
+
 {% endblock %}
 {% block breadcrumb %}
     {{ block.super }}
@@ -41,105 +20,141 @@
     <div class="container">
 
         <h4 class="page-header">{{ title.get_type_display }}流水明细记录</h4>
+        <div class="col-md-6">
+            <ul class="list-inline list-unstyled">
+                <li><a href="?status={{ status }}&?tag={{ tag_id }}&type={{ type }}"
+                       {% if year %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
+                {% for year_ in date_label %}
+                    <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year_ }}"
+                           {% ifequal year year_|stringformat:'i' %}class="label label-primary"{% endifequal %}>{{ year_ }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
 
-
-        <ul class="list-inline list-unstyled">
-            <li><a href="?status={{ status }}&?tag={{ tag_id }}&type={{ type }}"
-                   {% if year %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
-            {% for year_ in date_label %}
-                <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year_ }}"
-                       {% ifequal year year_|stringformat:'i' %}class="label label-primary"{% endifequal %}>{{ year_ }}</a>
+            <ul class="list-inline list-unstyled">
+                <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year }}"
+                       {% if type %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
+                <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %}
+                       href="?type=b&status={{ status }}&tag={{ tag_id }}&year={{ year }}">银行</a></li>
+                <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %}
+                       href="?type=c&status={{ status }}&tag={{ tag_id }}&year={{ year }}">现金</a></li>
+            </ul>
+            <ul class="list-inline list-unstyled">
+                <li><a href="?type={{ type }}&tag={{ tag_id }}&year={{ year }}"
+                       {% if status %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
+                <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %}
+                       href="?status=-1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">支出</a></li>
+                <li>
+                    <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="?status=1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">收入</a>
                 </li>
-            {% endfor %}
-        </ul>
+            </ul>
+            <ul class="list-inline list-unstyled">
+                <li><a href="?status={{ status }}&type={{ type }}&year={{ year }}"
+                       {% if tag_id %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
+                {% for t in tag %}
+                    <li>
+                        <a class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-default {% endifequal %}"
+                           href="{% url 'money:detail' %}?tag={{ t.id }}&status={{ status }}&?type={{ type }}&year={{ year }}">{{ t }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-
-        <ul class="list-inline list-unstyled">
-            <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year }}"
-                   {% if type %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
-            <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %}
-                   href="?type=b&status={{ status }}&tag={{ tag_id }}&year={{ year }}">银行</a></li>
-            <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %}
-                   href="?type=c&status={{ status }}&tag={{ tag_id }}&year={{ year }}">现金</a></li>
-        </ul>
-        <ul class="list-inline list-unstyled">
-            <li><a href="?type={{ type }}&tag={{ tag_id }}&year={{ year }}"
-                   {% if status %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
-            <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %}
-                   href="?status=-1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">支出</a></li>
-            <li>
-                <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="?status=1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">收入</a>
-            </li>
-        </ul>
-        <ul class="list-inline list-unstyled">
-            <li><a href="?status={{ status }}&type={{ type }}&year={{ year }}"
-                   {% if tag_id %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
-            {% for t in tag %}
-                <li><a class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-default {% endifequal %}"
-                       href="{% url 'money:detail' %}?tag={{ t.id }}&status={{ status }}&?type={{ type }}&year={{ year }}">{{ t }}</a>
+        <div class="col-md-6">
+            <ul class="list-unstyled text-right">
+                <li>
+                    <h4><i>银行账户余额:</i><strong> ￥{{ b_balance.get_balance }}</strong>
+                        <small> 更新日期：{{ c_balance.date|date:"y-m-d" }}</small>
+                    </h4>
                 </li>
-            {% endfor %}
-        </ul>
+                <li>
+                    <h4><i>现金账户余额:</i><strong> ￥{{ c_balance.get_balance }}</strong>
+                        <small> 更新日期：{{ c_balance.date|date:"y-m-d" }}</small>
+                    </h4>
+                </li>
+            </ul>
+        </div>
+
         <div>
             <div class="row">
-                <div id="container">
+                <div id="cht">
                     这里显示图表
                 </div>
             </div>
-            <table class="table table-responsive tab-content">
-                <thead>
-                <tr>
-                    <th>流水号</th>
-                    <th>日期</th>
-                    <th>项目</th>
-                    <th>类型</th>
-                    <th>去向</th>
-                    <th class="text-center">金额</th>
-                    <th class="text-center">余额</th>
-                    <th>经手人</th>
-                    <th>备注</th>
-                    <th>标签</th>
-                </tr>
-                </thead>
-                {% for money in object_list %}
-                    <tbody>
+            <div class="table-responsive tab-content">
+                <table id="table_id_example" class="display table" cellspacing="0" width="100%">
+                    <thead>
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col width='20%'>
+                        <col>
+                        <col>
+                        <col>
+                        <col>
+                        <col width='20%'>
+                    </colgroup>
                     <tr>
-                        <td class="text-center"><a href="{{ money.get_absolute_url }}">{{ money.num }}</a></td>
-                        <td>{{ money.date|date:"y-m-d" }}</td>
-                        <td>{{ money.detail }}{% for tag in money.tag.all %}<span>
-                            <a href="{% url 'money:detail' %}?tag={{ tag.id }}"
-                               class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}">{{ tag }}</a>{% endfor %}
-                        </span></td>
-                        <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}</td>
-                        <td>
-                            <a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a>
-                        </td>
-                        <td class="text-right">{{ money.amount }}</td>
-                        <td class="text-right">{{ money.get_balance }}</td>
-                        <td>{{ money.operator }}</td>
-                        <td>{{ money.ps }}</td>
+                        <th>流水号</th>
+                        <th>日期</th>
+                        <th>项目</th>
+                        <th>类型</th>
+                        <th>去向</th>
+                        <th class="text-center">金额</th>
+                        <th class="text-center">余额</th>
+                        {#                    <th>经手人</th>#}
+                        <th>备注</th>
+                        {#                    <th>标签</th>#}
                     </tr>
-                {% endfor %}
-                <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </tfoot>
-                </tbody>
-            </table>
+                    </thead>
+                    {% for money in object_list %}
+                        <tbody>
+                        <tr>
+                            <td class="text-center"><a href="{{ money.get_absolute_url }}">{{ money.num }}</a></td>
+                            <td>{{ money.date|date:"y-m-d" }}</td>
+                            <td>{{ money.detail }}{% for tag in money.tag.all %}<span>
+                                <a href="{% url 'money:detail' %}?tag={{ tag.id }}"
+                                   class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-success {% endifequal %}">{{ tag }}</a>{% endfor %}
+                            </span></td>
+                            <td><a href="{% url 'money:detail' %}?type={{ money.type }}">{{ money.get_type_display }}
+                            </td>
+                            <td>
+                                <a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a>
+                            </td>
+                            <td class="text-right">{{ money.amount }}</td>
+                            <td class="text-right">{{ money.get_balance }}</td>
+                            {#                        <td>{{ money.operator }}</td>#}
+                            <td>{{ money.ps }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        {#                    <th></th>#}
+                        {#                    <th></th>#}
+                    </tr>
+                    </tfoot>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 
     </div>
+     <!-- jQuery -->
+
+    <script>
+        $(document).ready(function () {
+            $('#table_id_example').DataTable();
+        });
+    </script>
 
 
 {% endblock %}
