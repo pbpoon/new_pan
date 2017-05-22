@@ -1,6 +1,16 @@
 from django.db import models
 from django.shortcuts import reverse
-import datetime
+from collections import defaultdict
+
+
+class MoneyAccountManager(models.Manager):
+    def date_objects(self):
+        date_list = MoneyAccount.objects.dates('date', 'month')
+        date_dict = defaultdict(list)
+        for d in date_list:
+            date_dict[d.year].append(d.month)
+        return sorted(date_dict.items())
+
 
 class Tag(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
@@ -30,6 +40,7 @@ class MoneyAccount(models.Model):
     tag = models.ManyToManyField('Tag', null=True, blank=True, verbose_name='标签')
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
+    objects = MoneyAccountManager()
 
     class Meta:
         verbose_name = '流水账'

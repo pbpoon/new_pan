@@ -7,29 +7,29 @@
 
 
     {{ block.super }}
-     {% load chartit %}
+    {% load chartit %}
     {{ money_list|load_charts:"container" }}
-{#    <script>#}
-{#        $(function () {#}
-{#            $('#container').highcharts({#}
-{#                chart: {#}
-{#                    type: 'column'#}
-{#                },#}
-{#                title: {#}
-{#                    text: 'My first Highcharts chart'#}
-{#                },#}
-{#                xAxis: {#}
-{#                    categories: ['my', 'first', 'chart']#}
-{#                },#}
-{#                yAxis: {#}
-{#                    title: {#}
-{#                        text: 'something'#}
-{#                    }#}
-{#                },#}
-{#                series: {{ series|safe }}#}
-{#            });#}
-{#        });#}
-{#    </script>#}
+    {#    <script>#}
+    {#        $(function () {#}
+    {#            $('#container').highcharts({#}
+    {#                chart: {#}
+    {#                    type: 'column'#}
+    {#                },#}
+    {#                title: {#}
+    {#                    text: 'My first Highcharts chart'#}
+    {#                },#}
+    {#                xAxis: {#}
+    {#                    categories: ['my', 'first', 'chart']#}
+    {#                },#}
+    {#                yAxis: {#}
+    {#                    title: {#}
+    {#                        text: 'something'#}
+    {#                    }#}
+    {#                },#}
+    {#                series: {{ series|safe }}#}
+    {#            });#}
+    {#        });#}
+    {#    </script>#}
 {% endblock %}
 {% block breadcrumb %}
     {{ block.super }}
@@ -41,31 +41,51 @@
     <div class="container">
 
         <h4 class="page-header">{{ title.get_type_display }}流水明细记录</h4>
+
+
         <ul class="list-inline list-unstyled">
-            <li><a href="{% url 'money:detail' %}">全部</a></li>
+            <li><a href="?status={{ status }}&?tag={{ tag_id }}&type={{ type }}"
+                   {% if year %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
+            {% for year_ in date_label %}
+                <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year_ }}"
+                       {% ifequal year year_|stringformat:'i' %}class="label label-primary"{% endifequal %}>{{ year_ }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+
+        <ul class="list-inline list-unstyled">
+            <li><a href="?status={{ status }}&?tag={{ tag_id }}&year={{ year }}"
+                   {% if type %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
             <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %}
-                   href="?type=b">银行</a></li>
+                   href="?type=b&status={{ status }}&tag={{ tag_id }}&year={{ year }}">银行</a></li>
             <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %}
-                   href="?type=c">现金</a></li>
+                   href="?type=c&status={{ status }}&tag={{ tag_id }}&year={{ year }}">现金</a></li>
+        </ul>
+        <ul class="list-inline list-unstyled">
+            <li><a href="?type={{ type }}&tag={{ tag_id }}&year={{ year }}"
+                   {% if status %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
             <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %}
-                   href="?status=-1&{{ full_path }}">支出</a></li>
+                   href="?status=-1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">支出</a></li>
             <li>
-                <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="?status=1&{{ full_path }}">收入</a>
+                <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="?status=1&type={{ type }}&tag={{ tag_id }}&year={{ year }}">收入</a>
             </li>
         </ul>
         <ul class="list-inline list-unstyled">
-            <li><a href="">全部</a></li>
+            <li><a href="?status={{ status }}&type={{ type }}&year={{ year }}"
+                   {% if tag_id %}{% else %}class="label label-primary"{% endif %}>全部</a></li>
             {% for t in tag %}
                 <li><a class="label  {% ifequal tag_id t.id %}label-primary {% else %} label-default {% endifequal %}"
-                       href="{% url 'money:detail' %}?tag={{ t.id }}&{{ full_path }}">{{ t }}</a></li>
+                       href="{% url 'money:detail' %}?tag={{ t.id }}&status={{ status }}&?type={{ type }}&year={{ year }}">{{ t }}</a>
+                </li>
             {% endfor %}
         </ul>
         <div>
-        <div class="row">
-            <div id="container">
-                这里显示图表
+            <div class="row">
+                <div id="container">
+                    这里显示图表
+                </div>
             </div>
-        </div>
             <table class="table table-responsive tab-content">
                 <thead>
                 <tr>
@@ -117,7 +137,6 @@
                 </tbody>
             </table>
         </div>
-
 
 
     </div>

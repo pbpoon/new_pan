@@ -1,10 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from django.views.generic import ListView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum, Avg
+
 from .models import MoneyAccount, Tag, Document
 import re
-from django.core import serializers
 
 from chartit import DataPool, Chart
 
@@ -31,21 +30,25 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         type = self.request.GET.get('type')
         tag = self.request.GET.get('tag')
         status = self.request.GET.get('status')
-        list = [type, tag, status]
-        list2 = ['type', 'tag', 'status']
+        year = self.request.GET.get('year')
+        list = [type, tag, status, year]
+        list2 = ['type', 'tag', 'status', 'date']
         kwargs = {}
         for k, v in zip(list2, list):
             if k == 'tag':
                 if v:
                     kwargs['{}__id'.format(k)] = v
-            if v:
+            elif k == 'date':
+                if v:
+                    kwargs['{}__year'.format(k)] = int(v)
+            elif v:
                 kwargs[k] = v
         if kwargs:
             qs = qs.filter(**kwargs)
+
         return qs
 
     def get_context_data(self, **kwargs):
-        context = super(MoneyDetailListView, self).get_context_data(**kwargs)
         '''
         full_path:把筛选的条件返回下次多个条件组合
         tag:把所有的标签展示到筛选
@@ -54,20 +57,15 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         tag_id:同上
         title:方便把title更改
         '''
-
-        string = r'.*?detail\?(.*)'
-        match_path = re.match(string, self.request.get_full_path())
-        full_path = match_path.group(1) if match_path else ''
-        context['full_path'] = full_path
-        context['tag'] = Tag.objects.all()
-        context['tag_id'] = int(self.request.GET.get('tag')) if self.request.GET.get('tag') else None
-        context['status'] = self.request.GET.get('status')
-        context['type'] = self.request.GET.get('type')
-        context['title'] = self.object_list.filter(type=context['type']).first()
-        # data = [obj.as_dict() for obj in self.object_list]
-        # context['series'] = data
+        kwargs['tag'] = Tag.objects.all()
+        kwargs['tag_id'] = self.request.GET.get('tag', '')
+        kwargs['status'] = self.request.GET.get('status', '')
+        kwargs['year'] = self.request.GET.get('year', '')
+        kwargs['type'] = self.request.GET.get('type', '')
+        kwargs['title'] = self.object_list.filter(type=kwargs['type']).first()
+        kwargs['date_label'] = [i.year for i in MoneyAccount.objects.dates('date', 'year')]
         '''
-        数据设置
+        图表数据设置
         '''
         money_list = \
             DataPool(
@@ -77,15 +75,13 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
                     'terms': [
                         'date',
                         'amount',
-                        'detail',
-                        'type']},
+                        'detail']},
                     {'options': {
                         'source': self.object_list.filter(status=-1)},
-                        'terms': [
-                            {'date2': 'date',
-                             'amount2': 'amount',
-                             'detail2': 'detail',
-                             'type2': 'type'}]}
+                        'terms': [{'date2': 'date',
+                                   'amount2': 'amount',
+                                   'detail2': 'detail'}
+                                  ]}
                 ])
 
         # Step 2: Create the Chart object
@@ -112,16 +108,17 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
                             'amount2']
                     }}
             ],
+
             chart_options=
             {'title': {
                 'text': '收支情况'},
                 'xAxis': {
                     'title': {
                         'text': 'amount'}},
-                })
-        context['money_list'] = cht
+            })
+        kwargs['money_list'] = cht
 
-        return context
+        return super(MoneyDetailListView, self).get_context_data(**kwargs)
 
 
 class ItemDetailView(DetailView):
