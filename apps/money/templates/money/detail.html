@@ -44,13 +44,13 @@
         <ul class="list-inline list-unstyled">
             <li><a href="{% url 'money:detail' %}">全部</a></li>
             <li><a {% ifequal type 'b' %}class="label label-primary" {% endifequal %}
-                   href="{% url 'money:detail' %}?type=b">银行</a></li>
+                   href="?type=b">银行</a></li>
             <li><a {% ifequal type 'c' %}class="label label-primary" {% endifequal %}
-                   href="{% url 'money:detail' %}?type=c">现金</a></li>
+                   href="?type=c">现金</a></li>
             <li><a {% ifequal status '-1' %}class="label label-primary" {% endifequal %}
-                   href="{% url 'money:detail' %}?status=-1&{{ full_path }}">支出</a></li>
+                   href="?status=-1&{{ full_path }}">支出</a></li>
             <li>
-                <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="{% url 'money:detail' %}?status=1&{{ full_path }}">收入</a>
+                <a {% ifequal status '1' %}class="label label-primary" {% endifequal %}href="?status=1&{{ full_path }}">收入</a>
             </li>
         </ul>
         <ul class="list-inline list-unstyled">
