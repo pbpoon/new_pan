@@ -64,21 +64,28 @@
                 </tfoot>
                 </tbody>
             </table>
-        {% if money.get_previous_by_date %}
-            <div class="pull-left">
-                <a href="{{ money.get_previous_by_date.get_absolute_url }}" class="btn btn-default"><<上条记录</a>
-            </div>
-        {% endif %}
-        {% if money.get_next_by_date %}
-            <div class="pull-right">
-                <a href="{{ money.get_next_by_date.get_absolute_url }}" class="btn btn-default">下条记录>></a>
-            </div>
-        {% endif %}
+            {% if money.get_previous_by_date %}
+                <div class="pull-left">
+                    <a href="{{ money.get_previous_by_date.get_absolute_url }}" class="btn btn-default"><
+                        <上条记录
+                    </a>
+                </div>
+            {% endif %}
+            {% if money.get_next_by_date %}
+                <div class="pull-right">
+                    <a href="{{ money.get_next_by_date.get_absolute_url }}" class="btn btn-default">下条记录>></a>
+                </div>
+            {% endif %}
         </div>
 
         {% for item in doc %}
-            <div class="list-group">
-                <img src="{{ item.img.url }}" alt="{{ item.img.desc }}" class="list-group-item">
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <a href="{{ item.img.url }}" class="thumbnail">
+                        <img src="{{ item.thumb.url }}" alt="{{ item.img.desc }}">
+                    </a>
+                </div>
+                ...
             </div>
         {% endfor %}
 

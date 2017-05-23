@@ -2,6 +2,23 @@ from django.db import models
 from django.shortcuts import reverse
 from collections import defaultdict
 
+import os
+from PIL import Image
+from pan.settings import MEDIA_ROOT
+from django.db.models.fields.files import ImageFieldFile
+
+
+def make_thumb(path, size = 480):
+    pixbuf = Image.open(path)
+    width, height = pixbuf.size
+
+    if width > size:
+        delta = width / size
+        height = int(height / delta)
+        pixbuf.thumbnail((size, height), Image.ANTIALIAS)
+
+        return pixbuf
+
 
 class MoneyAccountManager(models.Manager):
     def date_objects(self):
@@ -83,6 +100,7 @@ class MoneyAccount(models.Model):
 
 class Document(models.Model):
     img = models.ImageField('留档图片', upload_to='file/money/%Y%m%d', max_length=120)
+    thumb = models.ImageField('缩略图', upload_to='upload/money/%Y%m%d/thumb', blank=True)
     money_num = models.ForeignKey('MoneyAccount', related_name='doc', null=False, on_delete=models.CASCADE, verbose_name='对应账款')
     desc = models.CharField('图片说明', max_length=200, null=True, blank=True)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
@@ -92,3 +110,13 @@ class Document(models.Model):
         verbose_name = '流水账留档图片'
         verbose_name_plural = verbose_name
         ordering = ['create_d']
+
+    def save(self):
+        super(Document, self).save() #将上传的图片先保存一下，否则报错
+        base, ext = os.path.splitext(os.path.basename(self.img.path))
+        thumb_pixbuf = make_thumb(os.path.join(MEDIA_ROOT, self.img.name))
+        relate_thumb_path = os.path.join(MEDIA_ROOT, base + '.thumb' + ext)
+        thumb_path = os.path.join(MEDIA_ROOT, relate_thumb_path)
+        thumb_pixbuf.save(thumb_path)
+        self.thumb = ImageFieldFile(self, self.thumb, relate_thumb_path)
+        super(Document, self).save() #再保存一下，包括缩略图等

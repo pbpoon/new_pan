@@ -11,47 +11,50 @@
 {% block content %}
 
     <div class="container">
-    <h3 class="page-header">银行/现金 <small>流水账最后3条记录</small></h3>
-    {% regroup money_list|dictsort:"num" by type as type_list %}
-    {% for type in type_list %}
-        <a href="{% url 'money:detail' %}?type={{ type.grouper }}"><h4 class="page-header">{% ifequal type.grouper 'b' %}银行{% else %}现金{% endifequal %} 流水记录</h4></a>
-        <div>
+        <h3 class="page-header">银行/现金
+            <small>流水账最后3条记录<a class="label label-info label-lt" href="{% url 'money:detail' %}">查看详细</a></small>
+        </h3>
+        {% regroup money_list|dictsort:"num" by type as type_list %}
+        {% for type in type_list %}
+            <h4 class="page-header">{% ifequal type.grouper 'b' %}银行{% else %}现金{% endifequal %} 流水记录</h4>
+            <div>
 
-            <table class="table table-responsive tab-content">
-                <thead>
-                <tr>
-                    <th>流水号</th>
-                    <th>日期</th>
-                    <th>项目</th>
-                    <th>类型</th>
-                    <th>去向</th>
-                    <th class="text-center">金额</th>
-                    <th class="text-center">余额</th>
-                    <th>经手人</th>
-                    <th>备注</th>
-                    <th>标签</th>
-                </tr>
-                </thead>
-                {% for money in type.list %}
-                    <tbody>
+                <table class="table table-responsive tab-content">
+                    <thead>
                     <tr>
-                        <td class="text-center">{{ money.num }}</td>
-                        <td>{{ money.date|date:"y-m-d" }}</td>
-                        <td>{{ money.detail }}</td>
-                        <td>{{ money.get_type_display }}</td>
-                        <td><a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a></td>
-                        <td class="text-right">{{ money.amount }}</td>
-                        <td class="text-right">{{ money.get_balance }}</td>
-                        <td>{{ money.operator }}</td>
-                        <td>{{ money.ps }}</td>
-                        <td>{% for tag in money.tag.all %}<a href="{% url 'money:detail' %}?tag={{ tag.id }}&{{ full_path }}" class="label label-success">{{ tag }}</a><br>{% endfor %}</td>
+                        <th width="5%">流水号</th>
+                        <th>日期</th>
+                        <th width="20%">项目</th>
+                        <th>类型</th>
+                        <th>去向</th>
+                        <th class="text-center">金额</th>
+                        <th class="text-center">余额</th>
+                        <th width="20%">备注</th>
                     </tr>
-                {% endfor %}
+                    </thead>
 
-                </tbody>
-            </table>
-        </div>
-    {% endfor %}
+                    <tbody>
+                    {% for money in type.list %}
+                        <tr>
+                            <td class="text-center">{{ money.num }}</td>
+                            <td>{{ money.date|date:"y-m-d" }}</td>
+                            <td>{{ money.detail }}{% for tag in money.tag.all %}
+                                <a href="{% url 'money:detail' %}?tag={{ tag.id }}&{{ full_path }}"
+                                   class="label label-success">{{ tag }}</a><br>{% endfor %}</td>
+                            <td>{{ money.get_type_display }}</td>
+                            <td>
+                                <a href="{% url 'money:detail' %}?status={{ money.status }}&{{ full_path }}">{{ money.get_status_display }}</a>
+                            </td>
+                            <td class="text-right">{{ money.amount }}</td>
+                            <td class="text-right">{{ money.get_balance }}</td>
+                            <td>{{ money.ps }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
 
         <div class="col-md-8">
 

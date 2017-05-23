@@ -5,10 +5,10 @@
 {% block head %}
     {{ block.super }}
     {#    # chartit工具需要用到的标签，一定要注意jquery和highchart的js文件到入的先后次序#}
-
-    {% load chartit %}
-    {{ money_list|load_charts:"cht" }}
-
+    {% if money_list %}
+        {% load chartit %}
+        {{ money_list|load_charts:"cht" }}
+    {% endif %}
 {% endblock %}
 {% block breadcrumb %}
     {{ block.super }}
@@ -84,16 +84,6 @@
             <div class="table-responsive tab-content">
                 <table id="table_id_example" class="display table" cellspacing="0" width="100%">
                     <thead>
-                    <colgroup>
-                        <col>
-                        <col>
-                        <col width='20%'>
-                        <col>
-                        <col>
-                        <col>
-                        <col>
-                        <col width='20%'>
-                    </colgroup>
                     <tr>
                         <th>流水号</th>
                         <th>日期</th>
@@ -102,13 +92,11 @@
                         <th>去向</th>
                         <th class="text-center">金额</th>
                         <th class="text-center">余额</th>
-                        {#                    <th>经手人</th>#}
                         <th>备注</th>
-                        {#                    <th>标签</th>#}
                     </tr>
                     </thead>
+                    <tbody>
                     {% for money in object_list %}
-                        <tbody>
                         <tr>
                             <td class="text-center"><a href="{{ money.get_absolute_url }}">{{ money.num }}</a></td>
                             <td>{{ money.date|date:"y-m-d" }}</td>
@@ -127,34 +115,20 @@
                             <td>{{ money.ps }}</td>
                         </tr>
                     {% endfor %}
-                    <tfoot>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        {#                    <th></th>#}
-                        {#                    <th></th>#}
-                    </tr>
-                    </tfoot>
                     </tbody>
                 </table>
             </div>
         </div>
 
-
     </div>
-     <!-- jQuery -->
-
+    <!-- dt初始化 -->
     <script>
         $(document).ready(function () {
-            $('#table_id_example').DataTable();
+            $('#table_id_example').DataTable(
+                {
+                    'stateSave': true
+                }
+            );
         });
     </script>
-
-
 {% endblock %}

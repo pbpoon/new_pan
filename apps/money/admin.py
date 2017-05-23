@@ -4,6 +4,7 @@ from .models import MoneyAccount, Tag, Document
 
 class DocumentInline(admin.TabularInline):
     model = Document
+    readonly_fields = ['thumb']
     raw_id_fields = ['money_num']
 
 
