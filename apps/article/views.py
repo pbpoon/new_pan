@@ -39,23 +39,12 @@ class ArticleDetailView(DetailView):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['tag_list'] = self.object.tag.all()
         context['form'] = CommentForm()
-        context['article_like'] = Like.objects.filter(type='a', like_id=self.object.id, like=True).count()
-        context['article_unlike'] = Like.objects.filter(type='a', like_id=self.object.id, like=False).count()
-        '''判断有没有点过like或unlike，默认false'''
-        context['is_click'] = False
-        '''判断like或unlike'''
-        context['liked'] = False
-
+        context['article_like'] = Like.objects.filter(type='a', like_id=self.object.id, like=True)
+        context['article_unlike'] = Like.objects.filter(type='a', like_id=self.object.id, like=False)
+        if self.request.user.is_authenticated:
+            context['user_article_like'] = self.request.user.like.filter(type='a', like_id=self.object.id)
         '''如果是登陆的用户，就判断其在本article的like状态，先查找有没有有记录，如果有就进一步判断
         并把点击状态改变'''
-        if self.request.user.is_authenticated:
-            try:
-                liked = Like.objects.get(type='a', like_id=self.object.id, user=self.request.user)
-            except:
-                pass
-            else:
-                context['is_click'] = True
-                context['liked'] = liked.like
         all_comment = self.object.comment.all()
 
         '''
@@ -64,28 +53,17 @@ class ArticleDetailView(DetailView):
         context['comment_list'] = {}
         for comment in all_comment:
             comment_id = str(comment.id)
-            like = Like.objects.filter(type='c', like_id=comment_id, like=True).count()
-            unlike = Like.objects.filter(type='c', like_id=comment_id, like=False).count()
-            is_click = False
-            liked = False
-
-            print(comment.id)
+            like = Like.objects.filter(type='c', like_id=comment_id, like=True)
+            unlike = Like.objects.filter(type='c', like_id=comment_id, like=False)
+            user_comment_like = ''
             if self.request.user.is_authenticated:
-                try:
-                    cliked = Like.objects.get(type='c', like_id=comment.id, user=self.request.user)
-                except:
-                    pass
-                else:
-                    is_click = True
-                    liked = cliked.like
-                finally:
-                    context['comment_list'][comment_id] = {
-                        'comment': comment,
-                        'like': like,
-                        'unlike': unlike,
-                        'is_click': is_click,
-                        'liked': liked,
-                    }
+                user_comment_like = self.request.user.like.filter(type='a', like_id=self.object.id)
+            context['comment_list'][comment_id] = {
+                'comment': comment,
+                'like': like,
+                'unlike': unlike,
+                'user_comment_like': user_comment_like
+            }
 
         return context
 
@@ -146,7 +124,7 @@ class LikeView(View):
                 liked.like = like
                 liked.save()
             A = '文章' if type == 'a' else '评论'
-            B = '点赞' if like=='True' else '发表不满'
+            B = '点赞' if like == 'True' else '发表不满'
             if like == 'True':
                 messages.success(request, '你已对该{0}{1}!'.format(A, B))
             else:

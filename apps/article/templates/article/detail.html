@@ -28,16 +28,16 @@
                 {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
 
                 <div class="btn-group pull-left">
-                    <a class="btn btn-link btn-lg"
+                    <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %} btn-lg"
                        href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
                         <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                        <span class="badge">{{ article_like }}</span>
+                        <span class="badge">{{ article_like.count }}</span>
                     </a>
 
-                    <a class="btn btn-link btn-lg"
+                    <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %} btn-lg"
                        href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                        <span class="badge">{{ article_unlike }}</span>
+                        <span class="badge">{{ article_unlike.count }}</span>
                     </a>
                 </div>
 
@@ -52,7 +52,7 @@
                     {#                把评论的内容分别读取出来，由于view用list重新处理过，这里要读取values#}
 
                     {% for item in comment_list.values %}
-                        {% with item.comment as comment %}
+                        {% with comment=item.comment comment_likes=item.like comment_unlikes=item.unlike %}
                             <div class="panel panel-default">
                                 <!-- Default panel contents -->
                                 <div class="panel-heading">{{ comment.user }}
@@ -70,16 +70,16 @@
                                 <div class="container">
                                     <div class="btn-group">
                                         <div class="btn-group pull-left">
-                                            <a class="btn btn-link btn-lg"
+                                            <a class="btn {% if user_comment_like.like %} btn-success {% else %} btn-default {% endif %} btn-lg"
                                                href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=True">
                                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                                <span class="badge">{{ item.like }}</span>
+                                                <span class="badge">{{ comment_likes.count }}</span>
                                             </a>
 
-                                            <a class="btn btn-link btn-lg"
+                                           <a class="btn {% if not user_comment_like.like %} btn-success {% else %} btn-default {% endif %} btn-lg"
                                                href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=False">
                                                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                                <span class="badge">{{ item.unlike }}</span>
+                                                <span class="badge">{{ comment_unlikes.count }}</span>
                                             </a>
                                         </div>
                                     </div>

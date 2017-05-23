@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'money',
     'guardian',
     'chartit', #图表功能
+    'sorl.thumbnail', #缩略图功能
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -150,3 +151,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/user/login/'
 LOGIN_REDIRECT_URL = '/article'
+
+THUMBNAIL_DEBUG =True
