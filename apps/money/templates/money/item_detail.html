@@ -81,11 +81,16 @@
         {% for item in doc %}
             <div class="row">
                 <div class="col-xs-6 col-md-3">
-                    <a href="{{ item.img.url }}" class="thumbnail">
-                        <img src="{{ item.thumb.url }}" alt="{{ item.img.desc }}">
-                    </a>
+
+                <!--缩略图功能模板tag，详细看http://sorl-thumbnail.readthedocs.io/en/latest/examples.html-->
+                    {% load thumbnail %}
+                    {% thumbnail item.img "300" as im %}
+                        <a href="{{ item.img.url }}" class="thumbnail">
+                            <img src="{{ im.url }}" alt="">
+                        </a>
+                    {% endthumbnail %}
+
                 </div>
-                ...
             </div>
         {% endfor %}
 
