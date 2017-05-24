@@ -86,7 +86,7 @@
                 <!--缩略图功能模板tag，详细看http://sorl-thumbnail.readthedocs.io/en/latest/examples.html-->
                 {% load thumbnail %}
                 {% thumbnail item.img "300" as im %}
-                    <div class="col-xs-6 col-md-3">
+                    <div class="col-xs-6 col-xs-4 col-md-3">
 
                         <a href="{{ item.img.url }}" class="thumbnail">
                             <img src="{{ im.url }}" alt="">

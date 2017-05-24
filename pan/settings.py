@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'money',
     'guardian',
+    'document',
     'chartit', #图表功能
     'sorl.thumbnail', #缩略图功能
 ]

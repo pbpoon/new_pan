@@ -2,11 +2,6 @@ from django.db import models
 from django.shortcuts import reverse
 from collections import defaultdict
 
-import os
-from PIL import Image
-from pan.settings import MEDIA_ROOT
-from django.db.models.fields.files import ImageFieldFile
-
 
 class MoneyAccountManager(models.Manager):
     def date_objects(self):
@@ -42,7 +37,7 @@ class MoneyAccount(models.Model):
     amount = models.DecimalField('金额', decimal_places=2, max_digits=9, null=False)
     operator = models.ForeignKey('users.UserProfile', verbose_name='经手人')
     ps = models.CharField('备注说明', max_length=200, null=True, blank=True)
-    tag = models.ManyToManyField('Tag', null=True, blank=True, verbose_name='标签')
+    tag = models.ManyToManyField('Tag', null=True, verbose_name='标签')
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
     objects = MoneyAccountManager()
@@ -71,20 +66,6 @@ class MoneyAccount(models.Model):
     def get_absolute_url(self):
         return reverse('money:item_detail', kwargs={'pk': self.id})
 
-    def as_dict(self):
-        return {
-                str(self.num):{ 'date': self.date.strftime('%Y-%m-%d'),
-                'amount': str(self.amount),
-                }}
-        # return {'id':self.id,
-        #         'num': self.num,
-        #         'date': self.date.strftime('%Y-%m-%d'),
-        #         'amount': str(self.amount),
-        #         'status': self.status,
-        #         'type': self.type,
-        #         'detail': self.detail,
-        #         'ps':self.ps}
-
 
 class Document(models.Model):
     img = models.ImageField('留档图片', upload_to='file/money/%Y%m%d', max_length=120)
@@ -93,6 +74,7 @@ class Document(models.Model):
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
 
+
     class Meta:
         verbose_name = '流水账留档图片'
         verbose_name_plural = verbose_name
@@ -100,30 +82,4 @@ class Document(models.Model):
 
     def __str__(self):
         return self.desc[:20]
-#     def save(self):
-#         super(Document, self).save() #将上传的图片先保存一下，否则报错
-#         file_name, format_ = os.path.splitext(os.path.basename(self.img.path))
-#         thumb_pixbuf = make_thumb(os.path.join(MEDIA_ROOT, self.img.name))
-#         relate_path, _ = os.path.split(os.path.join(MEDIA_ROOT,self.img.path)) # 获取img字段的绝对文件夹路径
-#         relate_thumb_path = os.path.join(relate_path, file_name + '-thumb' + format_) #赋值thumb字段的绝对路径+文件名
-#         thumb_path = os.path.join(MEDIA_ROOT, relate_thumb_path)
-#         thumb_pixbuf.save(thumb_path)
-#         self.thumb = ImageFieldFile(self, self.thumb, relate_thumb_path) #把生成的thumb的路径写入字段
-#         super(Document, self).save() #再保存一下，包括缩略图等
-#
-#
-#
-# '''
-# 生成缩略图thumb函数
-# '''
-# def make_thumb(path, size=480):
-#     pixbuf = Image.open(path)
-#     width, height = pixbuf.size
-#
-#     if width > size:
-#         delta = width / size
-#         height = int(height / delta)
-#         pixbuf.thumbnail((size, height), Image.ANTIALIAS)
-#
-#         return pixbuf
-#
+
