@@ -17,25 +17,25 @@
         <div class="row">
             {% for object in object_list %}
                 <div class="col-sm-6 col-md-3">
-                <div class="thumbnail">
-                    {% if object.item.first.format in format_list %}
-                        {% load thumbnail %}
-                        {% thumbnail object.item.first.file "300" as im %}
-                            <img src="{{ im.url }}" alt="{{ object.item.first.file.title }}">
-                        {% endthumbnail %}
-                    {% endif %}
-                    <div class="caption">
-                        <h4>{{ object.name }}</h4>
-                        <p>&nbsp;&nbsp;{{ object.desc }}</p>
-                        <p><i class="glyphicon glyphicon-paperclip"></i>&nbsp;&nbsp;{{ object.item.count }}&nbsp;&nbsp;|&nbsp;&nbsp;
-                            <i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d }}&nbsp;&nbsp;|&nbsp;&nbsp;
-                            <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ object.views }}</p>
-                        <p><a href="{{ object.get_absolute_url }}" class="btn btn-default">查阅详细</a>
-                        </p>
+                    <div class="thumbnail" style="background-color:#eee">
+                        {% if object.item.first.format in format_list %}
+                            {% load thumbnail %}
+                            {% thumbnail object.item.first.file "300x300" crop='80% center' as im %}
+                                <img src="{{ im.url }}" alt="{{ object.item.first.file.name }}">
+                            {% endthumbnail %}
+                        {% endif %}
+                        <div class="caption">
+                            <h4>{{ object.title }}</h4>
+                            <p>&nbsp;&nbsp;{{ object.desc }}</p>
+                            <p><i class="glyphicon glyphicon-paperclip"></i>&nbsp;&nbsp;{{ object.item.count }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                                <i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d|date:"Y-m-d" }}&nbsp;&nbsp;|&nbsp;&nbsp;
+                                <i class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ object.views }}</p>
+                            <p><a href="{{ object.get_absolute_url }}" class="btn btn-default">查阅详细</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             {% endfor %}
-            </div>
         </div>
     </div>
 

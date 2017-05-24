@@ -1,42 +1,45 @@
 {% extends 'document/index.html' %}
 
 {% block title %}
-    档案 | {{ block.super }}
+    {{ object.title }} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumb %}
     {{ block.super }}
-    <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a></li>
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <div class="page-header">
-            <h2>{{ object.name }}
-                <small class="text-center pull-right"><i
-                        class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ object.views }}
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<i
-                            class="glyphicon glyphicon-paperclip"></i>&nbsp;&nbsp;{{ object.item.count }}
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d }}
-                </small>
-            </h2>
-            <p>&nbsp;&nbsp;{{ object.desc }}</p>
+        <div class="jumbotron">
+            <div class="page-header">
+                <h2>{{ object.title }}
+                    <small class="text-center pull-right"><i
+                            class="glyphicon glyphicon-eye-open"></i>&nbsp;&nbsp;{{ object.views }}
+                        &nbsp;&nbsp;|&nbsp;&nbsp;<i
+                                class="glyphicon glyphicon-paperclip"></i>&nbsp;&nbsp;{{ object.item.count }}
+                        &nbsp;&nbsp;|&nbsp;&nbsp;<i
+                                class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d|date:"Y-m-d" }}
+                    </small>
+                </h2>
+                <p>&nbsp;&nbsp;{{ object.desc }}</p>
+            </div>
         </div>
         <div class="row">
             {% for item in item_list %}
                 <div class="col-xs-6 col-sm-4 col-md-3">
-                    <a href="#">
-                        <div class="thumbnail">
+                    <a href="{{ item.get_absolute_url }}">
+                        <div style="background-color:#eee" class="thumbnail">
                             {% if item.format in format_list %}
                                 {% load thumbnail %}
                                 {% thumbnail item.file "280x280" crop="80% center" as im %}
-                                    <img src="{{ im.url }}" alt="{{ item.title }}">
+                                    <img src="{{ im.url }}" alt="{{ item.name }}">
                                 {% endthumbnail %}
                             {% endif %}
                             <div class="caption">
-                                <h3>{{ item.title }}</h3>
-                                <p>{% if item.desc %}{{ item.desc }}{% else %}&nbsp;{% endif %}</p>
-                                <p><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ item.update_d|date }}
+                                <h3>{{ item.name }}</h3>
+                                <p>&nbsp;{{ item.desc }}</p>
+                                <p><i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ item.update_d|date:"Y-m-d" }}
                                 </p>
                             </div>
                         </div>
