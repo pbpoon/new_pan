@@ -15,13 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^index/', RedirectView.as_view(pattern_name='article:index'), name='index'),
     url(r'^no_perm/', TemplateView.as_view(template_name='no_prem.html'),name='no_perm'),
     url(r'^user/', include('users.urls', namespace='user')),
     url(r'^document/', include('document.urls', namespace='document')),

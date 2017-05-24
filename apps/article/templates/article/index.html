@@ -7,8 +7,13 @@
 
 {% block content %}
     <div class="container">
+    <div class="jumbotron">
+                <h2>文章列表</h2>
+                <p>最新发表的公告，各样文件第一时间于这里！</p>
+            </div>
         <div class="col-md-8">
-            <h2 class="page-header">文章列表</h2>
+
+
             <div class="list-group">
                 {% for obj in object_list %}
                     <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
@@ -22,7 +27,8 @@
                     </a>
                 {% endfor %}
             </div>
-{#        分页符号#}
+
+            {#        分页符号#}
             {% if is_paginated %}
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
@@ -42,7 +48,7 @@
             {% endif %}
         </div>
         <div class="col-md-4">
-            <h2 class="page-header">所有标签主题</h2>
+            <h4 class="page-header">所有文章标签</h4>
             {% for tag in tag_list %}
                 <a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
             {% endfor %}
