@@ -1,0 +1,31 @@
+{% extends 'document/detail.html' %}
+
+{% block title %}
+    {{ object.name }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h2>{{ object.name }}
+                <small class="text-center pull-right">
+                    <i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d|date:"Y-m-d" }}
+                </small>
+            </h2>
+            <p>&nbsp;&nbsp;{{ object.desc }}</p>
+        </div>
+        <div class="row">
+            {% load thumbnail %}
+            {% thumbnail object.file "1200" as im %}
+                <img src="{{ im.url }}" alt="{{ object.name }}" class="img-rounded">
+            {% endthumbnail %}
+        </div>
+    </div>
+
+{% endblock %}
+

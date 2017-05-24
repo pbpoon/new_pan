@@ -17,6 +17,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^item/(?P<pk>\d+)/$', views.ItemDetailView.as_view(), name='item_detail'),
     url(r'^detail/(?P<pk>\d+)/$', views.DocumentDetailView.as_view(), name='detail'),
     url(r'^$', views.DocumentListView.as_view(), name='index'),
 ]

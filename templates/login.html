@@ -6,13 +6,13 @@
             <div class="alert alert-danger" role="alert">{{ msg }}</div>
         {% endif %}
 
-        <form action="" method="post">
-
+        <form class="form-signin" action="" method="post">
+            <h2 class="form-signin-heading">登录网站</h2>
             {% csrf_token %}
             {{ form.errors }}
-            {{ form.as_p }}
+            {{ form }}
             <input type="hidden" name="next" value="{{ next }}">
-            <p><input class="btn btn-default" type="submit" value="提交"></p>
+            <button class="btn btn-primary" type="submit" value="提交">
         </form>
     </div>
 {% endblock %}
