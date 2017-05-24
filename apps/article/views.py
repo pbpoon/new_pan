@@ -39,12 +39,8 @@ class ArticleDetailView(DetailView):
         context = super(ArticleDetailView, self).get_context_data(**kwargs)
         context['tag_list'] = self.object.tag.all()
         context['form'] = CommentForm()
-        context['article_like'] = Like.objects.filter(type='a', like_id=self.object.id, like=True)
-        context['article_unlike'] = Like.objects.filter(type='a', like_id=self.object.id, like=False)
-        if self.request.user.is_authenticated:
-            context['user_article_like'] = self.request.user.like.filter(type='a', like_id=self.object.id)
-        '''如果是登陆的用户，就判断其在本article的like状态，先查找有没有有记录，如果有就进一步判断
-        并把点击状态改变'''
+        context['article_like'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=True)]
+        context['article_unlike'] =  [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
         all_comment = self.object.comment.all()
 
         '''
@@ -53,16 +49,12 @@ class ArticleDetailView(DetailView):
         context['comment_list'] = {}
         for comment in all_comment:
             comment_id = str(comment.id)
-            like = Like.objects.filter(type='c', like_id=comment_id, like=True)
-            unlike = Like.objects.filter(type='c', like_id=comment_id, like=False)
-            user_comment_like = ''
-            if self.request.user.is_authenticated:
-                user_comment_like = self.request.user.like.filter(type='a', like_id=self.object.id)
+            like = [obj.user for obj in Like.objects.filter(type='c', like_id=comment_id, like=True)]
+            unlike = [obj.user for obj in Like.objects.filter(type='c', like_id=comment_id, like=False)]
             context['comment_list'][comment_id] = {
                 'comment': comment,
                 'like': like,
                 'unlike': unlike,
-                'user_comment_like': user_comment_like
             }
 
         return context

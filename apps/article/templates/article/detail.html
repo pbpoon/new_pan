@@ -28,16 +28,15 @@
                 {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
 
                 <div class="btn-group pull-left">
-                    <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %} btn-lg"
+                    <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %}"
                        href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
                         <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                        <span class="badge">{{ article_like.count }}</span>
+                        <span class="badge">{{ article_like|length }}</span>
                     </a>
-
-                    <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %} btn-lg"
+                    <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %}"
                        href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                        <span class="badge">{{ article_unlike.count }}</span>
+                        <span class="badge">{{ article_unlike|length }}</span>
                     </a>
                 </div>
 
@@ -52,7 +51,7 @@
                     {#                把评论的内容分别读取出来，由于view用list重新处理过，这里要读取values#}
 
                     {% for item in comment_list.values %}
-                        {% with comment=item.comment comment_likes=item.like comment_unlikes=item.unlike %}
+                        {% with comment=item.comment comment_like=item.like comment_unlike=item.unlike %}
                             <div class="panel panel-default">
                                 <!-- Default panel contents -->
                                 <div class="panel-heading">{{ comment.user }}
@@ -61,25 +60,22 @@
                                     </small>
                                 </div>
                                 <div class="panel-body">
-
-                                    {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
-
                                     <div class="container">
                                         <p>{{ comment.comment }}</p></div>
                                 </div>
                                 <div class="container">
                                     <div class="btn-group">
                                         <div class="btn-group pull-left">
-                                            <a class="btn {% if user_comment_like.like %} btn-success {% else %} btn-default {% endif %} btn-lg"
+                                            <a class="btn {% if request.user in comment_like %} btn-success {% else %} btn-default {% endif %}"
                                                href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=True">
                                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                                <span class="badge">{{ comment_likes.count }}</span>
+                                                <span class="badge">{{ comment_like|length }}</span>
                                             </a>
 
-                                           <a class="btn {% if not user_comment_like.like %} btn-success {% else %} btn-default {% endif %} btn-lg"
+                                            <a class="btn {% if request.user in comment_unlike %} btn-success {% else %} btn-default {% endif %}"
                                                href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=False">
                                                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                                <span class="badge">{{ comment_unlikes.count }}</span>
+                                                <span class="badge">{{ comment_unlike|length }}</span>
                                             </a>
                                         </div>
                                     </div>

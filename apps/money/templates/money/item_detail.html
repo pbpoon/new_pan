@@ -78,22 +78,26 @@
             {% endif %}
         </div>
 
-        {% for item in doc %}
-            <div class="row">
-                <div class="col-xs-6 col-md-3">
-
+    <div class="clearfix"></div>
+    {% if doc %}
+        <div class="row">
+        <h4 class="page-header">相关票据资料</h4>
+            {% for item in doc %}
                 <!--缩略图功能模板tag，详细看http://sorl-thumbnail.readthedocs.io/en/latest/examples.html-->
-                    {% load thumbnail %}
-                    {% thumbnail item.img "300" as im %}
+                {% load thumbnail %}
+                {% thumbnail item.img "300" as im %}
+                    <div class="col-xs-6 col-md-3">
+
                         <a href="{{ item.img.url }}" class="thumbnail">
                             <img src="{{ im.url }}" alt="">
                         </a>
-                    {% endthumbnail %}
 
-                </div>
-            </div>
-        {% endfor %}
+                    </div>
+                {% endthumbnail %}
+            {% endfor %}
+        </div>
 
+    {% endif %}
     </div>
 
 {% endblock %}
