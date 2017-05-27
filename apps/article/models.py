@@ -23,6 +23,7 @@ class Article(models.Model):
     publish = models.BooleanField('发布', default=False)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
+    views = models.PositiveIntegerField('查阅量', default=0)
 
     class Meta:
         verbose_name = '文章'

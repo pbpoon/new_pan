@@ -37,7 +37,7 @@ class MoneyAccount(models.Model):
     amount = models.DecimalField('金额', decimal_places=2, max_digits=9, null=False)
     operator = models.ForeignKey('users.UserProfile', verbose_name='经手人')
     ps = models.CharField('备注说明', max_length=200, null=True, blank=True)
-    tag = models.ManyToManyField('Tag', null=True, verbose_name='标签')
+    tag = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
     objects = MoneyAccountManager()

@@ -13,11 +13,11 @@ class ArticleListView(ListView):
     queryset = Article.objects.filter(publish=True)
     paginate_by = 12
 
-    # def get_queryset(self):
-    #     object_list = super(ArticleListView, self).get_queryset()
-    #     for qs in object_list:
-    #         qs.content = markdown.markdown(qs.content)
-    #     return object_list
+    def get_queryset(self):
+        object_list = super(ArticleListView, self).get_queryset()
+        for qs in object_list:
+            qs.content = markdown.markdown(qs.content)
+        return object_list
 
     def get_context_data(self, **kwargs):
         context = super(ArticleListView, self).get_context_data(**kwargs)
@@ -40,7 +40,7 @@ class ArticleDetailView(DetailView):
         context['tag_list'] = self.object.tag.all()
         context['form'] = CommentForm()
         context['article_like'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=True)]
-        context['article_unlike'] =  [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
+        context['article_unlike'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
         all_comment = self.object.comment.all()
 
         '''
