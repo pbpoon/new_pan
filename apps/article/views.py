@@ -1,11 +1,55 @@
 from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
-from django.views.generic import ListView, DetailView, FormView, View
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import ListView, DetailView, FormView, View, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 
 from .models import Article, Tag, Like
 from .forms import CommentForm
 
 import markdown
+
+
+class AuthorMixin:
+    '''
+    把author在query裏篩選出來
+    '''
+    def get_queryset(self):
+        qs = super(AuthorMixin, self).get_queryset()
+        return qs.filter(author=self.request.user)
+
+
+class AuthorArticleMixin(AuthorMixin):
+    '''
+    定好要使用的model
+    '''
+    model = Article
+
+
+class AuthorEditMixin:
+    '''
+    把需要用到表单的view最后把author加上为当前用户
+    '''
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(AuthorEditMixin, self).form_valid(form)
+
+
+class ArticleEditMixin(AuthorArticleMixin, AuthorEditMixin):
+    fields = ['title', 'content', 'tag', 'publish']
+    success_url = reverse_lazy('article:index')
+    template_name = 'article/form.html'
+
+
+class ArticleCreateView(ArticleEditMixin, CreateView):
+    pass
+
+
+class ArticleUpdateView(ArticleEditMixin, UpdateView):
+    pass
+
+
+class ArticleDelteView(ArticleEditMixin, UpdateView):
+    pass
 
 
 class ArticleListView(ListView):

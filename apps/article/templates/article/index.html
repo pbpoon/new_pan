@@ -12,7 +12,7 @@
                 <p>最新发表的公告，各样文件第一时间于这里！</p>
             </div>
         <div class="col-md-8">
-
+<a class="button" href="{% url 'article:article_create' %}">发表文章</a>
             <div class="list-group">
                 {% for obj in object_list %}
                     <a class="list-group-item" href="{% url 'article:detail' obj.id %}">

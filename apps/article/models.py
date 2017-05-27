@@ -19,7 +19,6 @@ class Article(models.Model):
     content = models.TextField('内容')
     author = models.ForeignKey('users.UserProfile', related_name='article', verbose_name='作者')
     tag = models.ManyToManyField('Tag', related_name='article', verbose_name='标签')
-    views = models.IntegerField('浏览数', default=0)
     publish = models.BooleanField('发布', default=False)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)
