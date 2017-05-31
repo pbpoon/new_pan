@@ -1,6 +1,6 @@
 from django.db import models
 from django.shortcuts import reverse
-
+from taggit.managers import TaggableManager
 
 class Category(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
@@ -18,7 +18,7 @@ class Article(models.Model):
     title = models.CharField('标题', max_length=120)
     content = models.TextField('内容')
     author = models.ForeignKey('users.UserProfile', related_name='article', verbose_name='作者')
-    tag = models.ManyToManyField('Tag', related_name='article', verbose_name='标签')
+    tag = TaggableManager()
     publish = models.BooleanField('发布', default=False)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)

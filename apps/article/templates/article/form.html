@@ -1,4 +1,5 @@
 {% extends 'article/index.html' %}
+{% load bootstrap_tags %}
 {% block title %}
     {{ block.super }} - {{ article.title }}
 {% endblock %}
@@ -10,24 +11,22 @@
 
 {% block content %}
     <div class="container">
-        <div class="col-md-8">
-            <h1>
-                {% if object %}
-                    Edit course "{{ object.title }}"
-                {% else %}
-                    Create a new course
-                {% endif %}
-            </h1>
-            <div class="module">
-                <h2>Course info</h2>
-                <form action="." method="post">
-                    {{ form.as_p }}
-                    {% csrf_token %}
-                    <p><input type="submit" value="Save course"></p>
-                </form>
-
-                <hr class="divider">
-            </div>
+    <div class="col-md-8">
+        <h1>
+            {% if object %}
+                编辑文章： "{{ object.title }}"
+            {% else %}
+                发表新文章
+            {% endif %}
+        </h1>
+        <div class="module">
+            <h2>详细内容</h2>
+            <form action="." method="post">
+                {{ form |as_bootstrap_inline }}
+                {% csrf_token %}
+                <input type="submit" value="保存文章">
+            </form>
+            <hr class="divider">
         </div>
-
+    </div>
 {% endblock %}

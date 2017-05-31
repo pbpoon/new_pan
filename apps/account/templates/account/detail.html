@@ -11,11 +11,14 @@
 {% block content %}
 
     <div class="container">
-        <div class="col-md-8">
+        <div class="jumbotron">
             <h3 class="page-header">{{ account.name }}
                 <span>/共 {{ account.get_peolpe_count }} 人</span>
                 <span>/符合分红资格： {{ account.get_getmoney_count }} 人</span>
             </h3>
+        </div>
+        <div class="col-md-8">
+
             <table class="table">
                 <thead>
                 <tr>

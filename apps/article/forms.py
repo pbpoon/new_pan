@@ -3,7 +3,7 @@ __author__ = 'pbpoon'
 __date__ = '2017/5/13 21:41'
 
 from django import forms
-from .models import Comment, Like
+from .models import Comment, Tag
 
 
 class CommentForm(forms.ModelForm):
@@ -14,3 +14,9 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'comment':forms.Textarea(attrs={'class': 'form-control', 'placeholder': '我来说两句~', 'row':3})
         }
+
+
+class AddTagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name']

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@ssh://pan@120.24.161.98:24/python36/python.exe">
+          <settings>
+            <list>
+              <mapping local-root="$USER_HOME$/OneDrive/python/pan/env/Scripts" remote-root="/python36/Scripts" />
+            </list>
+          </settings>
+        </remote-mappings>
+        <remote-mappings server-id="python@sftp://pan@120.24.161.98:24/python36/python.exe">
+          <settings>
+            <list>
+              <mapping local-root="$USER_HOME$/OneDrive/python/pan/env/Scripts" remote-root="/python36/python.exe" />
+            </list>
+          </settings>
+        </remote-mappings>
+      </list>
+    </list>
+  </component>
+</project>

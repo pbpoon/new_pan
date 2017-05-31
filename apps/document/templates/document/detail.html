@@ -28,7 +28,7 @@
         <div class="row">
             {% for item in item_list %}
                 <div class="col-xs-6 col-sm-4 col-md-3">
-                    <a href="{{ item.get_absolute_url }}">
+                    <a href="{{ item.get_absolute_url }}" data-toggle="modal" data-target="#item_detail">
                         <div style="background-color:#eee" class="thumbnail">
                             {% if item.format in format_list %}
                                 {% load thumbnail %}
@@ -48,6 +48,13 @@
             {% endfor %}
         </div>
     </div>
-
+<div class="modal fade" id="item_detail" >
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
 

@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^no_perm/', TemplateView.as_view(template_name='no_prem.html'),name='no_perm'),
     url(r'^user/', include('users.urls', namespace='user')),
     url(r'^document/', include('document.urls', namespace='document')),
-    url(r'^article/', include('article.urls', namespace='article')),
+    url(r'^', include('article.urls', namespace='article')),
     url(r'^account/', include('account.urls', namespace='account')),
     url(r'^asset/', include('asset.urls', namespace='asset')),
     url(r'^livingcost/', include('livingcost.urls', namespace='livingcost')),

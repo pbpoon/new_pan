@@ -18,9 +18,12 @@
 
             <hr class="divider">
             <div class="row">
+                {% ifequal request.user object.author %}
+                    <a class="btn btn-default" href="{% url 'article:update' object.id %}">編輯文章</a> {% endifequal %}
                 {% for tag in tag_list %}
 
                     <div class="pull-right">
+
                         <h4><a class="label label-info " href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></h4>
                     </div>
                 {% endfor %}
@@ -41,6 +44,13 @@
                 </div>
 
             </div>
+            <button class="btn btn-default" id="ajax_like">AJAX点赞</button>
+
+            <span id="ajax_like_count"
+                  class="label label-default">{% templatetag openvariable %}  message {% templatetag closevariable %}</span>
+            <input v-model="message" placeholder="edit me">
+            <p>{% templatetag openvariable %} message {% templatetag closevariable %}</p>
+
             <hr class="divider">
 
             {#        评论内容#}
@@ -86,5 +96,24 @@
             <hr class="divider">
             {% include 'article/comment_form.html' %}
         </div>
-
+        <script>
+            $(document).ready(function () {
+                $("#ajax_like").click(function () {
+                    var article_id ={{ object.id }};
+                    var type = 'c';
+                    var like_id = {{ object.id }};
+                    var like = 'True';
+                    $.getJSON("{% url 'article:article_like' %}", {
+                            'article_id': article_id,
+                            'type': type,
+                            'like_id': like_id,
+                            'like': like
+                        },
+                        function (data) {
+                            alert('test')
+                            $('#ajax_like_count').text(data['like_count'])
+                        })
+                })
+            })
+        </script>
 {% endblock %}

@@ -1,12 +1,14 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect
+from django.shortcuts import render, get_object_or_404, HttpResponseRedirect, redirect, HttpResponse
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, DetailView, FormView, View, CreateView, UpdateView, DeleteView
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Article, Tag, Like
-from .forms import CommentForm
+from .forms import CommentForm, AddTagForm
 
 import markdown
+from django.http import JsonResponse
 
 
 class AuthorMixin:
@@ -34,10 +36,20 @@ class AuthorEditMixin:
         return super(AuthorEditMixin, self).form_valid(form)
 
 
-class ArticleEditMixin(AuthorArticleMixin, AuthorEditMixin):
+class ArticleEditMixin(LoginRequiredMixin, AuthorArticleMixin, AuthorEditMixin):
     fields = ['title', 'content', 'tag', 'publish']
     success_url = reverse_lazy('article:index')
     template_name = 'article/form.html'
+    tag_form = AddTagForm
+
+    # def get(self):
+    #     tag_form = self.tag_form()
+    #     return super(ArticleEditMixin).get()
+    #
+    # def pos(self, request):
+    #     tag_form = self.tag_form(request.POST)
+    #     return super(ArticleEditMixin).post()
+    #
 
 
 class ArticleCreateView(ArticleEditMixin, CreateView):
@@ -165,4 +177,6 @@ class LikeView(View):
                 messages.success(request, '你已对该{0}{1}!'.format(A, B))
             else:
                 messages.warning(request, '你已对该{0}{1}!'.format(A, B))
+        #     like_count = {'like_count':Like.objects.filter(type=type, like_id=like_id, like=like).count()}
+        # return JsonResponse(like_count)
         return redirect(article.get_absolute_url())

@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'document',
     'chartit',  # 图表功能
     'sorl.thumbnail',  # 缩略图功能
+    'django_forms_bootstrap', # 表单bootstrap美化
+    'taggit',#tag功能
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -107,14 +109,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')},
-    'mysql': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'pan',
-        'PASSWORD': 'qqq456777',
-        'NAME': 'test',
-        'HOST': '120.24.161.98',
-        'PORT': '3306',
-    }
+    # 'mysql': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'USER': 'pan',
+    #     'PASSWORD': 'qqq456777',
+    #     'NAME': 'test',
+    #     'HOST': '120.24.161.98',
+    #     'PORT': '3306',
+    # }
 }
 
 # Password validation

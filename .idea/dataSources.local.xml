@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="db.sqlite3" uuid="fe489a5c-0241-41d1-92e3-261dd6cb3ce7">
+      <database-info product="SQLite" version="3.16.1" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
+    </data-source>
+    <data-source name="identifier.sqlite" uuid="04f8e3d4-6abb-4f05-a9d3-f3170a025e4c">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" />
+      <secret-storage>master_key</secret-storage>
+      <auth-required>false</auth-required>
+      <first-sync>true</first-sync>
+      <ssh-properties>
+        <enabled>true</enabled>
+        <proxy-host>120.24.161.98/Users/Administrator/Desktop/django/new_pan/db.sqlite3</proxy-host>
+        <proxy-port>24</proxy-port>
+        <secret-storage>master_key</secret-storage>
+        <user>pan</user>
+        <use-password>true</use-password>
+      </ssh-properties>
+    </data-source>
+  </component>
+</project>
