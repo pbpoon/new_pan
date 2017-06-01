@@ -52,9 +52,9 @@ INSTALLED_APPS = [
     'document',
     'chartit',  # 图表功能
     'sorl.thumbnail',  # 缩略图功能
-    'django_forms_bootstrap', # 表单bootstrap美化
-    'taggit',#tag功能
-    'markdownx', #markdown 实时预览图
+    'django_forms_bootstrap',  # 表单bootstrap美化
+    'taggit',  # tag功能
+    'markdownx',  # markdown 实时预览图
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -159,6 +159,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

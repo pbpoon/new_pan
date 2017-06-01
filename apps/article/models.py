@@ -1,7 +1,7 @@
 from django.db import models
 from django.shortcuts import reverse
 from taggit.managers import TaggableManager
-
+from markdownx.models import MarkdownxField
 
 class Category(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
@@ -17,9 +17,9 @@ class Category(models.Model):
 
 class Article(models.Model):
     title = models.CharField('标题', max_length=120)
-    content = models.TextField('内容')
+    content = MarkdownxField('内容')
     author = models.ForeignKey('users.UserProfile', related_name='article', verbose_name='作者')
-    tag = TaggableManager()
+    tag = TaggableManager('标签', blank=True, help_text='用英文逗号隔开每个标签')
     publish = models.BooleanField('发布', default=False)
     create_d = models.DateTimeField('创建时间', auto_now_add=True)
     update_d = models.DateTimeField('更新日期', auto_now=True)

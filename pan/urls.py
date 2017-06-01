@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
-
+from markdownx import urls as markdownx
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -31,7 +31,9 @@ urlpatterns = [
     url(r'^asset/', include('asset.urls', namespace='asset')),
     url(r'^livingcost/', include('livingcost.urls', namespace='livingcost')),
     url(r'^money/', include('money.urls', namespace='money')),
-    url(r'^markdownx/', include('markdownx.urls')),
+]
+urlpatterns += [
+    url(r'^markdownx/', include(markdownx))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

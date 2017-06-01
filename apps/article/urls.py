@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views
+from markdownx import urls as markdownx
 
 urlpatterns = [
     url(r'^edit/(?P<pk>\d+)/$', views.ArticleUpdateView.as_view(), name='update'),
@@ -25,3 +26,5 @@ urlpatterns = [
     url(r'^article/(?P<pk>\d+)/$', views.ArticleDetailView.as_view(), name='detail'),
     url(r'^$', views.ArticleListView.as_view(), name='index'),
 ]
+urlpatterns += [
+    url(r'^markdownx/', include(markdownx))]

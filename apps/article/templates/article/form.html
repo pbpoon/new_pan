@@ -11,7 +11,6 @@
 
 {% block content %}
     <div class="container">
-    <div class="col-md-8">
         <h1>
             {% if object %}
                 编辑文章： "{{ object.title }}"
@@ -22,11 +21,12 @@
         <div class="module">
             <h2>详细内容</h2>
             <form action="." method="post">
-                {{ form |as_bootstrap_inline }}
+                {{ form|as_bootstrap_inline }}
                 {% csrf_token %}
                 <input type="submit" value="保存文章">
             </form>
+
             <hr class="divider">
-        </div>
+            {{ form.media }}
     </div>
 {% endblock %}

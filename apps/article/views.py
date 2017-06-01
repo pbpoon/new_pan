@@ -5,16 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Article, Tag, Like
-from .forms import CommentForm
-
-import markdown
-from django.http import JsonResponse
+from .forms import CommentForm, ArticleEditForm
 
 
 class AuthorMixin:
     '''
     把author在query裏篩選出來
     '''
+
     def get_queryset(self):
         qs = super(AuthorMixin, self).get_queryset()
         return qs.filter(author=self.request.user)
@@ -31,15 +29,17 @@ class AuthorEditMixin:
     '''
     把需要用到表单的view最后把author加上为当前用户
     '''
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(AuthorEditMixin, self).form_valid(form)
 
 
 class ArticleEditMixin(LoginRequiredMixin, AuthorArticleMixin, AuthorEditMixin):
-    fields = ['title', 'content', 'tag', 'publish']
+    # fields = ['title', 'content', 'tag', 'publish']
     success_url = reverse_lazy('article:index')
     template_name = 'article/form.html'
+    form_class = ArticleEditForm
 
 
 class ArticleCreateView(ArticleEditMixin, CreateView):
@@ -50,7 +50,7 @@ class ArticleUpdateView(ArticleEditMixin, UpdateView):
     pass
 
 
-class ArticleDelteView(ArticleEditMixin, UpdateView):
+class ArticleDelteView(ArticleEditMixin, DeleteView):
     pass
 
 
@@ -73,17 +73,12 @@ class ArticleDetailView(DetailView):
     template_name = 'article/detail.html'
     model = Article
 
-    def get_object(self, queryset=None):
-        obj = super(ArticleDetailView, self).get_object()
-        obj.content = markdown.markdown(obj.content)
-
-        return obj
-
     def get_context_data(self, **kwargs):
         kwargs['tag_list'] = self.object.tag.all()
         kwargs['form'] = CommentForm()
         kwargs['article_like'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=True)]
-        kwargs['article_unlike'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
+        kwargs['article_unlike'] = [obj.user for obj in
+                                    Like.objects.filter(type='a', like_id=self.object.id, like=False)]
         all_comment = self.object.comment.all()
 
         '''
@@ -109,11 +104,6 @@ class TagListView(ListView):
     def get_queryset(self):
         object_list = Article.objects.filter(publish=True, tag__in=self.kwargs['tag_id'])
         return object_list
-
-    def get_context_data(self, **kwargs):
-        context = super(TagListView, self).get_context_data(**kwargs)
-        context['tag_list'] = Tag.objects.all()
-        return context
 
 
 class CommentView(FormView):
@@ -164,6 +154,6 @@ class LikeView(View):
                 messages.success(request, '你已对该{0}{1}!'.format(A, B))
             else:
                 messages.warning(request, '你已对该{0}{1}!'.format(A, B))
-        #     like_count = {'like_count':Like.objects.filter(type=type, like_id=like_id, like=like).count()}
+        # like_count = {'like_count':Like.objects.filter(type=type, like_id=like_id, like=like).count()}
         # return JsonResponse(like_count)
         return redirect(article.get_absolute_url())
