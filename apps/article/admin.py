@@ -22,6 +22,7 @@ class ArticleAdmin(admin.ModelAdmin):
     def tag_list(self, Article):
         return u", ".join(o.name for o in Article.tag.all())
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     pass

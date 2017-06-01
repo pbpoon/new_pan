@@ -1,5 +1,10 @@
-<form action="{% url 'article:comment' object.pk %}" method="post">
-    {{ form }}
-    {% csrf_token %}
-    <input type="submit" class="btn btn-primary" value="发表评论">
-</form>
+{% if request.user.is_authenticated %}
+    <hr class="divider">
+    <form action="{% url 'article:comment' object.pk %}" method="post">
+        {{ form }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="发表评论">
+    </form>
+{% else %}
+    如要评论本文章，请先 <a href="{% url 'user:login' %}?next={{ request.path }}">登录</a>账户
+{% endif %}

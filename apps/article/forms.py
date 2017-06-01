@@ -3,7 +3,7 @@ __author__ = 'pbpoon'
 __date__ = '2017/5/13 21:41'
 
 from django import forms
-from .models import Comment, Tag
+from .models import Comment, Article
 
 
 class CommentForm(forms.ModelForm):
@@ -16,7 +16,10 @@ class CommentForm(forms.ModelForm):
         }
 
 
-class AddTagForm(forms.ModelForm):
-    class Meta:
-        model = Tag
-        fields = ['name']
+# class ArticleEditForm(forms.ModelForm):
+#     class Meta:
+#         model = Article
+#         fields = ['publish', 'title', 'content', 'tag']
+#         widgets = {
+#             'tag': TagField(widget=taggit_bootstrap.TagsInput)
+#         }

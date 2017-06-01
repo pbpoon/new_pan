@@ -18,7 +18,7 @@ from . import views
 
 urlpatterns = [
     url(r'^edit/(?P<pk>\d+)/$', views.ArticleUpdateView.as_view(), name='update'),
-    url(r'^create/$', views.ArticleCreateView.as_view(), name='article_create'),
+    url(r'^create/$', views.ArticleCreateView.as_view(), name='create'),
     url(r'^like/', views.LikeView.as_view(), name='article_like'),
     url(r'^comment/(?P<article_id>\d+)', views.CommentView.as_view(), name='comment'),
     url(r'^article/tag/(?P<tag_id>\d+)/$', views.TagListView.as_view(), name='tag'),

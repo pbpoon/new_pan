@@ -13,9 +13,9 @@
                 {% for obj in object_list %}
                     <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
                         <h4 class="list-group-item-heading">{{ obj.title }}
-                            <small>(发布于:{{ obj.create_d|difftime }} / {{ obj.author }})</small>
+                            <small>(发布于:{{ obj.create_d }} / {{ obj.author }})</small>
                         </h4>
-                        <p class="list-group-item-text">{{ obj.content|markdown|striptags|truncatechars_html:"38" }}...</p>
+                        <p class="list-group-item-text">{{ obj.content|striptags|truncatechars_html:"38" }}...</p>
                         {% for tag in obj.tag.name %}
                             <span class="label-default">{{ tag }}</span>
                         {% endfor %}
@@ -43,16 +43,9 @@
             {% endif %}
         </div>
         <div class="col-md-4">
-            {% if perms.article %}
-                <h5 class="page-header">文章管理</h5>
-                <ul>
-                    <li>
-                        <a href="{% url 'article:create' %}">发表新文章</a>
-                    </li>
-                    <li><a href="{% url 'article:index' %}?publish=False">未发布文章</a></li>
-                </ul>
+            {% if request.user.is_au %}
             {% endif %}
-
+            <h5>文章管理</h5>
 
             <ul class="list-unstyled">
                 <li><h5 class="page-header">共有 {% total_article %} 篇文章</h5></li>

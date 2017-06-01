@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',  # 缩略图功能
     'django_forms_bootstrap', # 表单bootstrap美化
     'taggit',#tag功能
+    'markdownx', #markdown 实时预览图
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -163,6 +164,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/user/login/'
-LOGIN_REDIRECT_URL = '/article'
+LOGIN_REDIRECT_URL = reverse_lazy('index')
 
+'''
+第三方库的设置
+'''
 THUMBNAIL_DEBUG = True
+
+TAGGIT_CASE_INSENSITIVE = True
+TAGGIT_FORCE_LOWERCASE = True

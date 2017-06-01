@@ -1,10 +1,11 @@
 {% extends 'article/index.html' %}
+{% load article_tags %}
 {% block title %}
     {{ block.super }} - {{ article.title }}
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'article:index' %}">文章列表</a></li>
     <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
 {% endblock %}
 
@@ -12,56 +13,49 @@
     <div class="container">
         <div class="col-md-8">
             <h3 class="page-header">{{ object.title }}
-                <small>{{ object.author }} 发表于:{{ object.create_d }}</small>
+                <small class="pull-right">{{ object.author }} 发表于:{{ object.create_d }}</small>
             </h3>
             <p>{{ object.content|safe }}</p>
 
             <hr class="divider">
             <div class="row">
-                {% ifequal request.user object.author %}
-                    <a class="btn btn-default" href="{% url 'article:update' object.id %}">編輯文章</a> {% endifequal %}
-                {% for tag in tag_list %}
+                <div class="col-md-8">
+                    {% for tag in tag_list %}
+                        <div class="pull-right">
+                            <h4><a class="label label-info " href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></h4>
+                        </div>
+                    {% endfor %}
 
-                    <div class="pull-right">
+                    {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
 
-                        <h4><a class="label label-info " href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></h4>
+                    <div class="btn-group pull-left">
+                        <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %}"
+                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
+                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                            <span class="badge">{{ article_like|length }}</span>
+                        </a>
+                        <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %}"
+                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
+                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                            <span class="badge">{{ article_unlike|length }}</span>
+                        </a>
                     </div>
-                {% endfor %}
-
-                {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
-
-                <div class="btn-group pull-left">
-                    <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %}"
-                       href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
-                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                        <span class="badge">{{ article_like|length }}</span>
-                    </a>
-                    <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %}"
-                       href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
-                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                        <span class="badge">{{ article_unlike|length }}</span>
-                    </a>
                 </div>
-
             </div>
-            <button class="btn btn-default" id="ajax_like">AJAX点赞</button>
-
-            <span id="ajax_like_count"
-                  class="label label-default">{% templatetag openvariable %}  message {% templatetag closevariable %}</span>
-            <input v-model="message" placeholder="edit me">
-            <p>{% templatetag openvariable %} message {% templatetag closevariable %}</p>
-
             <hr class="divider">
 
             {#        评论内容#}
 
             {% if comment_list %}
-                <div><h4 class="page-header">评论列表</h4>
-
-                    {#                把评论的内容分别读取出来，由于view用list重新处理过，这里要读取values#}
-
+                <div>
                     {% for item in comment_list.values %}
                         {% with comment=item.comment comment_like=item.like comment_unlike=item.unlike %}
+                            <h4 class="page-header">评论列表
+                                <small>共有 {{ comment_list|length }} 条评论</small>
+                            </h4>
+                            {#                把评论的内容分别读取出来，由于view用list重新处理过，这里要读取values#}
+
+
                             <div class="panel panel-default">
                                 <!-- Default panel contents -->
                                 <div class="panel-heading">{{ comment.user }}
@@ -93,27 +87,31 @@
                             </div>
                         {% endwith %}{% endfor %}
                 </div>{% endif %}
-            <hr class="divider">
             {% include 'article/comment_form.html' %}
         </div>
-        <script>
-            $(document).ready(function () {
-                $("#ajax_like").click(function () {
-                    var article_id ={{ object.id }};
-                    var type = 'c';
-                    var like_id = {{ object.id }};
-                    var like = 'True';
-                    $.getJSON("{% url 'article:article_like' %}", {
-                            'article_id': article_id,
-                            'type': type,
-                            'like_id': like_id,
-                            'like': like
-                        },
-                        function (data) {
-                            alert('test')
-                            $('#ajax_like_count').text(data['like_count'])
-                        })
-                })
-            })
-        </script>
+        <div class="col-md-4">
+            {% if perms.article %}
+                <h5 class="page-header">文章管理</h5>
+                <ul>
+                    <li><a href="{% url 'article:update' object.id %}">修改本文章</a></li>
+
+                    <li>
+                        <a href="{% url 'article:create' %}">发表新文章</a>
+                    </li>
+                    <li><a href="{% url 'article:index' %}?publish=False">未发布文章</a></li>
+                </ul>
+            {% endif %}
+            <ul class="list-unstyled">
+                <li><h5 class="page-header">共有 {% total_article %} 篇文章</h5></li>
+                <li>{% show_most_comment_article 3 %}
+                </li>
+                <li>{% show_last_article 3 %}</li>
+                <li>
+                    {% show_tag_list %}
+                </li>
+            </ul>
+
+        </div>
+
+
 {% endblock %}

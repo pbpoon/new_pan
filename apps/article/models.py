@@ -2,6 +2,7 @@ from django.db import models
 from django.shortcuts import reverse
 from taggit.managers import TaggableManager
 
+
 class Category(models.Model):
     name = models.CharField('分类名称', max_length=20, db_index=True)
     desc = models.CharField('分类描述', max_length=60, null=True, blank=True)
@@ -33,7 +34,7 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('article:detail', kwargs={'pk': self.pk})
+        return reverse('article:detail', args=[self.id])
 
 
 class Tag(models.Model):

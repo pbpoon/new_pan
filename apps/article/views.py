@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Article, Tag, Like
-from .forms import CommentForm, AddTagForm
+from .forms import CommentForm
 
 import markdown
 from django.http import JsonResponse
@@ -40,16 +40,6 @@ class ArticleEditMixin(LoginRequiredMixin, AuthorArticleMixin, AuthorEditMixin):
     fields = ['title', 'content', 'tag', 'publish']
     success_url = reverse_lazy('article:index')
     template_name = 'article/form.html'
-    tag_form = AddTagForm
-
-    # def get(self):
-    #     tag_form = self.tag_form()
-    #     return super(ArticleEditMixin).get()
-    #
-    # def pos(self, request):
-    #     tag_form = self.tag_form(request.POST)
-    #     return super(ArticleEditMixin).post()
-    #
 
 
 class ArticleCreateView(ArticleEditMixin, CreateView):
@@ -70,15 +60,13 @@ class ArticleListView(ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        object_list = super(ArticleListView, self).get_queryset()
-        for qs in object_list:
-            qs.content = markdown.markdown(qs.content)
-        return object_list
+        publish = self.request.GET.get('publish', True)
+        kwarg = {'publish': publish}
+        return Article.objects.filter(**kwarg)
 
     def get_context_data(self, **kwargs):
-        context = super(ArticleListView, self).get_context_data(**kwargs)
-        context['tag_list'] = Tag.objects.all()
-        return context
+        kwargs['tag_list'] = Article.tag.all()
+        return super(ArticleListView, self).get_context_data(**kwargs)
 
 
 class ArticleDetailView(DetailView):
@@ -92,28 +80,27 @@ class ArticleDetailView(DetailView):
         return obj
 
     def get_context_data(self, **kwargs):
-        context = super(ArticleDetailView, self).get_context_data(**kwargs)
-        context['tag_list'] = self.object.tag.all()
-        context['form'] = CommentForm()
-        context['article_like'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=True)]
-        context['article_unlike'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
+        kwargs['tag_list'] = self.object.tag.all()
+        kwargs['form'] = CommentForm()
+        kwargs['article_like'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=True)]
+        kwargs['article_unlike'] = [obj.user for obj in Like.objects.filter(type='a', like_id=self.object.id, like=False)]
         all_comment = self.object.comment.all()
 
         '''
-        新建一个context的字典项，并遍历评论的queryset，把点击状态，点击量等添加到该字典项
+        新建一个kwargs的字典项，并遍历评论的queryset，把点击状态，点击量等添加到该字典项
         '''
-        context['comment_list'] = {}
+        kwargs['comment_list'] = {}
         for comment in all_comment:
             comment_id = str(comment.id)
             like = [obj.user for obj in Like.objects.filter(type='c', like_id=comment_id, like=True)]
             unlike = [obj.user for obj in Like.objects.filter(type='c', like_id=comment_id, like=False)]
-            context['comment_list'][comment_id] = {
+            kwargs['comment_list'][comment_id] = {
                 'comment': comment,
                 'like': like,
                 'unlike': unlike,
             }
 
-        return context
+        return super(ArticleDetailView, self).get_context_data(**kwargs)
 
 
 class TagListView(ListView):

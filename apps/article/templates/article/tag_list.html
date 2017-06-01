@@ -1,0 +1,6 @@
+相关标签
+<ul class="list-inline">
+    {% for tag in tag_list %}
+        <li><a class="label label-success" href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></li>
+    {% endfor %}
+</ul>
