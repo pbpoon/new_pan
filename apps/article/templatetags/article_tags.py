@@ -39,10 +39,3 @@ def show_tag_list():
 @register.filter(name='markdown')
 def markdown_fornat(text):
     return mark_safe(markdown.markdown(text))
-
-
-@register.filter(name='difftime')
-def difftime_out(time):
-    now = datetime.datetime.now()
-    day = (now - time).days
-    return day

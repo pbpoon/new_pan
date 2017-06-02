@@ -56,6 +56,7 @@ class CustomAuthBackend(ModelBackend):
 class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = RegisterForm
+
     def form_valid(self, form):
         '''
         创建用户并绑定村民信息

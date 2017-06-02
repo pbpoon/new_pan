@@ -4,16 +4,14 @@
     账目 | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumb %}
-    <li><a href="{% url 'money:index' %}">账目列表</a></li>
-{% endblock %}
-
 {% block content %}
 
     <div class="container">
-        <h3 class="page-header">银行/现金
-            <small>流水账最后3条记录<a class="label label-info label-lt" href="{% url 'money:detail' %}">查看详细</a></small>
-        </h3>
+        <div class="jumbotron">
+            <h3 class="page-header">银行/现金
+                <small>流水账最后3条记录<a class="btn btn-default" href="{% url 'money:detail' %}">查看详细</a></small>
+            </h3>
+        </div>
         {% regroup money_list|dictsort:"num" by type as type_list %}
         {% for type in type_list %}
             <h4 class="page-header">{% ifequal type.grouper 'b' %}银行{% else %}现金{% endifequal %} 流水记录</h4>

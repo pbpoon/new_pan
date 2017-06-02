@@ -13,12 +13,11 @@
                 {% for obj in object_list %}
                     <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
                         <h4 class="list-group-item-heading">{{ obj.title }}
-                            <small>(发布于:{{ obj.create_d|date:"Y-m-d" }} / {{ obj.author }})</small>
+                            <small class="pull-right">(发布于:{{ obj.create_d|timesince }} 前/ {{ obj.author }})</small>
+                            <small >{{ obj.tag.all|join:',' }}</small>
                         </h4>
                         <p style="padding-left: 10px" class="list-group-item-text">{{ obj.content|markdown|striptags|truncatechars_html:"80" }}...</p>
-                        {% for tag in obj.tag.name %}
-                            <span class="label-default">{{ tag }}</span>
-                        {% endfor %}
+
                     </a>
                 {% endfor %}
             </div>

@@ -11,7 +11,7 @@
     {% endif %}
 {% endblock %}
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'money:index' %}">账目列表</a></li>
     <li><a href="#">{{ title.get_type_display }}流水明细记录</a></li>
 {% endblock %}
 

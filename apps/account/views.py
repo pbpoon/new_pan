@@ -20,23 +20,6 @@ class AccountListView(ListView):
     context_object_name = 'account_list'
     paginate_by = 12
 
-    def get_context_data(self, **kwargs):
-        context = super(AccountListView, self).get_context_data(**kwargs)
-        peoples = People.objects.filter(is_del=False)
-        context['total_people'] = peoples.count()
-        context['total_get_getmoney'] = peoples.filter(is_getmoney=True).count()
-        context['average_age'] = Decimal(sum(people.get_age for people in peoples) \
-                                         / peoples.count()).quantize(Decimal('0.0'))
-        context['total_male'] = peoples.filter(sex='male').count()
-        context['total_female'] = peoples.filter(sex='female').count()
-        context['male_to_female'] = Decimal(1 / (context['total_male'] / context['total_female'])).quantize(
-            Decimal('0.00'))
-        context['min_65_age_totle'] = len([people for people in peoples if people.get_age > 65])
-        context['min_65_age_male'] = len([people for people in peoples.filter(sex='male') if people.get_age > 65])
-        context['min_65_age_female'] = len([people for people in peoples.filter(sex='female') if people.get_age > 65])
-
-        return context
-
 
 class PeopleListView(ListView):
     model = People
@@ -51,14 +34,18 @@ class PeopleListView(ListView):
         p2 = self.request.GET.get('p2')
         p3 = self.request.GET.get('p3')
         p4 = self.request.GET.get('p4')
+        fage = self.request.GET.get('fage', '0')
+        tage = self.request.GET.get('tage', '119')
+        kwargs = {}
         if p1 and p2:
             kwargs = {p1: p2}
             qs = qs.filter(**kwargs)
         elif p3:
-            qs = [people for people in qs if people.get_age > 65]
-        elif p4:
-            kwargs = {'sex': p4}
-            qs = [people for people in qs.filter(**kwargs) if people.get_age > 65]
+            if p4:
+                kwargs = {'sex': p4}
+                qs = qs.filter(**kwargs)
+            qs = [people for people in qs if people.get_age > int(fage) and people.get_age < int(tage)]
+
         '''
         对qureyset用自定义的函数方法排序，要用到如下个是，但是排序的方法函数必须设置@propety
         '''

@@ -2,14 +2,13 @@
 {% block title %}抄表列表 | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumb %}
-    {{ block.super }}
-    <li><a href="{% url 'livingcost:mark' %}">抄表列表</a></li>
-{% endblock %}
-
 {% block content %}
     <div class="container">
-    <div class="col-md-6">
+    <div class="jumbotron">
+        <h2 class="page-header">抄表期列表
+        <small><a href="{% url 'livingcost:index' %}">按水表列表</a></small></h2>
+    </div>
+    <div class="col-md-8">
         <ul class="list-group">
             {% for mark_d in mark_d_list %}
                 <a class="list-group-item" href="{% url 'livingcost:mark_detail' mark_d.id %}">

@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
-<li><a href="{{ num.get_absolute_url }}">{{ num }}</a></li>
+    <li><a href="{% url 'livingcost:index' %}">水表列表</a></li>
+    <li><a href="{{ num.get_absolute_url }}">{{ num }}</a></li>
 {% endblock %}
 
 {% block content %}
@@ -34,7 +34,7 @@
                     <td>{{ item.meter_num }}</td>
                     <td>{{ item.get_total_m3 }}</td>
                     <td>{{ item.get_total_price }}</td>
-                    <td>{{ item.is_pay }}</td>
+                    <td>{{ item.is_pay|yesno:"√, " }}</td>
                     <td>{{ item.ps }}</td>
                     <td>{{ item.create_d }}</td>
                 </tr>

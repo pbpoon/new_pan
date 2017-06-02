@@ -2,15 +2,15 @@
 {% block title %}区域列表 | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumb %}
-    {{ block.super }}
-    <li><a href="{% url 'asset:area' %}">田亩区域列表</a></li>
-{% endblock %}
+
 
 {% block content %}
     <div class="container">
-        <h3 class="page-header">田亩区域列表</h3>
-        <div class="col-md-6">
+    <div class="jumbotron">
+        <h3 class="page-header">田亩区域列表
+        <small><a href="{% url 'asset:index' %}">按所属人列表</a></small></h3>
+    </div>
+        <div class="col-md-8">
             <ul class="list-group">
                 {% for area in area_list %}
                     <a class="list-group-item" href="{% url 'asset:area_detail' area.id %}">

@@ -2,7 +2,7 @@
 {% block title %}{{ area.name }} | {{ block.super }}{% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'asset:area' %}">田亩区域列表</a></li>
     <li><a href="{{ area.get_absolute_url }}">{{ area.name }}</a></li>
 {% endblock %}
 

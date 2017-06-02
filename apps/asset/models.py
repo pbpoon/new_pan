@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum
 from account.models import People
 from django.shortcuts import reverse
+from markdownx.models import MarkdownxField
 
 
 class Category(models.Model):
@@ -65,7 +66,7 @@ class LandOwnerShip(models.Model):
                               verbose_name='所属人')#limit_choices_to={'is_main':True},
     old_owner = models.ForeignKey('LandOwner', related_name='old_owner', verbose_name='原有人')
     num = models.ForeignKey('LandNum', on_delete=models.CASCADE, verbose_name='田地号码')
-    ps = models.TextField('备注信息', null=True, blank=True)
+    ps = MarkdownxField('备注信息', null=True, blank=True)
     create_d = models.DateField('添加日期', auto_now_add=True)
     update_d = models.DateTimeField('修改日期', auto_now=True)
     file = models.FileField('资料', upload_to='asset/land/Y%m%/', blank=True)

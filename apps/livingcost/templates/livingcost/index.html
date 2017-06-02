@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}水费{% endblock %}
-{% block breadcrumb %}
-    <li><a href="{% url 'livingcost:index' %}">水表列表</a></li>
-{% endblock %}
 
 {% block content %}
     <div class="container">
-    <div class="col-md-6">
+    <div class="jumbotron">
+        <h2 class="page-header">水表列表
+        <small><a href="{% url 'livingcost:mark' %}">按抄表期</a></small></h2>
+    </div>
+    <div class="col-md-8">
         <ul class="list-group">
             {% for num in num_list %}
                 <a class="list-group-item" href="{{  num.get_absolute_url }} ">

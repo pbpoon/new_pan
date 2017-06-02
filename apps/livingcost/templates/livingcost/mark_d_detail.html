@@ -4,24 +4,25 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'livingcost:mark' %}">抄表列表</a></li>
     <li><a href="{{ mark_d.get_absolute_url }}">{{ mark_d.mark_d }}</a></li>
 {% endblock %}
 
 {% block content %}
 
     <div class="container">
+    <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">本次抄表总表明细</div>
+{#  <div class="panel-body">#}
+{#  </div>#}
+
+
         <table class="table">
             <colgroup>
                 <col class="col-md-1">
                 <col class="col-md-7">
             </colgroup>
-            <thead>
-            <tr>
-                <th>本次抄表总表明细</th>
-                <th></th>
-            </tr>
-            </thead>
             <tbody>
             <tr>
                 <td>抄表日期</td>
@@ -57,13 +58,13 @@
             </tr>
             </tbody>
         </table>
-
+</div>
         <table class="table">
             <thead>
             <tr>
                 <th>表号</th>
                 <th>水表度数</th>
-                <th>上次抄表度数</th>
+                <th>上次度数</th>
                 <th>用水量</th>
                 <th>水费金额</th>
                 <th>是否缴费</th>
@@ -82,7 +83,7 @@
                     <td>{{ item.get_pre_meter }}</td>
                     <td>{{ item.get_total_m3 }}</td>
                     <td>{{ item.get_total_price }}</td>
-                    <td>{{ item.is_pay }}</td>
+                    <td>{{ item.is_pay|yesno:"√, "}}</td>
                     <td>{{ item.ps }}</td>
                     <td>{{ item.create_d }}</td>
                 </tr>
@@ -103,5 +104,6 @@
 
         </table>
     </div>
+
 {% endblock %}
 

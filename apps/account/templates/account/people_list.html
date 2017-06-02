@@ -1,17 +1,16 @@
 {% extends 'account/index.html' %}
+{% load account_tags %}
 {% block title %}
     人口资料列表 | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumb %}
-    {{ block.super }}
-    <li><a href="{% url 'account:people_list' %}">户口列表</a></li>
-{% endblock %}
-
 {% block content %}
     <div class="container">
-        <h3 class="page-header">人口列表</h3>
-        <div class="col-md-6">
+        <div class="jumbotron">
+            <h3 class="page-header">人口列表
+            <small><a href="{% url 'account:index' %}">按户列表</a></small></h3>
+        </div>
+        <div class="col-md-8">
 
             <div class="list-group">
                 {% for people in people_list %}
@@ -24,8 +23,7 @@
             {% include 'pagination.html' %}
         </div>
         <div class="col-md-4">
-            {% block sidebar %}
-            {% endblock %}
+            {% show_sidebar %}
         </div>
     </div>
 {% endblock %}

@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'asset:index' %}">田亩簿列表</a></li>
     <li><a href="{{ people.get_absolute_url }}">{{ people }}</a></li>
 {% endblock %}
 
@@ -13,7 +13,7 @@
     <div class="container">
 
         </ol>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <table class="table">
                 <thead>
                 <tr>

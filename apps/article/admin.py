@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Article, Category, Tag, Comment
-
+from markdownx.admin import MarkdownxModelAdmin
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -11,7 +11,7 @@ class CommentInline(admin.TabularInline):
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ['title', 'content', 'author', 'views', 'publish', 'create_d', 'tag_list']
     list_display_links = ['title', 'content', 'author']
-    list_filter = ['tag', 'views', 'publish', 'create_d', 'update_d']
+    list_filter = ['publish', 'create_d', 'update_d']
     search_fields = ['title', 'content', 'author__name', 'tag__name']
     readonly_fields = ['views']
     inlines = [CommentInline]

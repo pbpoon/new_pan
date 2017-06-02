@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    {{ block.super }}
+    <li><a href="{% url 'account:index' %}">户口列表</a></li>
     <li><a href="{{ account.get_absolute_url }}">{{ account }}</a></li>
 {% endblock %}
 
@@ -18,69 +18,77 @@
             </h3>
         </div>
         <div class="col-md-8">
-
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>姓名</th>
-                    <th>性别</th>
-                    <th>年龄</th>
-                    <th>民族</th>
-                    <th>文化程度</th>
-                    <th>是否已婚</th>
-                    <th>分红资格</th>
-                    <th>电话号码</th>
-                    <th>是否户主</th>
-                </tr>
-                </thead>
-
-
-                <tbody>
-                {% for people in people_list %}
+            <div class="panel panel-default">
+                <table class="table table-responsive">
+                    <thead>
                     <tr>
-
-                        <td><a href="{{ people.get_absolute_url }}">{{ people }}</a></td>
-                        <td>{{ people.sex }}</td>
-                        <td>{{ people.get_age }}</td>
-                        <td>{{ people.nationality }}</td>
-                        <td>{{ people.education }}</td>
-                        <td>{{ people.is_main|default:"" }}</td>
-                        <td>{{ people.is_getmoney|default:"" }}</td>
-                        <td>{{ people.phone_num }}</td>
-                        <td>{{ people.is_main|default:"" }}</td>
+                        <th width="12%">姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>民族</th>
+                        <th>文化程度</th>
+                        <th>是否已婚</th>
+                        <th>分红资格</th>
+                        <th>电话号码</th>
+                        <th>是否户主</th>
                     </tr>
-                {% endfor %}
-                <tfoot>
-                <tr>
-                    <th>共 {{ account.get_peolpe_count }} 人</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>共 {{ account.get_getmoney_count }} 人符合</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-                </tfoot>
-                </tbody>
+                    </thead>
 
-            </table>
+
+                    <tbody>
+                    {% for people in people_list %}
+                        <tr>
+
+                            <td><a href="{{ people.get_absolute_url }}">{{ people }}</a></td>
+                            <td>{{ people.get_sex_display }}</td>
+                            <td>{{ people.get_age }}</td>
+                            <td>{{ people.nationality }}</td>
+                            <td>{{ people.education }}</td>
+                            <td>{{ people.is_main|yesno:"√, " }}</td>
+                            <td>{{ people.is_getmoney|yesno:"√, " }}</td>
+                            <td>{{ people.phone_num }}</td>
+                            <td>{{ people.is_main|yesno:"√, " }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tfoot>
+                    <tr>
+                        <th>共 {{ account.get_peolpe_count }} 人</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>共 {{ account.get_getmoney_count }} 人符合</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </tfoot>
+                    </tbody>
+
+                </table>
+
+            </div>
         </div>
         <div class="col-md-4">
-            <h3 class="page-header">额外信息</h3>
-            {% if waternum_list %}
-                <h5 class="page-header"><strong>水表</strong></h5>
-                {% for item in waternum_list %}
-                    <a href="{% url 'livingcost:detail' item.id %}">{{ item }}</a>
-                {% endfor %}
-            {% endif %}
-            {% if landnum_list %}
-                <h5 class="page-header"><strong>田亩记录</strong></h5>
-                {% for item in landnum_list %}
-                    <a href="{% url 'asset:owner' item.id %}">{{ item }}</a>
-                {% endfor %}
-            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    额外信息
+                </div>
+                <div class="panel-body">
+                    {% if waternum_list %}
+                        <h5 class="page-header"><strong>水表</strong></h5>
+                        {% for item in waternum_list %}
+                            <a href="{% url 'livingcost:detail' item.id %}">{{ item }}</a>
+                        {% endfor %}
+                    {% endif %}
+                    {% if landnum_list %}
+                        <h5 class="page-header"><strong>田亩记录</strong></h5>
+                        {% for item in landnum_list %}
+                            <a href="{% url 'asset:owner' item.id %}">{{ item }}</a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

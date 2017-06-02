@@ -1,0 +1,39 @@
+<div class="panel panel-default">
+    <div class="panel-heading">本村户口统计</div>
+    <div class="panel-body">
+        <ul class="list-unstyled">
+            <li><a href="{% url 'account:index' %}">共分戶口：{{ account_count }} 戶</a></li>
+            <li><a href="{% url 'account:people_list' %}">共有人口：{{ total_people }} 人</a></li>
+            <li>
+                <a href="{% url 'account:people_list' %}?p1=is_getmoney&p2=True">分红人口：{{ total_get_getmoney }}
+                    人</a></li>
+            <li><a href="{% url 'account:people_list' %}?p1=sex&p2=male">男性人口：{{ total_male }} 人</a>
+            </li>
+            <li><a href="{% url 'account:people_list' %}?p1=sex&p2=female">女性人口：{{ total_female }} 人</a>
+            </li>
+            <li><a href="{% url 'account:people_list' %}?p3=True&tage=65">高于65岁人口: {{ min_65_age_total }} 人</a>
+            </li>
+            <ul>
+                <li><a href="{% url 'account:people_list' %}?p4=male&tage=65">其中男性: {{ min_65_age_male }} 人</a>
+                </li>
+                <li>
+                    <a href="{% url 'account:people_list' %}?p4=female&tage=65">其中女性: {{ min_65_age_female }} 人</a>
+                </li>
+
+            </ul>
+            <li>
+                <a href="{% url 'account:people_list' %}?p3=True&fage=18&tage=45">年龄介于18-45岁人口: {{ betwee_18_to_45_total }} 人</a>
+                <ul>
+                    <li><a href="{% url 'account:people_list' %}?p4=male&p3=True&fage=18&tage=45">其中男性: {{ betwee_18_to_45_male }} 人</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'account:people_list' %}?p4=female&p3=True&fage=18&tage=45">其中女性: {{ betwee_18_to_45_female }} 人</a>
+                    </li>
+
+                </ul>
+            </li>
+            <li><a href="#">男女比例：1 : {{ male_to_female }} </a></li>
+            <li><a href="#">平均年龄: {{ average_age }} 岁</a></li>
+        </ul>
+    </div>
+</div>
