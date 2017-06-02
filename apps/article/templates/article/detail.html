@@ -12,37 +12,43 @@
 {% block content %}
     <div class="container">
         <div class="col-md-8">
-            <h3 class="page-header">{{ object.title }}
-                <small class="pull-right">{{ object.author }} 发表于:{{ object.create_d }}</small>
-            </h3>
-            <p>{{ object.content|safe }}</p>
-
-            <hr class="divider">
-            <div class="row">
-                <div class="col-md-8">
-                    {% for tag in tag_list %}
-                        <div class="pull-right">
-                            <h4><a class="label label-info " href="{% url 'article:tag' tag.pk %}">{{ tag }}</a></h4>
+            <div class="panel panel-default">
+                <div class="panel-heading text-right">
+                    <p>{{ object.author }} 发表于:{{ object.create_d }}</p>
+                </div>
+                <div class="panel-body">
+                    <h3 class="page-header">{{ object.title }}</h3>
+                    <p>{{ object.content|markdown }}</p>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="pull-right col-md-6 text-right">
+                            {% for tag in tag_list %}
+                                <span><a href="{% url 'article:tag' tag.pk %}">{{ tag }}</a>
+                                    {% if not forloop.last %}
+                                        ,{% endif %}&nbsp;&nbsp;</span>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
 
-                    {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
 
-                    <div class="btn-group pull-left">
-                        <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %}"
-                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
-                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                            <span class="badge">{{ article_like|length }}</span>
-                        </a>
-                        <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %}"
-                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
-                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                            <span class="badge">{{ article_unlike|length }}</span>
-                        </a>
+                        {#                                        把点赞和不满按钮独立出来，更容易页面布局#}
+
+                        <div style="padding-left:10px " class="btn-group pull-left">
+                            <a class="btn {% if request.user in article_like %} btn-success {% else %} btn-default{% endif %}"
+                               href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=True">
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                <span class="badge">{{ article_like|length }}</span>
+                            </a>
+                            <a class="btn {% if request.user in article_unlike %} btn-success {% else %} btn-default{% endif %}"
+                               href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=a&like_id={{ object.id }}&like=False">
+                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                <span class="badge">{{ article_unlike|length }}</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
+
             </div>
-            <hr class="divider">
 
             {#        评论内容#}
 
@@ -54,33 +60,34 @@
                                 <small>共有 {{ comment_list|length }} 条评论</small>
                             </h4>
                             {#                把评论的内容分别读取出来，由于view用list重新处理过，这里要读取values#}
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div style="padding-left: 5px;padding-top: 5px"
+                                         class="btn-group-vertical pull-left">
+                                        <a class="btn {% if request.user in comment_like %} btn-success {% else %} btn-default {% endif %}"
+                                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=True">
+                                            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                                            <span class="badge">{{ comment_like|length }}</span>
+                                        </a>
 
-
-                            <div class="panel panel-default">
-                                <!-- Default panel contents -->
-                                <div class="panel-heading">{{ comment.user }}
-                                    <small>
-                                        -- 评论于:{{ comment.create_d|date }}
-                                    </small>
+                                        <a class="btn {% if request.user in comment_unlike %} btn-success {% else %} btn-default {% endif %}"
+                                           href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=False">
+                                            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                                            <span class="badge">{{ comment_unlike|length }}</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="panel-body">
-                                    <div class="container">
-                                        <p>{{ comment.comment }}</p></div>
-                                </div>
-                                <div class="container">
-                                    <div class="btn-group">
-                                        <div class="btn-group pull-left">
-                                            <a class="btn {% if request.user in comment_like %} btn-success {% else %} btn-default {% endif %}"
-                                               href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=True">
-                                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                                                <span class="badge">{{ comment_like|length }}</span>
-                                            </a>
-
-                                            <a class="btn {% if request.user in comment_unlike %} btn-success {% else %} btn-default {% endif %}"
-                                               href="{% url 'article:article_like' %}?article_id={{ object.id }}&type=c&like_id={{ comment.id }}&like=False">
-                                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                                                <span class="badge">{{ comment_unlike|length }}</span>
-                                            </a>
+                                <div class="col-md-10 pull-right">
+                                    <div class="panel panel-default">
+                                        <!-- Default panel contents -->
+                                        <div class="panel-heading">{{ comment.user }}
+                                            <small>
+                                                -- 评论于:{{ comment.create_d|date }}
+                                            </small>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="container">
+                                                <p>{{ comment.comment }}</p></div>
                                         </div>
                                     </div>
                                 </div>
@@ -89,29 +96,30 @@
                 </div>{% endif %}
             {% include 'article/comment_form.html' %}
         </div>
-        <div class="col-md-4">
-            {% if perms.article %}
-                <h5 class="page-header">文章管理</h5>
-                <ul>
-                    <li><a href="{% url 'article:update' object.id %}">修改本文章</a></li>
+        <div class="col-md-4 pull-right">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if perms.article %}
+                        <h5 class="page-header">文章管理</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="{% url 'article:update' object.id %}">修改本文章</a></li>
 
-                    <li>
-                        <a href="{% url 'article:create' %}">发表新文章</a>
-                    </li>
-                    <li><a href="{% url 'article:index' %}?publish=False">未发布文章</a></li>
-                </ul>
-            {% endif %}
-            <ul class="list-unstyled">
-                <li><h5 class="page-header">共有 {% total_article %} 篇文章</h5></li>
-                <li>{% show_most_comment_article 3 %}
-                </li>
-                <li>{% show_last_article 3 %}</li>
-                <li>
-                    {% show_tag_list %}
-                </li>
-            </ul>
-
+                            <li>
+                                <a href="{% url 'article:create' %}">发表新文章</a>
+                            </li>
+                            <li><a href="{% url 'article:index' %}?publish=False">未发布文章</a></li>
+                        </ul>
+                    {% endif %}
+                    <ul class="list-unstyled">
+                        <li><h5 class="page-header">共有 {% total_article %} 篇文章</h5></li>
+                        <li>{% show_most_comment_article 3 %}
+                        </li>
+                        <li>{% show_last_article 3 %}</li>
+                        <li>
+                            {% show_tag_list %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-
 {% endblock %}

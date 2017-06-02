@@ -1,5 +1,5 @@
 最多评论文章
-<ul>
+<ul >
     {% for article in most_comment_article %}
         <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
     {% endfor %}

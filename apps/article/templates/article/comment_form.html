@@ -6,5 +6,5 @@
         <input type="submit" class="btn btn-primary" value="发表评论">
     </form>
 {% else %}
-    如要评论本文章，请先 <a href="{% url 'user:login' %}?next={{ request.path }}">登录</a>账户
+    <h4>如要评论本文章，请先 <a class="btn btn-success" href="{% url 'user:login' %}?next={{ request.path }}">登录</a> 账户</h4>
 {% endif %}

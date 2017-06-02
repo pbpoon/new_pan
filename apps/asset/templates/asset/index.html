@@ -1,4 +1,4 @@
-{% extends 'basc.html' %}
+{% extends 'base.html' %}
 {% block title %}户口{% endblock %}
 
 {% block breadcrumb %}
@@ -11,7 +11,7 @@
         <h2 class="page-header">田亩簿
             <small>（以所有人列表)</small>
         </h2>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <ul class="list-group">
                 {% for people in asset_list %}
                     <a class="list-group-item" href="{% url 'asset:owner' people.id %}">

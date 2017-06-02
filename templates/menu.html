@@ -49,8 +49,6 @@
                                 {{ request.user }}{% endif %}<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'user:info' request.user.id %}">用户资料</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
                             {% if request.user.is_superuser %}
                                 <li role="separator" class="divider"></li>
                                 <li><a href="/admin">管理后台</a></li>

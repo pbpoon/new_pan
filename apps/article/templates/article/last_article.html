@@ -1,5 +1,5 @@
 <h5>最新文章</h5>
-<ul>
+<ul >
     {% for article in last_article %}
         <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
     {% endfor %}

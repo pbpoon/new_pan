@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2557a250-5ad3-4c4e-b189-1ee543a2b3bb" name="win_server" url="http://120.24.161.98">
+        <fileTransfer host="120.24.161.98" port="24" rootFolder="/Users/Administrator/Desktop/django/new_pan" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="24" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

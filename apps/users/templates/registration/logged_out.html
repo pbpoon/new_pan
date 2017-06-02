@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}用户登录{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2 class="page-header">您已登出账号</h2>
+    <h3>     感谢您的浏览</h3>
+        <a href="{% url 'index' %}">回到首页</a>&nbsp;或者&nbsp;<a href="{% url 'user:login' %}">登录账户</a>
+    </div>
+{% endblock %}

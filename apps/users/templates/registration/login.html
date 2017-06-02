@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load bootstrap_tags %}
+{% block title %}用户登录{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2 class="page-header">登录网站</h2>
+        <div class="col-md-4">
+            {% if  form.errors %}
+                <div class="alert alert-danger" role="alert"></div>
+                <p>{{ form.errors }}</p>
+            {% else %}
+                <p>请输入账号和密码登录，或者 <a href="{% url "user:register" %}">注册</a>账号</p>
+            {% endif %}
+
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|as_bootstrap_inline }}
+                <input type="hidden" name="next" value="{{ next }}">
+                <input class="btn btn-primary" type="submit" value="提交">
+            </form>
+        </div>
+    </div>
+{% endblock %}

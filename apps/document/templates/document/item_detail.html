@@ -1,33 +1,45 @@
-{#{% extends 'document/detail.html' %}#}
-{##}
-{#{% block title %}#}
-{#    {{ object.name }} | {{ block.super }}#}
-{#{% endblock %}#}
-{##}
-{#{% block breadcrumb %}#}
-{#    {{ block.super }}#}
-{#    <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a></li>#}
-{#{% endblock %}#}
-{##}
-{#{% block content %}#}
-<div class="container">
-    <div class="page-header">
-        <h2>{{ object.name }}
-            <small class="text-center pull-right">
-                <i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d|date:"Y-m-d" }}
-            </small>
-        </h2>
-        <p>&nbsp;&nbsp;{{ object.desc }}</p>
+{% extends 'document/detail.html' %}
+
+{% block title %}
+    {{ object.name }} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    <li><a href="{{ object.get_absolute_url }}">{{ object.name }}</a></li>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-header">
+            <h2>{{ object.name }}
+                <small class="text-center pull-right">
+                    <i class="glyphicon glyphicon-time"></i>&nbsp;&nbsp;{{ object.update_d|date:"Y-m-d" }}
+                </small>
+            </h2>
+            <p>&nbsp;&nbsp;{{ object.desc }}</p>
+        </div>
+        <div class="row">
+            {% load thumbnail %}
+            {% thumbnail object.file "1200" as im %}
+                <div class="container">
+                    <img src="{{ im.url }}" alt="{{ object.name }}" class="img-responsive center-block">
+                </div>
+            {% endthumbnail %}
+        </div>
+    <br class="divider">
+    {% if object.get_previous_by_update_d %}
+                <div class="pull-left">
+                    <a href="{{ object.get_previous_by_update_d.get_absolute_url }}" class="btn btn-default">
+                        <<上条记录
+                    </a>
+                </div>
+            {% endif %}
+            {% if object.get_next_by_update_d %}
+                <div class="pull-right">
+                    <a href="{{ object.get_next_by_update_d.get_absolute_url }}" class="btn btn-default">下条记录>></a>
+                </div>
+            {% endif %}
     </div>
-    <div class="row">
-        {% load thumbnail %}
-        {% thumbnail object.file "1200" as im %}
-            <div class="container">
-                <img src="{{ im.url }}" alt="{{ object.name }}" class="img-rounded">
-            </div>
-        {% endthumbnail %}
-    </div>
-</div>
-{##}
-{#{% endblock %}#}
+{% endblock %}
 

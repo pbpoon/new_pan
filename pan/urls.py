@@ -23,7 +23,7 @@ from markdownx import urls as markdownx
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^index/', RedirectView.as_view(pattern_name='article:index'), name='index'),
-    url(r'^no_perm/', TemplateView.as_view(template_name='no_prem.html'),name='no_perm'),
+    url(r'^no_perm/', TemplateView.as_view(template_name='no_prem.html'), name='no_perm'),
     url(r'^user/', include('users.urls', namespace='user')),
     url(r'^document/', include('document.urls', namespace='document')),
     url(r'^', include('article.urls', namespace='article')),
@@ -35,5 +35,6 @@ urlpatterns = [
 urlpatterns += [
     url(r'^markdownx/', include(markdownx))
 ]
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

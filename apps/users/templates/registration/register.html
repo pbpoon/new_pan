@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load bootstrap_tags %}
+{% block title %}用户注册{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2 class="page-header">用户注册内容</h2>
+        <div class="col-md-4">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% for key, error in form.errors.items %}
+                    {{ error }}
+                {% endfor %}
+                {{ form|as_bootstrap_inline }}
+                <input type="submit" class="btn btn-primary" value="提交">
+            </form>
+        </div>
+        <div class="col-md-4">
+        <p>注册表单中的《本村村民姓名》和《身份证号码》一定要匹配才能注册成功，注册成功后，可以直接用你的姓名和你设置的密码来登录。</p>
+        </div>
+    </div>
+{% endblock %}

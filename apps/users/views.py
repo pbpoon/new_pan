@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, FormView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
@@ -53,31 +53,27 @@ class CustomAuthBackend(ModelBackend):
 #         return HttpResponseRedirect(reverse('article:index'))
 
 
-class RegisterView(View):
-    def post(self, request):
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            '''
-            创建用户并绑定村民信息
-            '''
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            bind_people = form.cleaned_data['people_name']
+class RegisterView(FormView):
+    template_name = 'registration/register.html'
+    form_class = RegisterForm
+    def form_valid(self, form):
+        '''
+        创建用户并绑定村民信息
+        '''
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        bind_people = form.cleaned_data['people_name']
 
-            new_user = UserProfile.objects.create(username=username, bind_people=bind_people)
-            new_user.set_password(password)
-            new_user.save()
-            '''如注册资料有电话号码,保存电话号码到people的资料'''
-            telphone = form.cleaned_data['telphone']
-            if telphone:
-                bind_people.phone_num = telphone
-                bind_people.save()
-            return render(request, 'login.html', {'msg': '注册成功!', 'form': form})
-        return render(request, 'register.html', {'form': form})
-
-    def get(self, request):
-        form = RegisterForm()
-        return render(request, 'register.html', {'form': form})
+        new_user = UserProfile.objects.create(username=username, bind_people=bind_people)
+        new_user.set_password(password)
+        new_user.save()
+        '''如注册资料有电话号码,保存电话号码到people的资料'''
+        telphone = form.cleaned_data['telphone']
+        if telphone:
+            bind_people.phone_num = telphone
+            bind_people.save()
+        return render(self.request, 'registration/login.html', {'msg': '注册成功!', 'form': form})
+    # return render(request, 'registration/register.html', {'form': form})
 
 
 class UserInfolView(View):

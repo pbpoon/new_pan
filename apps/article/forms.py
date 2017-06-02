@@ -4,7 +4,6 @@ __date__ = '2017/5/13 21:41'
 
 from django import forms
 from .models import Comment, Article
-from markdownx.fields import MarkdownxFormField
 
 
 class CommentForm(forms.ModelForm):
@@ -18,20 +17,41 @@ class CommentForm(forms.ModelForm):
 
 
 class ArticleEditForm(forms.ModelForm):
-    tag_list = forms.MultipleChoiceField(required=False)
+    tag_list = forms.ModelMultipleChoiceField(required=False, queryset=Article.tag.all(),)
+
     class Meta:
         model = Article
         fields = ['publish', 'title', 'content', 'tag']
 
     def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
-        self.fields['tag_list'].choices = ((x.id, x.name) for x in Article.tag.all())
+        # super(self.__class__, self).__init__(*args, **kwargs)
+        if kwargs.get('instance'):
+            initial = kwargs.setdefault('initial', {})
+            initial['tag_list'] = [(x.name, x.name) for x in Article.tag.all()]
+        forms.ModelForm.__init__(self, *args, **kwargs)
 
     def save(self, commit=True):
-        article = super(self.__class__, self).save(commit=True)
-        if self.fields['tag']:
-            if self.fields['tag'] in self.fields['tag_list']:
-                article.tag.add(self.tag_list)
-            else:
-                article.tag.add(self.tag)
-        super(self.__class__, self).save(commit=True)
+        instance = forms.ModelForm.save(self,False)
+        old_save_m2m = self.save_m2m
+
+        def save_m2m():
+            old_save_m2m()
+            # This is where we actually link the pizza with toppings
+            instance.tag.clear()
+            tag = self.cleaned_data['tag']
+            tag_list = self.cleaned_data['tag_list']
+            # tags = tag + tag_list
+            # tags =Tag.objects.filter(id__in=tags)
+            for _tag in tag:
+                instance.tag.add(_tag)
+            for _tag in tag_list:
+                instance.tag.add(_tag)
+
+        self.save_m2m = save_m2m
+
+        # Do we need to save all changes now?
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance

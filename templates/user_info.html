@@ -1,19 +1,24 @@
-{% extends 'basc.html' %}
+{% extends 'base.html' %}
 {% block title %}用户资料{% endblock %}
 {% block content %}
     <div class="container">
-    <div class="col-md-8">
-        <h3 class="page-header">
-            用户资料
-        </h3>
-        <ul class="list-unstyled">
-            <li>用户名:{{ user.name }}</li>
-            <li>村民姓名:{{ user.bind_people }}</li>
-            {% load thumbnail %}
-            {% thumbnail user.image "80x80" crop="80% center" as im  %}
-            <li><img src="{{ im.url }}" alt="头像" class="img-circle"></li>
-            {% endthumbnail %}
-        </ul>
-    </div>
+        <div class="col-md-8">
+            <h3 class="page-header">
+                用户资料
+            </h3>
+            <ul class="list-unstyled">
+                {% if request.user.name %}
+                    <li>用户名:{{ user.name }}</li>
+                {% endif %}
+                <li>村民姓名:{{ user.bind_people }}</li>
+                {#                <li>#}
+                {#                    {% load thumbnail %}#}
+                {#                    {% thumbnail user.image "80x80" crop="80% center" as im %}#}
+                {#                        <img src="{{ im.url }}" alt="头像" class="img-circle img-responsive">#}
+                {#                    {% endthumbnail %}</li>#}
+                <li><a href="{% url 'user:password_change' %}">更改密码</a></li>
+            </ul>
+
+        </div>
     </div>
 {% endblock %}
