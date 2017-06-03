@@ -12,8 +12,8 @@
             <div class="list-group">
                 {% for obj in object_list %}
                     <a class="list-group-item" href="{% url 'article:detail' obj.id %}">
-                        <h4 class="list-group-item-heading">{{ obj.title }}
-                            <small class="pull-right">(发布于:{{ obj.create_d|timesince }} 前/ {{ obj.author }})</small>
+                        <h4 class="list-group-item-heading"><strong>{{ obj.title }}</strong>&nbsp;&nbsp;
+                            <small class="pull-right"><span class="glyphicon glyphicon-time"></span>{{ obj.create_d|timesince }}前&nbsp;&nbsp;<span class="glyphicon glyphicon-user"></span>{{ obj.author }}</small>
                             <small >{{ obj.tag.all|join:',' }}</small>
                         </h4>
                         <p style="padding-left: 10px" class="list-group-item-text">{{ obj.content|markdown|striptags|truncatechars_html:"80" }}...</p>

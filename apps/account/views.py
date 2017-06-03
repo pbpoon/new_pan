@@ -14,14 +14,14 @@ from .forms import FileForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class AccountListView(ListView):
+class AccountListView(LoginRequiredMixin, ListView):
     queryset = Account.objects.filter(people__is_del=False).distinct()
     template_name = 'account/index.html'
     context_object_name = 'account_list'
     paginate_by = 12
 
 
-class PeopleListView(ListView):
+class PeopleListView(LoginRequiredMixin, ListView):
     model = People
     template_name = 'account/people_list.html'
     context_object_name = 'people_list'

@@ -137,7 +137,7 @@ class MoneyDetailListView(LoginRequiredMixin, ListView):
         return super(MoneyDetailListView, self).get_context_data(**kwargs)
 
 
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     template_name = 'money/item_detail.html'
     model = MoneyAccount
     context_object_name = 'money'

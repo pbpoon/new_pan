@@ -92,9 +92,10 @@ class ArticleDetailView(DetailView):
             kwargs['comment_list'][comment_id] = {
                 'comment': comment,
                 'like': like,
-                'unlike': unlike,
+            'unlike': unlike,
             }
-
+        self.object.views += 1
+        self.object.save()
         return super(ArticleDetailView, self).get_context_data(**kwargs)
 
 

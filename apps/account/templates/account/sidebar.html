@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">本村户口统计</div>
     <div class="panel-body">
-        <ul class="list-unstyled">
+        <ul style="margin-left: 15px" class="list-unstyled">
             <li><a href="{% url 'account:index' %}">共分戶口：{{ account_count }} 戶</a></li>
             <li><a href="{% url 'account:people_list' %}">共有人口：{{ total_people }} 人</a></li>
             <li>

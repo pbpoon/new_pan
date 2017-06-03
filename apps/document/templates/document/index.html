@@ -4,16 +4,14 @@
     档案 | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumb %}
-    <li><a href="{% url 'document:index' %}">档案集列表</a></li>
-{% endblock %}
-
 {% block content %}
 
     <div class="container">
-        <h2 class="page-header">
-            档案集列表
-        </h2>
+        <div class="jumbotron">
+            <h2 class="page-header">
+                档案集列表
+            </h2>
+        </div>
         <div class="row">
             {% for object in object_list %}
                 <div class="col-sm-6 col-md-3">
